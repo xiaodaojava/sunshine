@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+red.lixiang.tools.starter.spring.boot.ToolAutoConfiguration
+org.springframework.context.ApplicationContextInitializer=\
+red.lixiang.tools.starter.spring.boot.ToolApplicationContextInitializer

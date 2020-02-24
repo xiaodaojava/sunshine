@@ -1,0 +1,20 @@
+plugins {
+	id 'java'
+}
+
+
+
+
+dependencies {
+	compile project(":sunshine-base")
+	compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
+	compile group: 'ognl', name: 'ognl', version: '3.2.10'
+	compile group: 'org.apache.poi', name: 'poi', version: '4.1.2'
+	compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+	compile group: 'io.kubernetes', name: 'client-java', version: '7.0.0'
+	compile group: 'org.yaml', name: 'snakeyaml', version: '1.25'
+	implementation group: 'org.jsoup', name: 'jsoup', version: '1.12.1'
+
+}
+
+

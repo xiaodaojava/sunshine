@@ -1,0 +1,22 @@
+plugins {
+	id 'java'
+}
+
+
+dependencies {
+	implementation platform('org.springframework.boot:spring-boot-dependencies:2.1.8.RELEASE')
+	compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:2.1.8.RELEASE"
+	compile group: 'org.apache.commons', name: 'commons-pool2', version: '2.7.0'
+	compileOnly 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+	compileOnly group: 'org.springframework', name: 'spring-web', version: '5.1.9.RELEASE'
+	compileOnly group: 'org.apache.dubbo', name: 'dubbo', version: '2.7.4.1'
+	compile group: 'org.springframework', name: 'spring-jdbc', version: '5.2.2.RELEASE'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.2.0.RELEASE'
+	implementation group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '3.6.0'
+
+	compile project(":sunshine-common")
+}
+
+
+
