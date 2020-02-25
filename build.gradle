@@ -1,7 +1,6 @@
 plugins {
 	id 'java'
-	id("maven-publish") apply false
-
+	id("maven-publish")
 
 }
 
@@ -18,11 +17,11 @@ subprojects {
 				}
 			}
 		}
-		publications {
-			gpr(MavenPublication) {
-				from(components.java)
-			}
-		}
+//		publications {
+//			gpr(MavenPublication) {
+//				from(components.java)
+//			}
+//		}
 	}
 }
 
