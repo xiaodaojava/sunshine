@@ -362,7 +362,7 @@ public class XmlTools {
 
 
                 if (ReflectTools.simpleClass(fieldType)) {
-                    // todo: 这里要考虑到list的情况，现在先不做考虑
+                    // 这里要考虑到list的情况
                     if (fieldType == List.class) {
                         Element child = document.createElement(childName);
                         root.appendChild(child);
@@ -413,33 +413,6 @@ public class XmlTools {
         model.setFeeList(fee);
         String s  = beanToXml(model);
         System.out.println(s);
-
-//        String xml = "<program>" +
-//                "<session_id>757a05fb-a857-4a04-bb5b-490f87f49b02</session_id>" +
-//                "<function_id>test_function</function_id>" +
-//                "<feeinfo>" +
-//                "<row>" +
-//                "<ake005>xt12312000123</ake005>" +
-//                "<ake006>阿司匹林肠溶片</ake006>" +
-//                "<aaz213></aaz213>" +
-//                "<bka052>1</bka052>" +
-//                "<bka053>1</bka053>" +
-//                "<bka054>1</bka054>" +
-//                "<bka051>20160601</bka051>" +
-//                "<bka055>1</bka055>" +
-//                "<bka056>12.3</bka056>" +
-//                "<bka057>1</bka057>" +
-//                "<bka058>12.3</bka058>" +
-//                "<bka070>12312312412</bka070>" +
-//                "<bka074></bka074>" +
-//                "<bka075></bka075>" +
-//                "<bka071></bka071>" +
-//                "<aka063>0</aka063>" +
-//                "</row>" +
-//                "</feeinfo>" +
-//                "</program>";
-//        BaseModel baseModel = xmlToBean(xml, BaseModel.class);
-//        System.out.println(baseModel);
     }
 
     @XmlField(xmlRoot = "TTTT")
