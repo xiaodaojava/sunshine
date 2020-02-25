@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="信息设置页面">
+
+    <title>管理页面</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" href="/static/vendor/bootstrap/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/dist/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- bootstrap-table -->
+    <link th:href="@{/vendor/bootstrap-table/bootstrap-table.min.css}"
+          href="/static/vendor/bootstrap-table/bootstrap-table.css" rel="stylesheet" type="text/css">
+
+    <link th:href="@{/vendor/bootstrap3-editable/css/bootstrap-editable.css}"
+          href="/static/vendor/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Custom Fonts -->
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/admin/index">管理页面</a>
+        </div>
+        <!-- /.navbar-header -->
+
+
+        <!--<ul th:include="headMacro::index_top" class="nav navbar-top-links navbar-right"></ul>-->
+
+        <!-- /.navbar-top-links -->
+
+        <div th:include="headMacro::index_side" class="navbar-default sidebar" role="navigation"></div>
+    </nav>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">管理页面</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="col-md-1">
+                            <input type="button" class="btn btn-default" data-toggle="modal"
+                                   href="#modal-newModal" value="新增商品"/>
+                        </div>
+                        <table id="${config.modelCamelName}Table"/>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+
+    </div>
+    <!-- /#page-wrapper -->
+    <div id="Modal"></div>
+
+    <div class="modal fade" id="modal-newModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">新增商品</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="file" id="excelFile" class="btn btn-file" value="上传excel">
+                    </div>
+                    <div class="row">
+                        <% for(column in table.fieldList) { %>
+                        <div class="form-group col-lg-6">
+                            <label  class="col-lg-2 control-label">${column.remark}</label>
+                            <div class="col-lg-10">
+                            <input  query="new" name="${column.camelName}" class="form-control input-lg" />
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" id="save${column.modelName}" class="btn btn-primary">导入</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- jQuery -->
+
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/base.js"></script>
+
+<script th:src="@{/vendor/jquery/jquery.min.js}" src="/static/vendor/jquery/jquery.min.js"></script>
+
+<script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}" src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script th:src="@{https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js}"
+        src="/static/vendor/bootstrap-table/bootstrap-table.js"></script>
+<!--<script th:src="@{/vendor/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}" src="/static/vendor/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>-->
+
+<script th:src="@{/vendor/bootstrap-table/extensions/editable/bootstrap-table-editable.min.js}"
+        src="/static/vendor/bootstrap-table/extensions/editable/bootstrap-table-editable.js"></script>
+
+<script th:src="@{/vendor/bootstrap3-editable/js/bootstrap-editable.min.js}"
+        src="/static/vendor/bootstrap3-editable/js/bootstrap-editable.js"></script>
+<script th:src="@{/vendor/wangEditor/wangEditor.js}" src="/static/vendor/wangEditor/wangEditor.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/vendor/metisMenu/metisMenu.min.js"></script>
+<script src="/dist/js/sb-admin-2.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script>
+
+    var itemTable = $("#itemTable").bootstrapTable({
+        url: '/${config.modelCamelName}/list',         //请求后台的URL（*）
+        method: 'get',                      //请求方式（*）
+        toolbar: '#toolbar',                //工具按钮用哪个容器
+        striped: true,                      //是否显示行间隔色
+        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,                   //是否显示分页（*）
+        sortable: true,                     //是否启用排序
+        //sortOrder: "asc",                   //排序方式
+        queryParams: funcDtion (params) {
+            return params;
+        },//传递参数（*）
+        sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+        queryParamsType: '',
+        pageNumber: 1,                       //初始化加载第一页，默认第一页
+        pageSize: 10,                       //每页的记录行数（*）
+        pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+        search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+        showColumns: true,                  //是否显示所有的列
+        showRefresh: true,                  //是否显示刷新按钮
+        minimumCountColumns: 2,             //最少允许的列数
+        clickToSelect: true,                //是否启用点击选中行
+        height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+        uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+        cardView: false,                    //是否显示详细视图
+        detailView: false,                   //是否显示父子表
+        onEditableSave: function (field, row, oldValue, $el) {
+            row.startTime = formatDateTime(row.startTime);
+            row.endTime = formatDateTime(row.endTime);
+            row.createTime = null;
+            $.ajax({
+                type: "post",
+                url: "/${config.modelCamelName}/save",
+                data: row,
+                success: function (data) {
+
+                }
+
+            });
+        },
+        columns: [
+            {
+                field: 'operate',
+                title: '操作',
+                align: 'center',
+                // events: operateEvents,
+                formatter: function (value, row, index) {
+
+                    var id = row['id'];
+                    return '<input type="button" onclick="showDetail(' + row['id'] + ')"  class="btn btn-primary" data-value="' + row['id'] + '" value="详情">'+
+                        '<input type="button" onclick="delete${config.modelName}(' + row['id'] + ')"  class="btn btn-danger" data-value="' + row['id'] + '" value="删除">';
+
+                }
+            },
+            <% for(column in table.fieldList) { %>
+            {
+                field: '${column.camelName}',
+                title: '${column.remark}',
+            },
+            <% } %>
+
+            ]
+    });
+    var editor;
+
+    function showDetail(id) {
+        console.log(id)
+        $("#Modal").load("/item/showDetail?id=" + id + " #modalContent", function () {
+            $('#myModal').modal('show');
+            var E = window.wangEditor
+            editor = new E('#editor')
+            editor.customConfig.uploadImgServer = '/utils/uploadImage';
+            editor.customConfig.uploadFileName = 'file';
+            editor.create()
+        });
+    }
+
+    $("body").on('click','#saveItem', function (event) {
+        var item = {
+            categoryId: $("#categoryId").val(),
+            skuDesc: editor.txt.html(),
+            id: $("#itemId").val()
+        }
+
+        $.ajax({
+            url: '/item/save',
+            type:'POST',
+            data:item,
+            success: function (datas) {
+                alert("保存成功");
+            }
+        })
+    })
+
+    $("#importExcel").on('click',function (event) {
+        var formFile = new FormData();
+
+        var excelFile = document.getElementById("excelFile").files[0]; // js 获取文件对象
+        if (typeof (excelFile) !== "undefined" && excelFile.size > 0) {
+            // formFile.append("action", "UploadVMKImagePath");
+            formFile.append("excelFile", excelFile);
+            $.ajax({
+                url: '/item/importExcel',
+                type:'POST',
+                data:formFile,
+                processData: false,//用于对data参数进行序列化处理 这里必须false
+                contentType: false, //必须
+                success: function (datas) {
+                    alert("保存成功");
+                }
+            })
+        }else {
+            var param  = getParam('new');
+            console.log(param)
+            $.ajax({
+                url: '/item/save',
+                type:'POST',
+                data:param,
+                success: function (datas) {
+                    alert("保存成功");
+                }
+            })
+        }
+
+
+
+
+    })
+
+    function deleteItem(id) {
+        $.ajax({
+            url: '/item/delete?id='+id,
+            type:'GET',
+            success: function (datas) {
+                itemTable.bootstrapTable('refresh');
+                alert("保存成功");
+            }
+        })
+    }
+    function convertTime() {
+        var t = $("#timestamp").val();
+
+     var time = formatDateTime(parseInt(t));
+     $("#timestamp").val(time);
+    }
+
+    function formatDateTime(inputTime) {
+        var date = new Date(inputTime);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    }
+
+
+
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+package [(${basePackage})].models.dos;
+import com.platform.tools.mybatis.model.SqlField;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @author lixiang
+ */
+public class [(${table.javaTableName})]DO implements Serializable{
+
+   [# th:each="field : ${table.fieldList}"]
+   /** [(${field.remark})]  */
+   @SqlField
+   private [(${field.javaType})] [(${field.camelName})];
+
+   [/]
+
+
+   [# th:each="field : ${table.fieldList}"]
+   public [(${field.javaType})] get[(${field.javaName})]() {
+        return this.[(${field.camelName})];
+   }
+
+   public [(${table.javaTableName})]DO set[(${field.javaName})]([(${field.javaType})] [(${field.camelName})]) {
+        this.[(${field.camelName})] = [(${field.camelName})];
+        return this;
+   }
+   [/]
+
+   public static [(${table.javaTableName})]DO create(){
+       return new [(${table.javaTableName})]DO();
+   }
+
+   public [(${table.javaTableName})]DO build(){
+       return this;
+   }
+
+}

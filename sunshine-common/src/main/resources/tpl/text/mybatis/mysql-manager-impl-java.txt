@@ -1,0 +1,81 @@
+package [(${basePackage})].business.manager.impl.[(${domainName})];
+
+import [(${basePackage})].models.dos.[(${table.javaTableName})]DO;
+import [(${basePackage})].models.qc.[(${table.javaTableName})]QC;
+import com.platform.tools.jdk.ListUtils;
+import [(${basePackage})].business.manager.[(${table.javaTableName})]Manager;
+import [(${basePackage})].dao.[(${domainName})].[(${table.javaTableName})]Mapper;
+import com.platform.tools.mybatis.model.Page;
+import com.platform.tools.mybatis.model.Sort;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
+import java.util.List;
+
+@Component
+public class [(${table.javaTableName})]ManagerImpl implements [(${table.javaTableName})]Manager{
+
+    @Autowired
+    private [(${table.javaTableName})]Mapper [(${table.javaCamelName})]Mapper;
+    
+    @Override
+    public [(${table.javaTableName})]DO get[(${table.javaTableName})]ById(Long id) {
+        [(${table.javaTableName})]QC qc = new [(${table.javaTableName})]QC();
+        qc.setId(id);
+        qc.setPage(Page.getOne());
+        List<[(${table.javaTableName})]DO> [(${table.javaCamelName})]DOS = query[(${table.javaTableName})](qc);
+        return ListUtils.getOne([(${table.javaCamelName})]DOS);
+    }
+    
+    @Override
+    public [(${table.javaTableName})]DO get[(${table.javaTableName})]ByIdWithInjectName(Long id) {
+        [(${table.javaTableName})]DO [(${table.javaCamelName})]DO = get[(${table.javaTableName})]ById(id);
+        [(${table.javaCamelName})]DO = ([(${table.javaTableName})]DO) InjectNameUtils.injectName([(${table.javaCamelName})]DO);
+        return [(${table.javaCamelName})]DO;
+    }
+
+    @Override
+    public List<[(${table.javaTableName})]DO> query[(${table.javaTableName})]([(${table.javaTableName})]QC qc){
+
+        List<[(${table.javaTableName})]DO> [(${table.javaCamelName})]s = [(${table.javaCamelName})]Mapper.list[(${table.javaTableName})]s(qc);
+        return [(${table.javaCamelName})]s;
+    }
+    
+    @Override
+    public List<[(${table.javaTableName})]DO> query[(${table.javaTableName})]WithInjectName([(${table.javaTableName})]QC qc) {
+        List<[(${table.javaTableName})]DO> [(${table.javaCamelName})]DOS = query[(${table.javaTableName})](qc);
+        [(${table.javaCamelName})]DOS = (List<[(${table.javaTableName})]DO>) InjectNameUtils.injectName([(${table.javaCamelName})]DOS);
+        return [(${table.javaCamelName})]DOS;
+    }
+
+    @Override
+    public Long count[(${table.javaTableName})]([(${table.javaTableName})]QC qc){
+
+        Long count = [(${table.javaCamelName})]Mapper.count[(${table.javaTableName})]s(qc);
+        return count;
+    }
+
+    @Override
+    public [(${table.javaTableName})]DO save[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
+
+        if([(${table.javaCamelName})].getId()!=null){
+             [(${table.javaCamelName})]Mapper.update[(${table.javaTableName})]([(${table.javaCamelName})]);
+        }else {
+            [(${table.javaCamelName})].setCreateTime(new Date());
+             [(${table.javaCamelName})]Mapper.insert[(${table.javaTableName})]([(${table.javaCamelName})]);
+        }
+        return [(${table.javaCamelName})];
+
+    }
+
+    @Override
+    public int remove[(${table.javaTableName})]ById(Long id){
+
+        return [(${table.javaCamelName})]Mapper.remove[(${table.javaTableName})]ById(id);
+
+    }
+
+
+}

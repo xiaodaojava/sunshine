@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${config.packageName}.dao.${config.modelName}DAO">
+  	
+	<!--The user defined SQL!-->
+  	
+  	
+  	<!--The user defined SQL!-->
+
+  	<resultMap id="BaseResultMap" type="${config.packageName}.model.${config.modelName}" >
+            <id column="id" property="id" jdbcType="BIGINT" />
+            <% for(column in table.fieldList) { %>
+               <result column="${column.name}" property="${column.camelName}" jdbcType="${column.jdbcType}" />
+            <% } %>
+    </resultMap>
+
+    <sql id="queryCondition" >
+        <where>
+        <% for(column in table.fieldList) { %>
+            <if test="${column.camelName} != null ">
+                and ${column.name} = #{${column.camelName}}
+            </if>
+        <% } %>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List">
+        <trim prefix="" prefixOverrides=",">
+        <% for(column in table.fieldList) { %>
+          , ${column.name}
+        <% } %>
+        </trim>
+    </sql>
+
+
+  	
+    <insert id="insert${config.modelName}" parameterType="${config.packageName}.model.${config.modelName}">
+        insert into ${table.tableName}
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+        <% for(column in table.fieldList) { %>
+        <if test="${column.camelName} != null" >
+            ${column.name},
+        </if>
+        <% } %>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <% for(column in table.fieldList) { %>
+        <if test="${column.camelName} != null" >
+            #{${column.camelName},jdbcType=${column.jdbcType}},
+        </if>
+        <% } %>
+        </trim>
+    </insert>
+
+    <update id="update${config.modelName}" parameterType="${config.packageName}.model.${config.modelName}">
+        UPDATE ${table.tableName}
+        <trim prefix="set" suffixOverrides="," >
+
+        <% for(column in table.fieldList) { %>
+        <if test="${column.camelName} != null" >
+            ${column.name} = #{${column.camelName}},
+        </if>
+        <% } %>
+        </trim>
+        <include refid="queryCondition"/>
+    </update>
+
+    <select id="list${config.modelName}" parameterType="${config.packageName}.model.qc.${config.modelName}QC" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from ${table.tableName} <include refid="queryCondition" />
+        <if test="sortBy != null and sortType != null" >
+            order by #{sortBy} #{sortType}
+        </if>
+        <if test="page != null and page.startIndex != null and page.pageSize != null">
+            <![CDATA[ limit #{page.startIndex},#{page.pageSize} ]]>
+        </if>
+    </select>
+
+    <select id="count${config.modelName}" parameterType="${config.packageName}.model.qc.${config.modelName}QC" resultType="java.lang.Long">
+        SELECT count(*) from ${table.tableName}
+        <include refid="queryCondition"></include>
+    </select>
+
+
+    <insert id="insertBatch" >
+     	insert into ${table.tableName}
+     	(
+            <trim prefix="" prefixOverrides=",">
+            	<% for(column in table.fieldList) { %>,${column.name}<% } %>
+            </trim>
+        ) values 
+    	<foreach collection="list" item="item" index="index" separator=",">  
+	    (
+            <trim prefix="" prefixOverrides=",">
+                <% for(column in table.fieldList) { %> ,#{item.${column.camelName}}<% } %>
+            </trim>
+	     )
+    	</foreach>  
+    </insert>
+
+    <delete id="delete${config.modelName}ById" parameterType="java.lang.Long">
+            delete from ${table.tableName} where id = #{id}
+        </delete>
+
+</mapper>

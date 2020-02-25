@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'maven-publish'
 }
 
 
@@ -18,5 +19,23 @@ dependencies {
 	compile project(":sunshine-common")
 }
 
-
+publishing {
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = uri("https://maven.pkg.github.com/xiaodaojava/sunshine")
+			credentials {
+				username = project.findProperty("gpr.user")
+				password = project.findProperty("gpr.key")
+			}
+		}
+	}
+	publications {
+		gpr(MavenPublication) {
+			groupId="red.lixiang.tools"
+			version = "0.0.1"
+			from components.java
+		}
+	}
+}
 

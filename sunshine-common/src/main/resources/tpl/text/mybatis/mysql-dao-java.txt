@@ -1,0 +1,59 @@
+package [(${basePackage})].dao.[(${domainName})];
+
+import [(${basePackage})].models.dos.[(${table.javaTableName})]DO;
+import [(${basePackage})].models.qc.[(${table.javaTableName})]QC;
+import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * 本类只做简单的增删改查,复杂的用mapper自己手写,也可以写在Provider里面
+ * @author 造飞机团队自动生成
+ */
+@Mapper
+@Repository
+public interface [(${table.javaTableName})]Mapper {
+
+    /**
+     * 获取列表
+     * @param [(${table.javaCamelName})]QC
+     * @return
+     */
+    @SelectProvider(type = [(${table.javaTableName})]Provider.class)
+    List<[(${table.javaTableName})]DO> list[(${table.javaTableName})]s([(${table.javaTableName})]QC [(${table.javaCamelName})]QC);
+
+    /**
+     * 获取数量
+     * @param [(${table.javaCamelName})]QC
+     * @return
+     */
+    @SelectProvider(type = [(${table.javaTableName})]Provider.class)
+    long count[(${table.javaTableName})]s([(${table.javaTableName})]QC [(${table.javaCamelName})]QC);
+
+    /**
+     * 插入
+     * @param [(${table.javaCamelName})]
+     * @return
+     */
+    @InsertProvider(type = [(${table.javaTableName})]Provider.class)
+    @SelectKey(keyColumn = "id",resultType = Long.class,before = false,keyProperty = "id",statement ="SELECT LAST_INSERT_ID()" )
+    int insert[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]);
+
+    /**
+     * 更新,必须要有id
+     * @param [(${table.javaCamelName})]
+     * @return
+     */
+    @UpdateProvider(type = [(${table.javaTableName})]Provider.class)
+    int update[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]);
+
+
+    /**
+    * 删除,必须要有id
+    * @param id
+    * @return
+    */
+    @UpdateProvider(type = [(${table.javaTableName})]Provider.class)
+    int remove[(${table.javaTableName})]ById(long id);
+}

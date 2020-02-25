@@ -1,0 +1,63 @@
+package [(${basePackage})].dao.[(${domainName})];
+
+import [(${basePackage})].models.dos.[(${table.javaTableName})]DO;
+import [(${basePackage})].models.qc.[(${table.javaTableName})]QC;
+import com.platform.tools.mybatis.MapperUtils;
+import org.apache.ibatis.builder.annotation.ProviderMethodResolver;
+import org.apache.ibatis.jdbc.SQL;
+
+/**
+ * @author lixiang
+ */
+public class [(${table.javaTableName})]Provider implements ProviderMethodResolver {
+
+    private static final String TABLE_FIELDS = MapperUtils.getTableFieldName([(${table.javaTableName})]DO.class)
+
+    public String list[(${table.javaTableName})]s([(${table.javaTableName})]QC [(${table.javaCamelName})]QC){
+        SQL sql = new SQL() {{
+            SELECT(TABLE_FIELDS);
+            FROM("[(${table.tableName})]");
+        }};
+        MapperUtils.richWhereSql(sql, [(${table.javaCamelName})]QC);
+
+        return sql.toString();
+    }
+
+    public String count[(${table.javaTableName})]s([(${table.javaTableName})]QC [(${table.javaCamelName})]QC){
+        SQL sql = new SQL() {{
+            SELECT("count(1)");
+            FROM("[(${table.tableName})]");
+        }};
+        MapperUtils.richWhereSql(sql, [(${table.javaCamelName})]QC);
+
+        return sql.toString();
+    }
+
+    public String insert[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
+        SQL sql = new SQL() {{
+            INSERT_INTO("[(${table.tableName})]");
+        }};
+        MapperUtils.richInsertSql(sql, [(${table.javaCamelName})]);
+
+        return sql.toString();
+    }
+    public String update[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]) {
+        SQL sql = new SQL() {{
+            UPDATE("[(${table.tableName})]");
+
+        }};
+        MapperUtils.richUpdate(sql, [(${table.javaCamelName})]);
+        sql.WHERE("id = #{id}");
+        return sql.toString();
+    }
+
+    public String remove[(${table.javaTableName})]ById(long id){
+            SQL sql = new SQL() {{
+                UPDATE("[(${table.tableName})]");
+                SET("is_delete = 1");
+            }};
+            sql.WHERE("id = #{id}");
+            return sql.toString();
+    }
+
+}

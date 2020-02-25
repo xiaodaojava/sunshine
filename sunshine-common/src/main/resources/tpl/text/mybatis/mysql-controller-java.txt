@@ -1,0 +1,77 @@
+package [(${basePackage})].admin.controller;
+
+import com.alibaba.fastjson.JSON;
+import com.platform.tools.base.BaseResponse;
+import com.platform.tools.base.PageData;
+import com.platform.tools.mybatis.model.Page;
+import com.platform.tools.mybatis.model.Sort;
+import [(${basePackage})].business.manager.[(${table.javaTableName})]Manager;
+import [(${basePackage})].models.dos.[(${table.javaTableName})]DO;
+import [(${basePackage})].models.qc.[(${table.javaTableName})]QC;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import static com.platform.tools.base.PageData.PAGE_INDEX;
+import static com.platform.tools.base.PageData.PAGE_SIZE;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @Author 造飞机团队
+ **/
+@Controller
+public class [(${table.javaTableName})]Controller  {
+    @Autowired
+    private [(${table.javaTableName})]Manager [(${table.javaCamelName})]Manager;
+
+    @GetMapping("/[(${table.javaCamelName})]/query")
+    @ResponseBody
+    public BaseResponse<PageData<[(${table.javaTableName})]DO>> query[(${table.javaTableName})]([(${table.javaTableName})]QC qc, Page page ){
+
+
+        Long totalCount = [(${table.javaCamelName})]Manager.count[(${table.javaTableName})](qc);
+        qc.setPage(page);
+        List<[(${table.javaTableName})]DO> [(${table.javaCamelName})]s = [(${table.javaCamelName})]Manager.query[(${table.javaTableName})](qc);
+
+        return  BaseResponse.assemblePageResponse([(${table.javaCamelName})]s,totalCount,page.getPageIndex(),page.getPageSize());
+    }
+
+    @PostMapping("/[(${table.javaCamelName})]/save")
+    @ResponseBody
+    public BaseResponse<String> save[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
+        BaseResponse<String> baseResponse = new BaseResponse<>();
+        [(${table.javaCamelName})]Manager.save[(${table.javaTableName})]([(${table.javaCamelName})]);
+        baseResponse.setData("OK");
+        return  baseResponse;
+    }
+
+
+    
+    @GetMapping("/[(${table.javaCamelName})]/get")
+    @ResponseBody
+    public BaseResponse<[(${table.javaTableName})]DO> get[(${table.javaTableName})]([(${table.javaTableName})]QC qc){
+        qc.setPage(Page.getOne());
+        List<[(${table.javaTableName})]DO> [(${table.javaCamelName})]s = [(${table.javaCamelName})]Manager.query[(${table.javaTableName})](qc);
+        if([(${table.javaCamelName})]s!=null && [(${table.javaCamelName})]s.size()>0){
+            return BaseResponse.success([(${table.javaCamelName})]s.get(0));
+        }else{
+            return BaseResponse.fail("no data info");
+        }
+    }
+
+    @GetMapping("/[(${table.javaCamelName})]/remove")
+    @ResponseBody
+    public BaseResponse<String> remove(Long id){
+        BaseResponse<String> baseResponse = new BaseResponse<>();
+        [(${table.javaCamelName})]Manager.remove[(${table.javaTableName})]ById(id);
+        baseResponse.setData("OK");
+        return  baseResponse;
+    }
+
+}

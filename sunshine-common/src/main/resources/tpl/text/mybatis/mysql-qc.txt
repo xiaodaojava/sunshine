@@ -1,0 +1,41 @@
+package [(${basePackage})].models.qc;
+
+import com.platform.tools.mybatis.model.BaseQC;
+import java.util.Date;
+
+/**
+ * @author lixiang
+ */
+public class [(${table.javaTableName})]QC extends BaseQC {
+
+   [# th:each="field : ${table.fieldList}"]
+   [# th:if="${field.queryFlag}"]
+   /** [(${field.remark})]  */
+   private [(${field.javaType})] [(${field.camelName})];
+   [/]
+   [/]
+
+    [# th:each="field : ${table.fieldList}"]
+    [# th:if="${field.queryFlag}"]
+
+    public [(${field.javaType})] get[(${field.javaName})]() {
+        return this.[(${field.camelName})];
+    }
+
+    public [(${table.javaTableName})]QC set[(${field.javaName})]([(${field.javaType})] [(${field.camelName})]) {
+        this.[(${field.camelName})] = [(${field.camelName})];
+        return this;
+    }
+     [/]
+    [/]
+
+
+    public static [(${table.javaTableName})]QC create(){
+        return new [(${table.javaTableName})]QC();
+    }
+
+    public [(${table.javaTableName})]QC build(){
+        return this;
+    }
+
+}
