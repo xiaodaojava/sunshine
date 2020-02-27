@@ -3,7 +3,8 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 }
-
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 dependencies {
 	compile group: 'com.alibaba', name: 'fastjson', version: '1.2.62'
 }
@@ -37,6 +38,15 @@ javadoc {
 
 publishing {
 	repositories {
+
+		maven {
+			name "360jk"
+			url "http://maven.default.svc.cluster.local:30081/repository/maven-snapshots/"
+			credentials {
+				username project.findProperty("haoyao.username")
+				password project.findProperty("haoyao.password")
+			}
+		}
 		maven {
 			name 'sonatypeRepository'
 			url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
@@ -45,14 +55,7 @@ publishing {
 				password = project.findProperty("sonatype.password")
 			}
 		}
-		maven {
-			name = 'sonatypeSnapshotRepository'
-			url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-			credentials {
-				username = project.findProperty("sonatype.username")
-				password = project.findProperty("sonatype.password")
-			}
-		}
+
 
 		publications {
 			mavenJava(MavenPublication) {

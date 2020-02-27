@@ -173,7 +173,10 @@ public class XmlTools {
                     String rowWrapper = conf.rowWrapper;
                     if (StringTools.isBlank(rowWrapper)) {
                         //没有row,就是单独的,可以直接递归解析
-                        nodeToBean(node, t, (Class<?>) fieldType);
+                        Class<?> fieldClassType = (Class<?>) fieldType;
+                        Object o = fieldClassType.getDeclaredConstructor().newInstance();
+                        field.set(t,o);
+                        nodeToBean(node, o, fieldClassType);
                     }
                     //可能是list,或者是单个的
                     List<Node> nodesByTagName = getNodesByTagName(node, rowWrapper);

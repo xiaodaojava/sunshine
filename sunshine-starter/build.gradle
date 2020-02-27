@@ -3,7 +3,8 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 }
-
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 dependencies {
 	implementation platform('org.springframework.boot:spring-boot-dependencies:2.1.8.RELEASE')
@@ -59,13 +60,14 @@ publishing {
 			}
 		}
 		maven {
-			name = 'sonatypeSnapshotRepository'
-			url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+			name "360jk"
+			url "http://maven.default.svc.cluster.local:30081/repository/maven-snapshots/"
 			credentials {
-				username = project.findProperty("sonatype.username")
-				password = project.findProperty("sonatype.password")
+				username project.findProperty("haoyao.username")
+				password project.findProperty("haoyao.password")
 			}
 		}
+
 
 		publications {
 			mavenJava(MavenPublication) {

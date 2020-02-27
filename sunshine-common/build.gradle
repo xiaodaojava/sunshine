@@ -4,7 +4,8 @@ plugins {
 	id 'signing'
 }
 
-
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 
 dependencies {
@@ -53,11 +54,11 @@ javadoc {
 publishing {
 	repositories {
 		maven {
-			name 'sonatypeRepository'
-			url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+			name "360jk"
+			url "http://maven.default.svc.cluster.local:30081/repository/maven-snapshots/"
 			credentials {
-				username = project.findProperty("sonatype.username")
-				password = project.findProperty("sonatype.password")
+				username project.findProperty("haoyao.username")
+				password project.findProperty("haoyao.password")
 			}
 		}
 		maven {
