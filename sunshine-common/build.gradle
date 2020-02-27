@@ -1,6 +1,7 @@
 plugins {
 	id 'java'
 	id 'maven-publish'
+	id 'signing'
 }
 
 
@@ -21,24 +22,91 @@ dependencies {
 
 }
 
+// 后面的都是打包的配置
+task sourcesJar(type: Jar) {
+	archiveClassifier = 'sources'
+	from sourceSets.main.allJava
+}
+// 生成 javadoc jar
+task javadocJar(type: Jar) {
+	archiveClassifier = 'javadoc'
+	from javadoc.destinationDir
+}
+// javadoc 配置，这里是自定义了 java doc 的一些配置
+javadoc {
+	description = "Generates project-level javadoc for use in -javadoc jar"
+
+	options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PROTECTED
+	options.author = true
+	options.version = true
+	options.header = project.name
+	options.addStringOption('Xdoclint:none', '-quiet')
+
+	// suppress warnings due to cross-module @see and @link references;
+	// note that global 'api' task does display all warnings.
+	logging.captureStandardError LogLevel.INFO
+	logging.captureStandardOutput LogLevel.INFO // suppress "## warnings" message
+	options.encoding = "UTF-8"  //编码一定要配置否则直接出错
+	options.charSet = 'UTF-8'
+}
+
 publishing {
 	repositories {
 		maven {
-			name = "GitHubPackages"
-			url = uri("https://maven.pkg.github.com/xiaodaojava/sunshine")
+			name 'sonatypeRepository'
+			url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
 			credentials {
-				username = project.findProperty("gpr.user")
-				password = project.findProperty("gpr.key")
+				username = project.findProperty("sonatype.username")
+				password = project.findProperty("sonatype.password")
+			}
+		}
+		maven {
+			name = 'sonatypeSnapshotRepository'
+			url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+			credentials {
+				username = project.findProperty("sonatype.username")
+				password = project.findProperty("sonatype.password")
+			}
+		}
+
+		publications {
+			mavenJava(MavenPublication) {
+				groupId = "red.lixiang.tools"
+				version = "0.0.1"
+				from components.java
+				artifact sourcesJar
+				artifact javadocJar
+				pom {
+					name = "sunshine-common"
+					description = "java tools depends on third party"
+					url = "https://github.com/xiaodaojava/sunshine"
+					licenses {
+						license {
+							name = "The Apache License, Version 2.0"
+							url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+						}
+					}
+					developers {
+						developer {
+							id = "lixiang"
+							name = "lixiang"
+							email = "lixiang9409@vip.qq.com"
+						}
+					}
+					scm {
+						connection = "scm:git:https://github.com/xiaodaojava/sunshine.git"
+						developerConnection = "scm:git:https://github.com/xiaodaojava/sunshine.git"
+						url = "https://github.com/xiaodaojava/sunshine"
+					}
+				}
+
 			}
 		}
 	}
-	publications {
-		gpr(MavenPublication) {
-			groupId="red.lixiang.tools"
-			version = "0.0.1"
-			from components.java
-		}
-	}
+}
+
+signing {
+	sign publishing.publications.mavenJava
 }
 
 
