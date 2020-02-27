@@ -71,8 +71,8 @@ publishing {
 
 		publications {
 			mavenJava(MavenPublication) {
-				groupId = "red.lixiang.tools"
-				version = "0.0.1"
+				groupId = group
+				version = version
 				from components.java
 				artifact sourcesJar
 				artifact javadocJar
