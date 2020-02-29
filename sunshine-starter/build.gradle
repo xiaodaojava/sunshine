@@ -60,11 +60,11 @@ publishing {
 			}
 		}
 		maven {
-			name "360jk"
-			url "http://maven.default.svc.cluster.local:30081/repository/maven-snapshots/"
+			name = 'sonatypeSnapshotRepository'
+			url = 'https://oss.sonatype.org/content/repositories/snapshots/'
 			credentials {
-				username project.findProperty("haoyao.username")
-				password project.findProperty("haoyao.password")
+				username = project.findProperty("sonatype.username")
+				password = project.findProperty("sonatype.password")
 			}
 		}
 

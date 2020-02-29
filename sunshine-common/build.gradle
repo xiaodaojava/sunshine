@@ -53,14 +53,7 @@ javadoc {
 
 publishing {
 	repositories {
-		maven {
-			name "360jk"
-			url "http://maven.default.svc.cluster.local:30081/repository/maven-snapshots/"
-			credentials {
-				username project.findProperty("haoyao.username")
-				password project.findProperty("haoyao.password")
-			}
-		}
+
 		maven {
 			name 'sonatypeRepository'
 			url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
