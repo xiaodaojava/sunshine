@@ -1,10 +1,7 @@
 package red.lixiang.tools.jdk.io;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.CharBuffer;
 
 /**
@@ -52,6 +49,15 @@ public class IOTools {
         return (bos.toByteArray());
     }
     public static String readString(InputStreamReader from) throws IOException {
+        char[] buffer = new char[1024];
+        StringBuilder builder = new StringBuilder();
+        int len;
+        while((len = from.read(buffer)) != -1) {
+            builder.append(buffer,0,len);
+        }
+        return builder.toString();
+    }
+    public static String readStringFromReader(Reader from) throws IOException {
         char[] buffer = new char[1024];
         StringBuilder builder = new StringBuilder();
         int len;
