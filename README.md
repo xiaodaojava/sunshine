@@ -8,13 +8,13 @@ maven:
 <dependency>
   <groupId>red.lixiang.tools</groupId>
   <artifactId>sunshine-starter</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
 </dependency>
 ```
 
 gradle:
 ```groovy
-implementation 'red.lixiang.tools:sunshine-starter:0.0.1'
+implementation 'red.lixiang.tools:sunshine-starter:0.0.2'
 ```
 如只需要jdk本身的工具,可只引用 `sunshine-base`
 如只需一些第三方的某个工具只需引用 `sunshine-common`
