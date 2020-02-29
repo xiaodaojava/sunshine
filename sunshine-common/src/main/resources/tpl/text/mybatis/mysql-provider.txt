@@ -11,7 +11,7 @@ import org.apache.ibatis.jdbc.SQL;
  */
 public class [(${table.javaTableName})]Provider implements ProviderMethodResolver {
 
-    private static final String TABLE_FIELDS = MapperUtils.getTableFieldName([(${table.javaTableName})]DO.class)
+    private static final String TABLE_FIELDS = MapperUtils.getTableFieldName([(${table.javaTableName})]DO.class);
 
     public String list[(${table.javaTableName})]s([(${table.javaTableName})]QC [(${table.javaCamelName})]QC){
         SQL sql = new SQL() {{
