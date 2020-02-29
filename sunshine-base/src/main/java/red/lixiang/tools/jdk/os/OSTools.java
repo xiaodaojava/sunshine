@@ -16,5 +16,14 @@ public class OSTools {
         return osName.toLowerCase().contains("mac");
     }
 
+    public static String userHomePath(){
+        String userHome  = System.getProperty("user.home");
+        return userHome;
+    }
+    public static String fileSeparator(){
+        String userHome  = System.getProperty("file.separator");
+        return userHome;
+    }
+
 
 }
