@@ -29,12 +29,6 @@ public class [(${table.javaTableName})]ManagerImpl implements [(${table.javaTabl
         return ListUtils.getOne([(${table.javaCamelName})]DOS);
     }
     
-    @Override
-    public [(${table.javaTableName})]DO get[(${table.javaTableName})]ByIdWithInjectName(Long id) {
-        [(${table.javaTableName})]DO [(${table.javaCamelName})]DO = get[(${table.javaTableName})]ById(id);
-        [(${table.javaCamelName})]DO = ([(${table.javaTableName})]DO) InjectNameUtils.injectName([(${table.javaCamelName})]DO);
-        return [(${table.javaCamelName})]DO;
-    }
 
     @Override
     public List<[(${table.javaTableName})]DO> query[(${table.javaTableName})]([(${table.javaTableName})]QC qc){
@@ -43,12 +37,6 @@ public class [(${table.javaTableName})]ManagerImpl implements [(${table.javaTabl
         return [(${table.javaCamelName})]s;
     }
     
-    @Override
-    public List<[(${table.javaTableName})]DO> query[(${table.javaTableName})]WithInjectName([(${table.javaTableName})]QC qc) {
-        List<[(${table.javaTableName})]DO> [(${table.javaCamelName})]DOS = query[(${table.javaTableName})](qc);
-        [(${table.javaCamelName})]DOS = (List<[(${table.javaTableName})]DO>) InjectNameUtils.injectName([(${table.javaCamelName})]DOS);
-        return [(${table.javaCamelName})]DOS;
-    }
 
     @Override
     public Long count[(${table.javaTableName})]([(${table.javaTableName})]QC qc){

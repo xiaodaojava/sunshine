@@ -3,7 +3,6 @@ package red.lixiang.tools.jdk.xml;
 import com.alibaba.fastjson.JSONObject;
 
 import red.lixiang.tools.jdk.StringTools;
-import red.lixiang.tools.jdk.StringTools;
 import red.lixiang.tools.jdk.reflect.ReflectTools;
 import org.w3c.dom.*;
 

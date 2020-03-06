@@ -13,11 +13,9 @@ public interface [(${table.javaTableName})]Manager {
 
     public [(${table.javaTableName})]DO get[(${table.javaTableName})]ById (Long id);
 
-    public [(${table.javaTableName})]DO get[(${table.javaTableName})]ByIdWithInjectName (Long id);
 
     public List<[(${table.javaTableName})]DO> query[(${table.javaTableName})]([(${table.javaTableName})]QC qc);
 
-    public List<[(${table.javaTableName})]DO> query[(${table.javaTableName})]WithInjectName([(${table.javaTableName})]QC qc);
 
     public Long count[(${table.javaTableName})]([(${table.javaTableName})]QC [(${table.javaCamelName})]);
 

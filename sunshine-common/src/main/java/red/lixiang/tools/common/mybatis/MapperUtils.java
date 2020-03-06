@@ -32,10 +32,23 @@ public class MapperUtils {
 
     private static HashMap<Class<?>,String> tableFieldCache = new HashMap<>(50);
 
+    private static List<String> getSimpleModelFields(Class<?> clazz){
+        Field[] allFields = ReflectTools.getAllFields(clazz);
+        List<String> stringList = new ArrayList<>();
+        for (Field field : allFields) {
+            SqlField sqlField = field.getAnnotation(SqlField.class);
+            if(sqlField==null){
+                continue;
+            }
+            stringList.add(field.getName());
+        }
+        return stringList;
+    }
+
     public static String getTableFieldName(Class<?> clazz){
 
         String tableField = tableFieldCache.computeIfAbsent(clazz, x -> {
-            List<String> fields = ReflectTools.getSimpleModelFields(clazz);
+            List<String> fields = getSimpleModelFields(clazz);
             String s = fields.stream().map(StringTools::camel2UnderScope).collect(Collectors.joining(","));
             return s;
         });
