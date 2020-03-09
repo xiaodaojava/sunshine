@@ -4,8 +4,8 @@ package [(${basePackage})].business.manager;
 import [(${basePackage})].models.dos.[(${table.javaTableName})]DO;
 import [(${basePackage})].models.qc.[(${table.javaTableName})]QC;
 
-import com.platform.tools.mybatis.model.Page;
-import com.platform.tools.mybatis.model.Sort;
+import red.lixiang.tools.common.mybatis.model.Page;
+import red.lixiang.tools.common.mybatis.model.Sort;
 import java.util.List;
 
 

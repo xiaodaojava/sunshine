@@ -2,11 +2,11 @@ package [(${basePackage})].business.manager.impl.[(${domainName})];
 
 import [(${basePackage})].models.dos.[(${table.javaTableName})]DO;
 import [(${basePackage})].models.qc.[(${table.javaTableName})]QC;
-import com.platform.tools.jdk.ListUtils;
+import red.lixiang.tools.jdk.ListTools;
 import [(${basePackage})].business.manager.[(${table.javaTableName})]Manager;
 import [(${basePackage})].dao.[(${domainName})].[(${table.javaTableName})]Mapper;
-import com.platform.tools.mybatis.model.Page;
-import com.platform.tools.mybatis.model.Sort;
+import red.lixiang.tools.common.mybatis.model.Page;
+import red.lixiang.tools.common.mybatis.model.Sort;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class [(${table.javaTableName})]ManagerImpl implements [(${table.javaTabl
         qc.setId(id);
         qc.setPage(Page.getOne());
         List<[(${table.javaTableName})]DO> [(${table.javaCamelName})]DOS = query[(${table.javaTableName})](qc);
-        return ListUtils.getOne([(${table.javaCamelName})]DOS);
+        return ListTools.getOne([(${table.javaCamelName})]DOS);
     }
     
 

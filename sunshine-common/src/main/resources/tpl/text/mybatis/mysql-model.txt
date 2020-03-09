@@ -1,5 +1,5 @@
 package [(${basePackage})].models.dos;
-import com.platform.tools.mybatis.model.SqlField;
+import red.lixiang.tools.common.mybatis.model.SqlField;
 import java.io.Serializable;
 import java.util.Date;
 

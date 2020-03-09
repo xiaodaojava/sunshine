@@ -2,7 +2,7 @@ package [(${basePackage})].dao.[(${domainName})];
 
 import [(${basePackage})].models.dos.[(${table.javaTableName})]DO;
 import [(${basePackage})].models.qc.[(${table.javaTableName})]QC;
-import com.platform.tools.mybatis.MapperUtils;
+import red.lixiang.tools.common.mybatis.MapperUtils;
 import org.apache.ibatis.builder.annotation.ProviderMethodResolver;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -54,7 +54,7 @@ public class [(${table.javaTableName})]Provider implements ProviderMethodResolve
     public String remove[(${table.javaTableName})]ById(long id){
             SQL sql = new SQL() {{
                 UPDATE("[(${table.tableName})]");
-                SET("is_delete = 1");
+                SET("delete_flag = 1");
             }};
             sql.WHERE("id = #{id}");
             return sql.toString();
