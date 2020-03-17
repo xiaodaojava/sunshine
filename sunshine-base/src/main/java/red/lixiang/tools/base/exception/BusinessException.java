@@ -21,20 +21,24 @@ public class BusinessException extends RuntimeException {
     private Object env;
 
     public BusinessException(String msg) {
+        super(msg);
         this.errorMessage = msg;
     }
 
     public BusinessException(String msg, int code) {
+        super(msg);
         this.errorMessage = msg;
         this.errorCode = code;
     }
 
     public BusinessException(String msg, Throwable exception) {
+        super(msg,exception);
         this.throwable = exception;
         this.errorMessage = msg;
     }
 
     public BusinessException(String msg, int code , Throwable throwable, Object env){
+        super(msg,throwable);
         this.errorCode = code;
         this.errorMessage = msg;
         this.throwable = throwable;
@@ -42,6 +46,7 @@ public class BusinessException extends RuntimeException {
     }
 
     public BusinessException(String msg, int code , Object env){
+        super(msg);
         this.errorCode = code;
         this.errorMessage = msg;
         this.env = env;
@@ -62,6 +67,7 @@ public class BusinessException extends RuntimeException {
 
 
     public BusinessException(String msg, int code, Throwable exception) {
+        super(msg,exception);
         this.errorMessage = msg;
         this.errorCode = code;
         this.throwable = exception;

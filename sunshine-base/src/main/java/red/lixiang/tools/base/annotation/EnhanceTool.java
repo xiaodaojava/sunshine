@@ -16,4 +16,6 @@ public @interface EnhanceTool {
     boolean logParam() default true;
     boolean logResult() default true;
     boolean tryCatch() default true;
+    boolean skipToMap() default false;
+
 }
