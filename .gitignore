@@ -2,3 +2,8 @@
 .gradle
 out
 build
+.vscode
+.project
+.settings
+bin
+.classpath
