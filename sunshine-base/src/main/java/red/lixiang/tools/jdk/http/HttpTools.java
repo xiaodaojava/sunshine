@@ -87,8 +87,10 @@ public class HttpTools {
             // 请置请求方式
             conn.setRequestMethod(request.getHttpMethod());
             // 添加header
-            for (Map.Entry<String, String> entry : request.getHeaderMap().entrySet()) {
-                conn.setRequestProperty(entry.getKey(), entry.getValue());
+            if(request.getHeaderMap()!=null){
+                for (Map.Entry<String, String> entry : request.getHeaderMap().entrySet()) {
+                    conn.setRequestProperty(entry.getKey(), entry.getValue());
+                }
             }
             conn.setUseCaches(false);
             conn.setDoOutput(true);

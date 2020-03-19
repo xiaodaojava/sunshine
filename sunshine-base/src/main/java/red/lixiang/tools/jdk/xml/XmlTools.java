@@ -108,13 +108,16 @@ public class XmlTools {
         Map<String, XmlFieldConf> confMap = new HashMap<>(fields.length);
         //先通过反射,获取xml标签和属性名的对应关系
         for (Field field : fields) {
-            XmlField xmlField = field.getAnnotation(XmlField.class);
-            if (xmlField == null) {
-                continue;
-            }
             String name = field.getName();
-            XmlFieldConf conf = new XmlFieldConf(xmlField.xmlEle(), name, xmlField.row());
-            confMap.put(xmlField.xmlEle(), conf);
+            String xmlTag = name;
+            String row = null;
+            XmlField xmlField = field.getAnnotation(XmlField.class);
+            if (xmlField != null) {
+                xmlTag = xmlField.xmlEle();
+                row = xmlField.row();
+            }
+            XmlFieldConf conf = new XmlFieldConf(xmlTag, name, row);
+            confMap.put(xmlTag, conf);
         }
         return confMap;
     }
@@ -232,7 +235,7 @@ public class XmlTools {
         NodeList children = node.getChildNodes();
         if (children.getLength() == 1) {
             Node child = children.item(0);
-            return child.getNodeType() == Node.TEXT_NODE;
+            return child.getNodeType() == Node.TEXT_NODE || child.getNodeType() == Node.CDATA_SECTION_NODE;
         }
         return false;
     }
