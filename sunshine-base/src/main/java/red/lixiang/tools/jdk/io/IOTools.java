@@ -14,7 +14,13 @@ public class IOTools {
     /** 2K chars (4K bytes) */
     private static final int BUF_SIZE = 0x800;
 
-
+    /**
+     * 用完之后要关流
+     *
+     * @param from
+     * @return
+     * @throws IOException
+     */
     public static long copy(Readable from, Appendable to) throws IOException {
         CharBuffer buf = CharBuffer.allocate(BUF_SIZE);
         long total = 0;
@@ -26,7 +32,13 @@ public class IOTools {
         }
         return total;
     }
-
+    /**
+     * 用完之后要关流
+     *
+     * @param from
+     * @return
+     * @throws IOException
+     */
     public static String readString(InputStream from) throws IOException {
         byte[] buffer = new byte[1024];
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -37,7 +49,13 @@ public class IOTools {
         bos.close();
         return new String(bos.toByteArray());
     }
-
+    /**
+     * 用完之后要关流
+     *
+     * @param from
+     * @return
+     * @throws IOException
+     */
     public static byte[] readByte(InputStream from) throws IOException {
         byte[] buffer = new byte[1024];
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -48,6 +66,13 @@ public class IOTools {
         bos.close();
         return (bos.toByteArray());
     }
+    /**
+     * 用完之后要关流
+     *
+     * @param from
+     * @return
+     * @throws IOException
+     */
     public static String readString(InputStreamReader from) throws IOException {
         char[] buffer = new char[1024];
         StringBuilder builder = new StringBuilder();

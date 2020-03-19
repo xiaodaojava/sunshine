@@ -1,21 +1,13 @@
 package red.lixiang.tools.starter.spring.boot;
 
 import red.lixiang.tools.jdk.ThreadPoolTools;
-import red.lixiang.tools.spring.redis.RedisTools;
-import red.lixiang.tools.spring.ContextHolder;
+import red.lixiang.tools.spring.redis.RedisSpringTools;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
 
 /**
  * @author lixiang
@@ -31,11 +23,10 @@ public class ToolAutoConfiguration {
     private ToolsProperty toolsProperty;
 
 
-
     @Bean
-    public RedisTools getRedisUtil(){
+    public RedisSpringTools getRedisUtil(){
         stringRedisTemplate.setDefaultSerializer(new StringRedisSerializer());
-        return new RedisTools().setRedisTemplate(stringRedisTemplate);
+        return new RedisSpringTools().setRedisTemplate(stringRedisTemplate);
     }
 
 

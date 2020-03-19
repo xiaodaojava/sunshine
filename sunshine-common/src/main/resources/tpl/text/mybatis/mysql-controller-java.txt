@@ -10,7 +10,7 @@ import [(${basePackage})].models.dos.[(${table.javaTableName})]DO;
 import [(${basePackage})].models.qc.[(${table.javaTableName})]QC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
+import org.springframework.util.StringTools;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

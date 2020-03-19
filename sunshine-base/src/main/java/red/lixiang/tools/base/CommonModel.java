@@ -1,6 +1,7 @@
 package red.lixiang.tools.base;
 
 import red.lixiang.tools.base.annotation.EnhanceTool;
+import red.lixiang.tools.jdk.StringTools;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -18,8 +19,8 @@ public interface CommonModel {
      * 对当前实体类的处理
      * @return
      */
-    default public Map<String, Object> toMap(){
-        Map<String, Object> map = new HashMap<>();
+    default public Map<String,Object> toMap(){
+        Map<String,Object> map = new HashMap<>();
         Field[] fields = this.getClass().getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -30,18 +31,30 @@ public interface CommonModel {
             Object obj;
             try {
                 obj = field.get(this);
+                String keyName =(enhanceTool!=null && StringTools.isNotBlank(enhanceTool.mapKey()))?
+                        enhanceTool.mapKey():mapKey(field.getName());
+
                 if(obj == null){
                     continue;
                 }
-                if(obj.getClass()== String.class){
-                    map.put((field.getName()), String.valueOf(obj));
+                if(obj.getClass()==String.class){
+                    map.put(keyName, String.valueOf(obj));
                 }else {
-                    map.put((field.getName()), obj);
+                    map.put(keyName, obj);
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
         return map;
+    }
+
+    /**
+     * 对key需不需要特殊处理
+     * @param s
+     * @return
+     */
+    default String mapKey(String s){
+        return s;
     }
 }

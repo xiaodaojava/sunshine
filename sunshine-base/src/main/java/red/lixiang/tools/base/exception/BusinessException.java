@@ -13,7 +13,7 @@ public class BusinessException extends RuntimeException {
 
     private String errorMessage;
 
-    private Integer errorCode;
+    private String errorCode;
 
     /**
      * 用于保存发生异常时的一些场景信息
@@ -25,7 +25,7 @@ public class BusinessException extends RuntimeException {
         this.errorMessage = msg;
     }
 
-    public BusinessException(String msg, int code) {
+    public BusinessException(String msg, String code) {
         super(msg);
         this.errorMessage = msg;
         this.errorCode = code;
@@ -37,7 +37,7 @@ public class BusinessException extends RuntimeException {
         this.errorMessage = msg;
     }
 
-    public BusinessException(String msg, int code , Throwable throwable, Object env){
+    public BusinessException(String msg, String code , Throwable throwable, Object env){
         super(msg,throwable);
         this.errorCode = code;
         this.errorMessage = msg;
@@ -45,7 +45,7 @@ public class BusinessException extends RuntimeException {
         this.env = env;
     }
 
-    public BusinessException(String msg, int code , Object env){
+    public BusinessException(String msg, String code , Object env){
         super(msg);
         this.errorCode = code;
         this.errorMessage = msg;
@@ -66,7 +66,7 @@ public class BusinessException extends RuntimeException {
 
 
 
-    public BusinessException(String msg, int code, Throwable exception) {
+    public BusinessException(String msg, String code, Throwable exception) {
         super(msg,exception);
         this.errorMessage = msg;
         this.errorCode = code;
@@ -91,11 +91,11 @@ public class BusinessException extends RuntimeException {
         return this;
     }
 
-    public Integer getErrorCode() {
+    public String getErrorCode() {
         return errorCode;
     }
 
-    public BusinessException setErrorCode(int errorCode) {
+    public BusinessException setErrorCode(String errorCode) {
         this.errorCode = errorCode;
         return this;
     }

@@ -9,9 +9,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 
-public class RedisTools {
+public class RedisSpringTools {
 
-    private Logger logger = LoggerFactory.getLogger(RedisTools.class);
+    private Logger logger = LoggerFactory.getLogger(RedisSpringTools.class);
 
     //各种时间
     public static final Long TWELVE_HOUR = 60L * 60 * 12;
@@ -22,7 +22,7 @@ public class RedisTools {
 
     private StringRedisTemplate redisTemplate;
 
-    public RedisTools setRedisTemplate(StringRedisTemplate redisTemplate) {
+    public RedisSpringTools setRedisTemplate(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
         return this;
     }

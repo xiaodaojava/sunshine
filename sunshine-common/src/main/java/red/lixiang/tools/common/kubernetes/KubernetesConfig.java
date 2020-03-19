@@ -7,6 +7,8 @@ import red.lixiang.tools.common.yaml.YamlTools;
  * @date 2020/2/23
  **/
 public class KubernetesConfig {
+
+    private Long id;
     private String configPath;
     private String userClientKey;
     private String userClientCertificate;
@@ -20,6 +22,15 @@ public class KubernetesConfig {
         userClientKey = tools.getValueByKey("users[0].user.client-key-data", null);
         userClientCertificate = tools.getValueByKey("users[0].user.client-certificate-data", null);
         serverCertificateAuthority = tools.getValueByKey("clusters[0].cluster.certificate-authority-data", null);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public KubernetesConfig setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getConfigPath() {

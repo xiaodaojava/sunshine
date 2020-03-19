@@ -25,10 +25,10 @@ public enum ExceptionEnum {
     /**
      * 登录密码错误
      */
-    LOGIN_WRONG_PASSWORD("登录密码错误",101),
+    LOGIN_WRONG_PASSWORD("登录密码错误","101"),
 
 
-    PARA_CHECK_FAIL("参数校验错误",701);
+    PARA_CHECK_FAIL("参数校验错误","701");
 
 
 
@@ -36,9 +36,9 @@ public enum ExceptionEnum {
 
     private String errorMsg;
 
-    private Integer errorCode;
+    private String errorCode;
 
-    ExceptionEnum(String errorMsg, Integer errorCode) {
+    ExceptionEnum(String errorMsg, String errorCode) {
         this.errorMsg = errorMsg;
         this.errorCode = errorCode;
     }
@@ -48,7 +48,7 @@ public enum ExceptionEnum {
     }
 
 
-    public Integer getErrorCode() {
+    public String getErrorCode() {
         return errorCode;
     }
 

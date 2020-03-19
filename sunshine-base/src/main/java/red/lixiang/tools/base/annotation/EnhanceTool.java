@@ -17,5 +17,9 @@ public @interface EnhanceTool {
     boolean logResult() default true;
     boolean tryCatch() default true;
     boolean skipToMap() default false;
-
+    /**
+     * 可以指定在toMap的时候,使用指定的key
+     * @return
+     */
+    String mapKey() default "";
 }
