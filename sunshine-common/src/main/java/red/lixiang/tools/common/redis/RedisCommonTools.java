@@ -1,5 +1,9 @@
 package red.lixiang.tools.common.redis;
 
+import io.lettuce.core.KeyScanCursor;
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.ScanArgs;
+import io.lettuce.core.ScanCursor;
 import io.lettuce.core.api.StatefulRedisConnection;
 import red.lixiang.tools.jdk.StringTools;
 

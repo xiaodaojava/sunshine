@@ -40,7 +40,7 @@ publishing {
 	repositories {
 
 		maven {
-			name '阿里云仓库'
+			name 'ALI_MAVEN'
 			credentials {
 				username project.findProperty("aliyun.username")
 				password project.findProperty("aliyun.password")

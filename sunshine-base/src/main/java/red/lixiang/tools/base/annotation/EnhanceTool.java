@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * @date 2019/12/11
  **/
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD,ElementType.TYPE,ElementType.PARAMETER})
+@Target({ElementType.METHOD,ElementType.FIELD,ElementType.TYPE,ElementType.PARAMETER})
 public @interface EnhanceTool {
     boolean logParam() default true;
     boolean logResult() default true;
