@@ -93,8 +93,8 @@ public class RedisSpringTools {
      * @param key
      * @return
      */
-    public Object get(final String key) {
-        Object result;
+    public String get(final String key) {
+        String result;
         ValueOperations<String , String> operations = redisTemplate.opsForValue();
         result = operations.get(key);
         return result;
