@@ -167,7 +167,7 @@ public class MapperUtils {
     public static <T> SQL richInsertSql(SQL sql, T t) {
         try {
             Class<?> tClass = t.getClass();
-            Field[] declaredFields = reflectFieldCache.computeIfAbsent(tClass, x -> tClass.getDeclaredFields());
+            Field[] declaredFields = reflectFieldCache.computeIfAbsent(tClass, x -> ReflectTools.getAllFields(tClass));
             for (Field field : declaredFields) {
                 field.setAccessible(true);
                 String fieldName = field.getName();
@@ -220,7 +220,7 @@ public class MapperUtils {
     public static <T> SQL richUpdate(SQL sql, T t) {
         try {
             Class<?> tClass = t.getClass();
-            Field[] declaredFields = reflectFieldCache.computeIfAbsent(tClass, x -> tClass.getDeclaredFields());
+            Field[] declaredFields = reflectFieldCache.computeIfAbsent(tClass, x -> ReflectTools.getAllFields(tClass));
             for (Field field : declaredFields) {
                 field.setAccessible(true);
                 String fieldName = field.getName();

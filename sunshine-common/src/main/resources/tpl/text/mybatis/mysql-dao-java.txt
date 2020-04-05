@@ -18,6 +18,7 @@ public interface [(${table.javaTableName})]Mapper {
     /**
      * 获取列表
      * @param [(${table.javaCamelName})]QC
+     * @see [(${table.javaTableName})]Provider#list[(${table.javaTableName})]s([(${table.javaTableName})]QC)
      * @return
      */
     @SelectProvider(type = [(${table.javaTableName})]Provider.class)
@@ -26,6 +27,7 @@ public interface [(${table.javaTableName})]Mapper {
     /**
      * 获取数量
      * @param [(${table.javaCamelName})]QC
+     * @see [(${table.javaTableName})]Provider#count[(${table.javaTableName})]s([(${table.javaTableName})]QC)
      * @return
      */
     @SelectProvider(type = [(${table.javaTableName})]Provider.class)
@@ -34,6 +36,7 @@ public interface [(${table.javaTableName})]Mapper {
     /**
      * 插入
      * @param [(${table.javaCamelName})]
+     * @see [(${table.javaTableName})]Provider#insert[(${table.javaTableName})]([(${table.javaTableName})]DO)
      * @return
      */
     @InsertProvider(type = [(${table.javaTableName})]Provider.class)
@@ -43,6 +46,7 @@ public interface [(${table.javaTableName})]Mapper {
     /**
      * 更新,必须要有id
      * @param [(${table.javaCamelName})]
+     * @see [(${table.javaTableName})]Provider#update[(${table.javaTableName})]([(${table.javaTableName})]DO)
      * @return
      */
     @UpdateProvider(type = [(${table.javaTableName})]Provider.class)
@@ -52,6 +56,7 @@ public interface [(${table.javaTableName})]Mapper {
     /**
     * 删除,必须要有id
     * @param id
+    * @see [(${table.javaTableName})]Provider#remove[(${table.javaTableName})]ById(long id)
     * @return
     */
     @UpdateProvider(type = [(${table.javaTableName})]Provider.class)

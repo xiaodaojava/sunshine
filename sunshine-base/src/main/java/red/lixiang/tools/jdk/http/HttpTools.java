@@ -98,7 +98,7 @@ public class HttpTools {
             // 添加请求的body
             if (StringTools.isNotBlank(request.getBodyContent())) {
                 try (OutputStream outputStream = conn.getOutputStream()) {
-                    outputStream.write(request.getBodyContent().getBytes());
+                    outputStream.write(request.getBodyContent().getBytes(StandardCharsets.UTF_8));
                 }
             }
 
