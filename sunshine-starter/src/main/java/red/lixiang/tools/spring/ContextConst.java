@@ -14,6 +14,5 @@ public class ContextConst {
 
     public static final String APP_NAME = "APP_NAME";
 
-    public static final String HOSPITAL_CODE = "HOSPITAL_CODE";
 
 }

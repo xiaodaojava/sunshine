@@ -2,6 +2,7 @@ package red.lixiang.tools.starter.spring.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import red.lixiang.tools.spring.oss.OSSProperty;
 
 /**
  * @Author lixiang
@@ -14,6 +15,16 @@ public class ToolsProperty {
     /** 保存随机字符串的表名 */
     private String saltTable;
 
+    private OSSProperty oss;
+
+    public OSSProperty getOss() {
+        return oss;
+    }
+
+    public ToolsProperty setOss(OSSProperty oss) {
+        this.oss = oss;
+        return this;
+    }
 
     public String getSaltTable() {
         return saltTable;

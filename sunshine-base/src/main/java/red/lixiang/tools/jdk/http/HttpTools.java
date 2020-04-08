@@ -108,6 +108,13 @@ public class HttpTools {
             int statusCode = conn.getResponseCode();
             String response = null;
             try {
+                if(responseType == byte.class){
+                    byte[] bytes = IOTools.readByte(conn.getInputStream());
+                    return new HttpResponse<>(statusCode,(T)bytes);
+                }
+                if(responseType == InputStream.class){
+                    return new HttpResponse<>(statusCode,(T) conn.getInputStream());
+                }
                 isr = new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8);
                 response = IOTools.readString(isr);
                 if (responseType == String.class) {

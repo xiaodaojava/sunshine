@@ -1,19 +1,26 @@
-package red.lixiang.tools.common.json;
+package red.lixiang.tools.jdk;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 
-import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 
 /**
- * json工具类
- * @Author lixiang
- * @CreateTime 2019/10/16
+ * @author lixiang
+ * @date 2020/4/7
  **/
 public class JSONTools {
+
+    public static String toJson(Object object){
+        Gson gson = new Gson();
+        return gson.toJson(object);
+    }
+
+    public static  <T>  T toObject(String json, Class<T> clazz){
+        Gson gson = new Gson();
+        return gson.fromJson(json,clazz);
+    }
 
     /**
      * 把json里面的key都提取出来,然后加上前缀和后缀
@@ -29,8 +36,4 @@ public class JSONTools {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(UUID.randomUUID().toString().replaceAll("-",""));
-
-    }
 }

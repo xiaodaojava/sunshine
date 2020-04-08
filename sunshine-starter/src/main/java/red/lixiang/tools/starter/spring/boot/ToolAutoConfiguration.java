@@ -1,6 +1,12 @@
 package red.lixiang.tools.starter.spring.boot;
 
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.common.auth.DefaultCredentialProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import red.lixiang.tools.jdk.ThreadPoolTools;
+import red.lixiang.tools.spring.oss.AliOssTools;
+import red.lixiang.tools.spring.oss.OSSProperty;
 import red.lixiang.tools.spring.redis.RedisSpringTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -35,6 +41,15 @@ public class ToolAutoConfiguration {
         return new ThreadPoolTools();
     }
 
+    @Bean
+    @ConditionalOnProperty(prefix = "tools.oss",name = "access-key")
+    @ConditionalOnClass(OSSClient.class)
+    public AliOssTools getOssUtils(){
+        OSSProperty ossProperty = toolsProperty.getOss();
+        DefaultCredentialProvider provider = new DefaultCredentialProvider(ossProperty.getAccessKey(),ossProperty.getAccessSecret());
+        OSSClient client = new OSSClient(ossProperty.getEndpoint(),provider,null);
+        return new AliOssTools().setOssClient(client);
+    }
 
 //    @Bean
 //    @ConditionalOnClass(SqlSessionFactory.class)
