@@ -107,23 +107,28 @@ public class HttpTools {
 
             int statusCode = conn.getResponseCode();
             String response = null;
+            InputStream inputStream =null;
             try {
-                if(responseType == byte.class){
-                    byte[] bytes = IOTools.readByte(conn.getInputStream());
+                inputStream = conn.getInputStream();
+                if(responseType == byte[].class){
+                    byte[] bytes = IOTools.readByte(inputStream);
                     return new HttpResponse<>(statusCode,(T)bytes);
                 }
                 if(responseType == InputStream.class){
-                    return new HttpResponse<>(statusCode,(T) conn.getInputStream());
+                    return new HttpResponse<>(statusCode,(T) inputStream);
                 }
-                isr = new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8);
+                isr = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
                 response = IOTools.readString(isr);
                 if (responseType == String.class) {
                     return new HttpResponse<>(statusCode, (T) response);
                 }
-                return new HttpResponse<T>(statusCode, JSON.parseObject(response, responseType));
+                return new HttpResponse<>(statusCode, JSON.parseObject(response, responseType));
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
+                if(inputStream!=null){
+                    inputStream.close();
+                }
                 if (isr != null) {
                     try {
                         isr.close();
