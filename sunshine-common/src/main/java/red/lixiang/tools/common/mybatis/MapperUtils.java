@@ -17,6 +17,7 @@ import red.lixiang.tools.jdk.security.AESTools;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -28,9 +29,9 @@ public class MapperUtils {
     public static boolean securityFlag = false;
     private static final Logger logger = LoggerFactory.getLogger(MapperUtils.class);
 
-    private static HashMap<Class<?>, Field[]> reflectFieldCache = new HashMap<>(50);
+    private static ConcurrentHashMap<Class<?>, Field[]> reflectFieldCache = new ConcurrentHashMap<>(50);
 
-    private static HashMap<Class<?>,String> tableFieldCache = new HashMap<>(50);
+    private static ConcurrentHashMap<Class<?>,String> tableFieldCache = new ConcurrentHashMap<>(50);
 
     private static List<String> getSimpleModelFields(Class<?> clazz){
         Field[] allFields = ReflectTools.getAllFields(clazz);
