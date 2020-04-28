@@ -53,12 +53,14 @@ public class BusinessException extends RuntimeException {
     }
 
     public BusinessException(ExceptionEnum e , Object env){
+        super(e.getErrorCode()+":"+e.getErrorMsg());
         this.errorCode = e.getErrorCode();
         this.errorMessage = e.getErrorMsg();
         this.env = env;
     }
 
     public BusinessException(ExceptionEnum e ){
+        super(e.getErrorCode()+":"+e.getErrorMsg());
         this.errorCode = e.getErrorCode();
         this.errorMessage = e.getErrorMsg();
 
