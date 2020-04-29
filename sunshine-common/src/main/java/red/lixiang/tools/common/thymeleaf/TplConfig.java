@@ -4,6 +4,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 import java.util.Collections;
 
@@ -19,6 +20,12 @@ public class TplConfig {
      */
     static class InitTplConfig{
         final static TemplateEngine templateEngine = new TemplateEngine();
+        static {
+            templateEngine.addTemplateResolver(textTemplateResolver());
+            StringTemplateResolver stringTemplateResolver = new StringTemplateResolver();
+            stringTemplateResolver.setTemplateMode(TemplateMode.TEXT);
+            templateEngine.addTemplateResolver(stringTemplateResolver);
+        }
         static TemplateEngine getEngine(){
             return templateEngine;
         }
@@ -30,9 +37,6 @@ public class TplConfig {
      */
     public static TemplateEngine getTemplateEngine() {
         final TemplateEngine templateEngine = InitTplConfig.getEngine();
-        // 处理txt的
-        templateEngine.addTemplateResolver(textTemplateResolver());
-
         return templateEngine;
     }
 

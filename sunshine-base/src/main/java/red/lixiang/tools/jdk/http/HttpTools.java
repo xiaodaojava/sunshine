@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.URL;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +35,10 @@ public class HttpTools {
     public static <T> HttpResponse<T> doGet(String url, Map<String, String> paramMap, final Class<T> responseType) {
         HttpRequest request = new HttpRequest(url);
         request.setParamMap(paramMap);
-        return doGetWithRequest(request, responseType);
+        return doGet(request, responseType);
     }
 
-    public static <T> HttpResponse<T> doGetWithRequest(HttpRequest httpRequest, final Class<T> responseType) {
+    public static <T> HttpResponse<T> doGet(HttpRequest httpRequest, final Class<T> responseType) {
         httpRequest.setHttpMethod(HttpRequest.METHOD_GET);
         return doInvoke(httpRequest, responseType);
     }
@@ -81,8 +78,13 @@ public class HttpTools {
             if (request.getProxyHost() != null && request.getProxyPort() != null) {
                 proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(request.getProxyHost(), request.getProxyPort()));
             }
+            if(request.getCookieManager()!=null){
+                request.getCookieManager().setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
+                CookieHandler.setDefault(request.getCookieManager());
+            }
 
             InputStreamReader isr = null;
+            InputStreamReader esr = null;
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection(proxy);
             // 请置请求方式
             conn.setRequestMethod(request.getHttpMethod());
@@ -106,32 +108,45 @@ public class HttpTools {
 
 
             int statusCode = conn.getResponseCode();
+
             String response = null;
-            InputStream inputStream =null;
             try {
-                inputStream = conn.getInputStream();
                 if(responseType == byte[].class){
-                    byte[] bytes = IOTools.readByte(inputStream);
+                    byte[] bytes = IOTools.readByte(conn.getInputStream());
                     return new HttpResponse<>(statusCode,(T)bytes);
                 }
                 if(responseType == InputStream.class){
-                    return new HttpResponse<>(statusCode,(T) inputStream);
+                    return new HttpResponse<>(statusCode,(T) conn.getInputStream());
                 }
-                isr = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+                isr = new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8);
                 response = IOTools.readString(isr);
                 if (responseType == String.class) {
                     return new HttpResponse<>(statusCode, (T) response);
                 }
-                return new HttpResponse<>(statusCode, JSON.parseObject(response, responseType));
+                return new HttpResponse<T>(statusCode, JSON.parseObject(response, responseType));
             } catch (Exception e) {
+                InputStream errorStream = conn.getErrorStream();
+                if (errorStream != null) {
+                    esr = new InputStreamReader(errorStream, StandardCharsets.UTF_8);
+                    try {
+                        response =IOTools.readString(esr);
+                        return new HttpResponse(statusCode, response);
+                    } catch (IOException ioe) {
+                        //ignore
+                    }
+                }
                 e.printStackTrace();
             } finally {
-                if(inputStream!=null){
-                    inputStream.close();
-                }
                 if (isr != null) {
                     try {
                         isr.close();
+                    } catch (IOException ex) {
+                        // ignore
+                    }
+                }
+                if (esr != null) {
+                    try {
+                        esr.close();
                     } catch (IOException ex) {
                         // ignore
                     }

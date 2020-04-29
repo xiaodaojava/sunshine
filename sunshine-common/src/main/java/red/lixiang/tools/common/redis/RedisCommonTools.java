@@ -1,9 +1,6 @@
 package red.lixiang.tools.common.redis;
 
-import io.lettuce.core.KeyScanCursor;
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.ScanArgs;
-import io.lettuce.core.ScanCursor;
+import io.lettuce.core.*;
 import io.lettuce.core.api.StatefulRedisConnection;
 import red.lixiang.tools.jdk.StringTools;
 
@@ -23,7 +20,7 @@ public class RedisCommonTools {
 
     private RedisConfig config;
 
-   // private RedisClient client;
+    // private RedisClient client;
 
     private ScanCursor scanCursor;
 
@@ -48,48 +45,42 @@ public class RedisCommonTools {
 
 
     public void setKey(String key , String value , Long seconds){
-        RedisClient client = config.fetchRedisClient();
-        StatefulRedisConnection<String, String> connect = client.connect();
+        StatefulRedisConnection<String, String> connect = config.conn();
         connect.sync().set(key,value);
         if(null != seconds){
             connect.sync().expire(key,seconds);
         }
-        connect.close();
-        client.shutdown();
     }
 
     public RedisValue get(String key){
-       RedisClient client = config.fetchRedisClient();
+        StatefulRedisConnection<String, String> connect = config.conn();
 
-        StatefulRedisConnection<String, String> connect = client.connect();
         // 获取key的值
         String value = connect.sync().get(key);
         //获取key还有多长时间过期
         Long ttl  = connect.sync().ttl(key);
-        connect.close();
-        client.shutdown();
+//        connect.close();
+//        client.shutdown();
         return new RedisValue(key,value,ttl);
     }
     public Long del(String key){
-       RedisClient client = config.fetchRedisClient();
+        StatefulRedisConnection<String, String> connect = config.conn();
 
-        StatefulRedisConnection<String, String> connect = client.connect();
         // 获取key的值
         Long del = connect.sync().del(key);
         //获取key还有多长时间过期
-        connect.close();
-        client.shutdown();
+        // connect.close();
+//        client.shutdown();
         return del;
     }
 
-    public void ex(String key, Long seconds){
-        RedisClient client = config.fetchRedisClient();
+    public void ex(String key,Long seconds){
+        StatefulRedisConnection<String, String> connect = config.conn();
 
-        StatefulRedisConnection<String, String> connect = client.connect();
         // 获取key的值
         connect.sync().expire(key,seconds);
-        connect.close();
-        client.shutdown();
+        // connect.close();
+//        client.shutdown();
     }
 
     /**
@@ -98,24 +89,26 @@ public class RedisCommonTools {
      * @param count 要搜索的数量
      * @return
      */
-    public List<String> scan(Boolean init, String match, Long count){
-        RedisClient client = config.fetchRedisClient();
+    public List<String> scan(Boolean init,String match,Long count){
+//        RedisClient client = config.fetchRedisClient();
         count = count ==null?100L:count;
         ScanArgs scanArgs = ScanArgs.Builder.limit(count);
         if(StringTools.isNotBlank(match)){
             scanArgs.match(match+"*");
         }
         // 去连接获取数据
-        StatefulRedisConnection<String, String> connect = client.connect();
+//        StatefulRedisConnection<String, String> connect = client.connect();
+        StatefulRedisConnection<String, String> connect = config.conn();
+
         KeyScanCursor<String> scan = connect.sync().scan(getScanCursor(init), scanArgs);
         scanCursor = scan;
-        connect.close();
-        client.shutdown();
+//        connect.close();
+//        client.shutdown();
         return scan.getKeys();
     }
 
     public void close(){
-       // client.shutdown();
+        config.close();
     }
 
 

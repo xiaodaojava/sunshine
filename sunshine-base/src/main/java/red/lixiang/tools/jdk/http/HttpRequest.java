@@ -1,6 +1,9 @@
 package red.lixiang.tools.jdk.http;
 
+import java.net.CookieManager;
+import java.net.HttpCookie;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,11 +17,16 @@ public class HttpRequest {
 
 
   private String url;
-  private String httpMethod;
+  private String httpMethod = METHOD_GET;
   private int connectTimeout;
   private int readTimeout;
   private String proxyHost;
   private Integer proxyPort;
+
+  /**
+   * 管理cookie的
+   */
+  private CookieManager cookieManager;
 
   /**
    * 跟在url后面的
@@ -32,8 +40,13 @@ public class HttpRequest {
 
   public static Map<String,String> JSON_HEADER = new HashMap<>();
 
+  public static Map<String,String> AGENT_HEADER = new HashMap<>();
+  public static Map<String,String> FORM_URL_ENCODING_HEADER = new HashMap<>();
+
   static {
     JSON_HEADER.put("Content-Type", "application/json");
+    FORM_URL_ENCODING_HEADER.put("Content-Type", " application/x-www-form-urlencoded");
+    AGENT_HEADER.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36");
   }
 
   /**
@@ -44,6 +57,15 @@ public class HttpRequest {
     this.url = url;
     connectTimeout = 3000;
     readTimeout = 3000;
+  }
+
+  public CookieManager getCookieManager() {
+    return cookieManager;
+  }
+
+  public HttpRequest setCookieManager(CookieManager cookieManager) {
+    this.cookieManager = cookieManager;
+    return this;
   }
 
   public HttpRequest(String url, Map<String, String> paramMap) {
@@ -61,6 +83,10 @@ public class HttpRequest {
   }
 
   public Map<String, String> getHeaderMap() {
+    if(cookieManager!=null){
+//      List<HttpCookie> cookies = cookieManager.getCookieStore().getCookies();
+
+    }
     return headerMap;
   }
 

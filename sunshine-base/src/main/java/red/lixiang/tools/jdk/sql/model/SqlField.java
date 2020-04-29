@@ -1,4 +1,4 @@
-package red.lixiang.tools.common.mybatis.generate;
+package red.lixiang.tools.jdk.sql.model;
 
 
 /**
@@ -10,6 +10,9 @@ public class SqlField {
 
     /**字段名称 passport_role */
     private String name;
+
+    /** 字段的排序 */
+    private Integer ordinary;
 
     /**驼蜂式命名 passportRole */
     private String camelName;
@@ -31,6 +34,15 @@ public class SqlField {
 
     /** 标明是不是查询对象 */
     private Boolean queryFlag;
+
+    public Integer getOrdinary() {
+        return ordinary;
+    }
+
+    public SqlField setOrdinary(Integer ordinary) {
+        this.ordinary = ordinary;
+        return this;
+    }
 
     public String getJavaName() {
         return javaName;

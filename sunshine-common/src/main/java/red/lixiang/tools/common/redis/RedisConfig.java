@@ -1,8 +1,9 @@
 package red.lixiang.tools.common.redis;
 
+import io.lettuce.core.api.StatefulRedisConnection;
+import red.lixiang.tools.jdk.StringTools;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
-import red.lixiang.tools.jdk.StringTools;
 
 /**
  * @author lixiang
@@ -20,6 +21,9 @@ public class RedisConfig {
     private String password;
     private Boolean ssl;
     private Integer database;
+
+    private StatefulRedisConnection<String,String> connection = null;
+    private RedisClient client = null;
 
     public RedisConfig(String host, Integer port, String password) {
         this.host = host;
@@ -103,7 +107,18 @@ public class RedisConfig {
         return this;
     }
 
+    public StatefulRedisConnection<String,String> conn (){
+        RedisClient client = fetchRedisClient();
+        if(connection == null || !connection.isOpen()){
+            connection =   client.connect();
+        }
+        return connection;
+    }
+
     public RedisClient fetchRedisClient(){
+        if(client!=null){
+            return client;
+        }
         RedisURI.Builder builder = RedisURI.Builder.redis(host, port);
         if(StringTools.isNotBlank(password)){
             builder.withPassword(password);
@@ -115,6 +130,15 @@ public class RedisConfig {
             builder.withSsl(ssl);
         }
         RedisURI redisURI = builder.build();
-        return RedisClient.create(redisURI);
+        RedisClient  redisClient = RedisClient.create(redisURI);
+        client = redisClient;
+        return client;
+    }
+
+    public void close() {
+        if(connection!=null && connection.isOpen()){
+            connection.close();
+        }
+        fetchRedisClient().shutdown();
     }
 }

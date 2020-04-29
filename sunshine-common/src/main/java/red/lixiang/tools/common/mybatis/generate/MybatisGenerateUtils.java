@@ -5,6 +5,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import red.lixiang.tools.common.thymeleaf.TplConfig;
 import red.lixiang.tools.jdk.StringTools;
+import red.lixiang.tools.jdk.sql.model.SqlField;
+import red.lixiang.tools.jdk.sql.model.SqlTable;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -49,7 +51,7 @@ public class MybatisGenerateUtils {
      * @param tableName
      * @return
      */
-    public  SqlTable getTableInfo(String dbName, String tableName) {
+    public SqlTable getTableInfo(String dbName, String tableName) {
 
         SqlTable table = new SqlTable();
         //把tableName转成驼峰式,并且首子母改成大写

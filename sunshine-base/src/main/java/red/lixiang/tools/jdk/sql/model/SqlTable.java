@@ -1,4 +1,4 @@
-package red.lixiang.tools.common.mybatis.generate;
+package red.lixiang.tools.jdk.sql.model;
 
 import java.util.List;
 
@@ -9,17 +9,41 @@ import java.util.List;
  **/
 public class SqlTable {
 
-    /** 表名 */
-    private String tableName;
+    /** 数据库名称 */
+    public String schemeName;
 
-    /** 对应的java实体类的名称 */
-    private String javaTableName;
+    /** 表名 test_table */
+    public String tableName;
 
-    /** 对应的java实体类驼峰的名称 */
-    private String javaCamelName;
+    /** 对应的java实体类的名称 TestTable */
+    public String javaTableName;
+
+    /** 对应的java实体类驼峰的名称 testTable */
+    public String javaCamelName;
+
+    /** 表的备注 */
+    public String tableRemark;
 
     /** 表里面的字段名 */
-    private List<SqlField> fieldList;
+    public List<SqlField> fieldList;
+
+    public String getTableRemark() {
+        return tableRemark;
+    }
+
+    public SqlTable setTableRemark(String tableRemark) {
+        this.tableRemark = tableRemark;
+        return this;
+    }
+
+    public String getSchemeName() {
+        return schemeName;
+    }
+
+    public SqlTable setSchemeName(String schemeName) {
+        this.schemeName = schemeName;
+        return this;
+    }
 
     public String getTableName() {
         return tableName;
