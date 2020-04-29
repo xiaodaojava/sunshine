@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
  * @Author lixiang
  * @CreateTime 2019-07-15
  **/
-public class MapperUtils {
+public class MapperTools {
 
     public static boolean securityFlag = false;
-    private static final Logger logger = LoggerFactory.getLogger(MapperUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(MapperTools.class);
 
     private static ConcurrentHashMap<Class<?>, Field[]> reflectFieldCache = new ConcurrentHashMap<>(50);
 

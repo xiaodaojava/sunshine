@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>   
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="${config.packageName}.dao.${config.modelName}DAO">
+<mapper namespace="${basePackage}.dao.${table.javaTableName}DAO">
   	
 	<!--The user defined SQL!-->
   	
   	
   	<!--The user defined SQL!-->
 
-  	<resultMap id="BaseResultMap" type="${config.packageName}.model.${config.modelName}" >
+  	<resultMap id="BaseResultMap" type="${basePackage}.model.${table.javaTableName}" >
             <id column="id" property="id" jdbcType="BIGINT" />
             <% for(column in table.fieldList) { %>
                <result column="${column.name}" property="${column.camelName}" jdbcType="${column.jdbcType}" />
@@ -35,7 +35,7 @@
 
 
   	
-    <insert id="insert${config.modelName}" parameterType="${config.packageName}.model.${config.modelName}">
+    <insert id="insert${table.javaTableName}" parameterType="${basePackage}.model.${table.javaTableName}">
         insert into ${table.tableName}
         <trim prefix="(" suffix=")" suffixOverrides="," >
         <% for(column in table.fieldList) { %>
@@ -53,7 +53,7 @@
         </trim>
     </insert>
 
-    <update id="update${config.modelName}" parameterType="${config.packageName}.model.${config.modelName}">
+    <update id="update${table.javaTableName}" parameterType="${basePackage}.model.${table.javaTableName}">
         UPDATE ${table.tableName}
         <trim prefix="set" suffixOverrides="," >
 
@@ -66,7 +66,7 @@
         <include refid="queryCondition"/>
     </update>
 
-    <select id="list${config.modelName}" parameterType="${config.packageName}.model.qc.${config.modelName}QC" resultMap="BaseResultMap">
+    <select id="list${table.javaTableName}" parameterType="${basePackage}.model.qc.${table.javaTableName}QC" resultMap="BaseResultMap">
         select <include refid="Base_Column_List" />
         from ${table.tableName} <include refid="queryCondition" />
         <if test="sortBy != null and sortType != null" >
@@ -77,7 +77,7 @@
         </if>
     </select>
 
-    <select id="count${config.modelName}" parameterType="${config.packageName}.model.qc.${config.modelName}QC" resultType="java.lang.Long">
+    <select id="count${table.javaTableName}" parameterType="${basePackage}.model.qc.${table.javaTableName}QC" resultType="java.lang.Long">
         SELECT count(*) from ${table.tableName}
         <include refid="queryCondition"></include>
     </select>
@@ -99,7 +99,7 @@
     	</foreach>  
     </insert>
 
-    <delete id="delete${config.modelName}ById" parameterType="java.lang.Long">
+    <delete id="delete${table.javaTableName}ById" parameterType="java.lang.Long">
             delete from ${table.tableName} where id = #{id}
         </delete>
 
