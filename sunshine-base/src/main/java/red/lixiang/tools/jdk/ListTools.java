@@ -173,6 +173,14 @@ public class ListTools {
         return result;
     }
 
+    public static boolean isBlank(List list) {
+        return null == list || list.isEmpty();
+    }
+
+    public static boolean isNotBlank(List list) {
+        return !isBlank(list);
+    }
+
     public static void main(String[] args) {
         List<String> list = new ArrayList<>();
         list.add("aaaa");
