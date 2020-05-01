@@ -6,8 +6,8 @@ plugins {
 allprojects {
 	group = 'red.lixiang.tools'
 	version = '0.0.6-snapshot'
-	sourceCompatibility = '1.8'
-	targetCompatibility = '1.8'
+	sourceCompatibility = '14'
+	targetCompatibility = '14'
 	repositories {
 		maven { url 'https://maven.aliyun.com/repository/public/' }
 		maven { url 'https://maven.aliyun.com/repository/spring/'}

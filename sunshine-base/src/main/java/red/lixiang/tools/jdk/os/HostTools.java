@@ -43,6 +43,25 @@ public class HostTools {
         }
     }
 
+    public static String saveHostByRoot(String content, String root) {
+        try {
+            String toolsPath = OSTools.userHomePath() + "/.tools";
+            String tempHostPath = toolsPath+"/tempHosts";
+            if(Files.notExists(Paths.get(toolsPath))){
+                Files.createDirectories(Paths.get(toolsPath));
+            }
+            Files.writeString(Paths.get(tempHostPath),content);
+            TerminalTools.execByRoot("rm -rf /etc/hosts", root);
+            String s = TerminalTools.execByRoot(" mv "+tempHostPath+" /etc/hosts", root);
+            //改变权限和组
+            TerminalTools.execByRoot("chown root:wheel /etc/hosts",root);
+            Files.deleteIfExists(Paths.get(tempHostPath));
+        }catch (Exception e){
+            return "fail"+e.getMessage();
+        }
+        return "OK";
+    }
+
     public static void main(String[] args) {
         String s = loadHost();
         System.out.println(s);

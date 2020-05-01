@@ -36,4 +36,13 @@ public class JSONTools {
         return sb.toString();
     }
 
+    /**
+     * @param origin
+     * @return
+     */
+    public static String formatJson(String origin){
+        JSONObject jsonObject = JSON.parseObject(origin);
+        String result = JSON.toJSONString(jsonObject, true);
+        return result;
+    }
 }
