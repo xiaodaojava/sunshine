@@ -19,10 +19,7 @@
  */
 package red.lixiang.tools.common.kubernetes;
 
-import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
+
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -35,31 +32,32 @@ import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateCrtKeySpec;
+import java.util.Base64;
 
 public class SSLUtils {
-  static {
-    Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-  }
+//  static {
+//    Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+//  }
 
   public static boolean isNotNullOrEmpty(String val) {
     return val != null && val.length() > 0;
   }
 
   public static KeyManager[] keyManagers(
-      byte[] certData,
-      byte[] keyData,
-      String algo,
-      String passphrase,
-      String keyStoreFile,
-      String keyStorePassphrase)
-      throws NoSuchAlgorithmException, UnrecoverableKeyException, KeyStoreException,
+          byte[] certData,
+          byte[] keyData,
+          String algo,
+          String passphrase,
+          String keyStoreFile,
+          String keyStorePassphrase)
+          throws NoSuchAlgorithmException, UnrecoverableKeyException, KeyStoreException,
           CertificateException, InvalidKeySpecException, IOException {
     KeyManager[] keyManagers = null;
     if (certData != null && keyData != null) {
       KeyStore keyStore =
-          createKeyStore(certData, keyData, algo, passphrase, keyStoreFile, keyStorePassphrase);
+              createKeyStore(certData, keyData, algo, passphrase, keyStoreFile, keyStorePassphrase);
       KeyManagerFactory kmf =
-          KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+              KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
       kmf.init(keyStore, passphrase.toCharArray());
       keyManagers = kmf.getKeyManagers();
     }
@@ -67,40 +65,30 @@ public class SSLUtils {
   }
 
   public static KeyStore createKeyStore(
-      byte[] clientCertData,
-      byte[] clientKeyData,
-      String clientKeyAlgo,
-      String clientKeyPassphrase,
-      String keyStoreFile,
-      String keyStorePassphrase)
-      throws IOException, CertificateException, NoSuchAlgorithmException, InvalidKeySpecException,
+          byte[] clientCertData,
+          byte[] clientKeyData,
+          String clientKeyAlgo,
+          String clientKeyPassphrase,
+          String keyStoreFile,
+          String keyStorePassphrase)
+          throws IOException, CertificateException, NoSuchAlgorithmException, InvalidKeySpecException,
           KeyStoreException {
     try (InputStream certInputStream = new ByteArrayInputStream(clientCertData);
-        InputStream keyInputStream = new ByteArrayInputStream(clientKeyData)) {
+         InputStream keyInputStream = new ByteArrayInputStream(clientKeyData)) {
       return createKeyStore(
-          certInputStream,
-          keyInputStream,
-          clientKeyAlgo,
-          clientKeyPassphrase != null ? clientKeyPassphrase.toCharArray() : null,
-          keyStoreFile,
-          getKeyStorePassphrase(keyStorePassphrase));
+              certInputStream,
+              keyInputStream,
+              clientKeyAlgo,
+              clientKeyPassphrase != null ? clientKeyPassphrase.toCharArray() : null,
+              keyStoreFile,
+              getKeyStorePassphrase(keyStorePassphrase));
     }
   }
 
   private static PrivateKey loadKey(InputStream keyInputStream, String clientKeyAlgo)
-      throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+          throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 
-    // Try PKCS7 / EC
-    if (clientKeyAlgo.equals("EC")) {
-      Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-      PEMParser pemParser = new PEMParser(new InputStreamReader(keyInputStream));
-      Object pemObject;
-      while ((pemObject = pemParser.readObject()) != null) {
-        if (pemObject instanceof PEMKeyPair) {
-          return new JcaPEMKeyConverter().getKeyPair(((PEMKeyPair) pemObject)).getPrivate();
-        }
-      }
-    }
+
 
     byte[] keyBytes = decodePem(keyInputStream);
 
@@ -128,13 +116,13 @@ public class SSLUtils {
   }
 
   public static KeyStore createKeyStore(
-      InputStream certInputStream,
-      InputStream keyInputStream,
-      String clientKeyAlgo,
-      char[] clientKeyPassphrase,
-      String keyStoreFile,
-      char[] keyStorePassphrase)
-      throws IOException, CertificateException, NoSuchAlgorithmException, InvalidKeySpecException,
+          InputStream certInputStream,
+          InputStream keyInputStream,
+          String clientKeyAlgo,
+          char[] clientKeyPassphrase,
+          String keyStoreFile,
+          char[] keyStorePassphrase)
+          throws IOException, CertificateException, NoSuchAlgorithmException, InvalidKeySpecException,
           KeyStoreException {
     CertificateFactory certFactory = CertificateFactory.getInstance("X509");
     X509Certificate cert = (X509Certificate) certFactory.generateCertificate(certInputStream);
@@ -178,7 +166,7 @@ public class SSLUtils {
 
     while ((line = reader.readLine()) != null) {
       if (line.indexOf(endMarker) != -1) {
-        return Base64.decodeBase64(buf.toString());
+        return Base64.getDecoder().decode(buf.toString());
       }
       buf.append(line.trim());
     }
@@ -193,14 +181,14 @@ public class SSLUtils {
     parser.read();
 
     return new RSAPrivateCrtKeySpec(
-        next(parser),
-        next(parser),
-        next(parser),
-        next(parser),
-        next(parser),
-        next(parser),
-        next(parser),
-        next(parser));
+            next(parser),
+            next(parser),
+            next(parser),
+            next(parser),
+            next(parser),
+            next(parser),
+            next(parser),
+            next(parser));
   }
 
   private static BigInteger next(DerParser parser) throws IOException {
@@ -289,7 +277,7 @@ public class SSLUtils {
   }
 
   private static void loadDefaultKeyStoreFile(KeyStore keyStore, char[] keyStorePassphrase)
-      throws CertificateException, NoSuchAlgorithmException, IOException {
+          throws CertificateException, NoSuchAlgorithmException, IOException {
 
     String keyStorePath = System.getProperty("javax.net.ssl.keyStore");
     if (keyStorePath != null && keyStorePath.length() > 0) {
@@ -303,7 +291,7 @@ public class SSLUtils {
   }
 
   private static boolean loadDefaultStoreFile(KeyStore keyStore, File fileToLoad, char[] passphrase)
-      throws CertificateException, NoSuchAlgorithmException, IOException {
+          throws CertificateException, NoSuchAlgorithmException, IOException {
     if (fileToLoad.exists() && fileToLoad.isFile() && fileToLoad.length() > 0) {
       try (FileInputStream inputStream = new FileInputStream(fileToLoad)) {
         keyStore.load(inputStream, passphrase);

@@ -7,6 +7,7 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 dependencies {
+	compile project(":sunshine-common")
 	implementation platform('org.springframework.boot:spring-boot-dependencies:2.1.8.RELEASE')
 	compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:2.1.8.RELEASE"
@@ -17,8 +18,6 @@ dependencies {
 	compile group: 'org.springframework', name: 'spring-jdbc', version: '5.2.2.RELEASE'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.2.0.RELEASE'
 	implementation group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '3.6.0'
-
-	compile project(":sunshine-common")
 }
 
 // 后面的都是打包的配置

@@ -142,6 +142,10 @@ public class DateTools {
         return Math.abs((d1.getTime()-d2.getTime())/1000);
     }
 
+    public static Long getSecondBetween(long t1, long t2){
+        return Math.abs((t1-t2)/1000);
+    }
+
     public static String clearTimeForString(String date){
         return date.split(" ")[0]+" 00:00:00";
     }
@@ -165,17 +169,14 @@ public class DateTools {
     }
 
     public static void main(String[] args) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String s = "2019-12-18 15:44:28";
-        String s1 = "2019-12-18 20:45:28";
+        long l = System.currentTimeMillis();
         try {
-            Date d1  = format.parse(s);
-            Date d2 = format.parse(s1);
-            Long secondBetween = getSecondBetween(d1, d2);
-            System.out.println(secondBetween);
-        } catch (ParseException e) {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        Long secondBetween = getSecondBetween(l, System.currentTimeMillis());
+        System.out.println(secondBetween);
 
 
     }
