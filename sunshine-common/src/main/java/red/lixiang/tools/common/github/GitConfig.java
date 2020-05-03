@@ -82,6 +82,20 @@ public class GitConfig {
      */
     private Integer proxyPort;
 
+    /**
+     * 是否是当前选中的
+     */
+    private Boolean selected;
+
+    public Boolean getSelected() {
+        return selected;
+    }
+
+    public GitConfig setSelected(Boolean selected) {
+        this.selected = selected;
+        return this;
+    }
+
     public String getTag() {
         return tag;
     }

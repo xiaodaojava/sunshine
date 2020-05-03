@@ -28,9 +28,12 @@ public class GitTools {
 
 
 
-    public static List<String> commitFileUrlList(GitConfig config) {
+    public static List<String> commitFileUrlList(GitConfig config,Integer page) {
+        if(page ==null){
+            page = 1;
+        }
         List<String> urlList = new ArrayList<>();
-        List<CommitRes> commitResList = lastCommits(config, 1, null);
+        List<CommitRes> commitResList = lastCommits(config, page, null);
         for (CommitRes commitRes : commitResList) {
             List<CommitRes> commitDetail = lastCommits(config, null, commitRes.getSha());
             CommitRes.File file = commitDetail.get(0).getFiles().get(0);
@@ -127,13 +130,9 @@ public class GitTools {
         return uploadFileResResponse.getBody();
     }
 
-    public static ImageBed convertUploadFileRes(UploadFileRes res) {
+    public static ImageBed convertUploadFileRes(String originUrl) {
         String cdnHost = "https://cdn.jsdelivr.net/gh/";
-        if (res == null) {
-            return null;
-        }
-        UploadFileRes.Content content = res.getContent();
-        String originUrl = content.getDownloadUrl();
+
         //markdown的格式
         String markdownUrl = String.format("![](%s)", originUrl);
         String removeHost = URLTools.removeHost(originUrl).replace("/master", "");
