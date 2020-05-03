@@ -3,7 +3,9 @@ package red.lixiang.tools.jdk;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -20,6 +22,12 @@ public class JSONTools {
     public static  <T>  T toObject(String json, Class<T> clazz){
         Gson gson = new Gson();
         return gson.fromJson(json,clazz);
+    }
+
+    public static  <T> List<T> toList(String json, Class<T> clazz){
+        Gson gson = new Gson();
+        return  gson.fromJson(json, new TypeToken<List<T>>() {}.getType());
+
     }
 
     /**

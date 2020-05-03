@@ -70,7 +70,7 @@ public class GitTools {
             CommitRes commitRes = JSONTools.toObject(body, CommitRes.class);
             return Collections.singletonList(commitRes);
         }
-        List<CommitRes> commitRes = JSON.parseArray(body, CommitRes.class);
+        List<CommitRes> commitRes = JSONTools.toList(body, CommitRes.class);
         return commitRes;
     }
 
