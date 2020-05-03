@@ -1,5 +1,6 @@
 package red.lixiang.tools.common.github;
 
+import red.lixiang.tools.jdk.StringTools;
 import red.lixiang.tools.jdk.http.HttpRequest;
 
 /**
@@ -10,7 +11,7 @@ public class GitConfig {
 
     public static final String GITHUB_HOST = "https://api.github.com";
     
-    public static final String GITEE_HOST = "https://gitee.com/api";
+    public static final String GITEE_HOST = "https://gitee.com/api/v5";
 
     public static final int TYPE_GITHUB = 0;
 
@@ -21,10 +22,28 @@ public class GitConfig {
     }
 
     public String giteeUploadFileUrl(){
-        return GITEE_HOST+"/v5/repos/"+owner+"/"+repo+"/contents/";
+        return GITEE_HOST+"/repos/"+owner+"/"+repo+"/contents/";
     }
 
-    public HttpRequest httpRequest(String fileName){
+    public String lastCommitUrl(String sha){
+        String url = (gitType == TYPE_GITHUB ? GITHUB_HOST : GITEE_HOST) +
+                "/repos/" +
+                owner + "/" +
+                repo + "/" +
+                "commits";
+        if(StringTools.isNotBlank(sha)){
+            url = url+"/"+sha;
+        }
+        return url;
+    }
+
+    public HttpRequest lastCommitRequest(String sha){
+        HttpRequest httpRequest = new HttpRequest(lastCommitUrl(sha));
+        httpRequest.setHeaderMap(HttpRequest.AGENT_HEADER);
+        return httpRequest;
+    }
+
+    public HttpRequest uploadFileRequest(String fileName){
         String url  = this.gitType==TYPE_GITHUB?githubUploadFileUrl():giteeUploadFileUrl();
         return new HttpRequest(url+fileName);
     }

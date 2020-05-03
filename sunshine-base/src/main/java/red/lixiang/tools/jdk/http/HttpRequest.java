@@ -87,6 +87,9 @@ public class HttpRequest {
 //      List<HttpCookie> cookies = cookieManager.getCookieStore().getCookies();
 
     }
+    if(headerMap==null){
+      headerMap = new HashMap<>();
+    }
     return headerMap;
   }
 
@@ -96,6 +99,9 @@ public class HttpRequest {
   }
 
   public Map<String, String> getParamMap() {
+    if(paramMap == null){
+      paramMap = new HashMap<>();
+    }
     return paramMap;
   }
 
