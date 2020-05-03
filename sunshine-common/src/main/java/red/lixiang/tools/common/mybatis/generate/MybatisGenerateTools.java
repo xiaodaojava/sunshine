@@ -25,23 +25,7 @@ import static red.lixiang.tools.common.mybatis.generate.DomainDescTemplates.*;
  **/
 public class MybatisGenerateTools {
 
-    /** 存数据库类型和java类型的映射 */
-    private static Map<String,String> property2BeanMap = new HashMap<>();
 
-    static  {
-        property2BeanMap.put("BIGINT UNSIGNED","Long");
-        property2BeanMap.put("DATETIME","Date");
-        property2BeanMap.put("TIMESTAMP","Date");
-        property2BeanMap.put("VARCHAR","String");
-        property2BeanMap.put("DECIMAL","BigDecimal");
-        property2BeanMap.put("BIGINT","Long");
-        property2BeanMap.put("TEXT","String");
-        property2BeanMap.put("TINYINT","Integer");
-        property2BeanMap.put("INT","Integer");
-        property2BeanMap.put("BIT","Integer");
-        property2BeanMap.put("CHAR","String");
-        property2BeanMap.put("DOUBLE","Double");
-    }
 
 
 

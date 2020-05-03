@@ -9,10 +9,7 @@ import red.lixiang.tools.jdk.sql.model.SqlTable;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author lixiang
@@ -23,6 +20,25 @@ public class SqlTools {
     public static void main(String[] args) throws IOException {
 
     }
+
+    /** 存数据库类型和java类型的映射 */
+    private static Map<String,String> property2BeanMap = new HashMap<>();
+
+    static  {
+        property2BeanMap.put("BIGINT UNSIGNED","Long");
+        property2BeanMap.put("DATETIME","Date");
+        property2BeanMap.put("TIMESTAMP","Date");
+        property2BeanMap.put("VARCHAR","String");
+        property2BeanMap.put("DECIMAL","BigDecimal");
+        property2BeanMap.put("BIGINT","Long");
+        property2BeanMap.put("TEXT","String");
+        property2BeanMap.put("TINYINT","Integer");
+        property2BeanMap.put("INT","Integer");
+        property2BeanMap.put("BIT","Integer");
+        property2BeanMap.put("CHAR","String");
+        property2BeanMap.put("DOUBLE","Double");
+    }
+
 
     public static void compareScheme(List<SqlTable> t1, List<SqlTable> t2) {
         for (SqlTable ceshiTable : t1) {
@@ -123,6 +139,7 @@ public class SqlTools {
                 field.setCamelName(StringTools.underScope2Camel(columnName));
                 // TestTable
                 field.setJavaName(StringTools.first2BigLetter(field.getCamelName()));
+                field.setJavaType(property2BeanMap.get(columnType));
                 fieldList.add(field);
             }
         } catch (SQLException ex) {
