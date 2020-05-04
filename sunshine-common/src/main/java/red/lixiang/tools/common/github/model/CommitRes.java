@@ -1,5 +1,6 @@
 package red.lixiang.tools.common.github.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class CommitRes {
     private String url;
     private String sha;
 
+    @JSONField(serialize = false,deserialize = false)
     List<File> files;
 
     public String getUrl() {

@@ -1,6 +1,7 @@
 package red.lixiang.tools.common.github;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import red.lixiang.tools.common.github.model.ImageBed;
 import red.lixiang.tools.common.github.model.CommitRes;
 import red.lixiang.tools.common.github.model.UploadFileReq;
@@ -70,7 +71,7 @@ public class GitTools {
             CommitRes commitRes = JSONTools.toObject(body, CommitRes.class);
             return Collections.singletonList(commitRes);
         }
-        List<CommitRes> commitRes = JSONTools.toList(body, CommitRes.class);
+        List<CommitRes> commitRes = JSONArray.parseArray(body, CommitRes.class);
         return commitRes;
     }
 
