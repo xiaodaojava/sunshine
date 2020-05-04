@@ -178,7 +178,7 @@ public class DomainDescTemplates {
                          SELECT(TABLE_FIELDS);
                          FROM("[(${table.tableName})]");
                      }};
-                     MapperUtils.richWhereSql(sql, [(${table.javaCamelName})]QC);
+                     MapperTools.richWhereSql(sql, [(${table.javaCamelName})]QC);
              
                      return sql.toString();
                  }
@@ -188,7 +188,7 @@ public class DomainDescTemplates {
                          SELECT("count(1)");
                          FROM("[(${table.tableName})]");
                      }};
-                     MapperUtils.richWhereSql(sql, [(${table.javaCamelName})]QC);
+                     MapperTools.richWhereSql(sql, [(${table.javaCamelName})]QC);
              
                      return sql.toString();
                  }
@@ -197,7 +197,7 @@ public class DomainDescTemplates {
                      SQL sql = new SQL() {{
                          INSERT_INTO("[(${table.tableName})]");
                      }};
-                     MapperUtils.richInsertSql(sql, [(${table.javaCamelName})]);
+                     MapperTools.richInsertSql(sql, [(${table.javaCamelName})]);
              
                      return sql.toString();
                  }
@@ -206,7 +206,7 @@ public class DomainDescTemplates {
                          UPDATE("[(${table.tableName})]");
              
                      }};
-                     MapperUtils.richUpdate(sql, [(${table.javaCamelName})]);
+                     MapperTools.richUpdate(sql, [(${table.javaCamelName})]);
                      sql.WHERE("id = #{id}");
                      return sql.toString();
                  }
