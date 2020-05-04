@@ -36,22 +36,4 @@ public class MarkdownTools {
         return render;
     }
 
-    public static void main(String[] args) {
-        String markdownText = """
-                #hello , 
-                > this is a markdown test
-                
-                ```java
-                
-                 public class Test{
-                 
-                 public void test(){
-                    System.out.println("Hello Markdown");
-                 }  
-                 
-                 }
-                ```
-                """;
-        System.out.println(markdown2Html(markdownText,new MarkdownConfig()));
-    }
 }

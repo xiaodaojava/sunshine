@@ -38,7 +38,7 @@ public class GitTools {
         for (CommitRes commitRes : commitResList) {
             List<CommitRes> commitDetail = lastCommits(config, null, commitRes.getSha());
             CommitRes.File file = commitDetail.get(0).getFiles().get(0);
-            urlList.add(file.rawUrl());
+            urlList.add(file.getRawUrl());
         }
         return urlList;
     }

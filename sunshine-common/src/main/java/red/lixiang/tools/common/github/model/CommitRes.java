@@ -43,6 +43,18 @@ public class CommitRes {
         return this;
     }
 
-    public record File(@SerializedName("raw_url") String rawUrl){};
+    public static class File{
+        @SerializedName("raw_url")
+        String rawUrl;
+
+        public String getRawUrl() {
+            return rawUrl;
+        }
+
+        public File setRawUrl(String rawUrl) {
+            this.rawUrl = rawUrl;
+            return this;
+        }
+    };
 
 }
