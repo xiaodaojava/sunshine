@@ -268,11 +268,9 @@ public class DomainDescTemplates {
                         
                 @PostMapping("/[(${table.javaCamelName})]/save")
                 @ResponseBody
-                public BaseResponse<String> save[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
-                    BaseResponse<String> baseResponse = new BaseResponse<>();
-                    [(${table.javaCamelName})]Manager.save[(${table.javaTableName})]([(${table.javaCamelName})]);
-                    baseResponse.setData("OK");
-                    return  baseResponse;
+                public BaseResponse<[(${table.javaTableName})]> save[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
+                    [(${table.javaTableName})] [(${table.javaCamelName})]DO =  [(${table.javaCamelName})]Manager.save[(${table.javaTableName})]([(${table.javaCamelName})]);
+                    return  BaseResponse.success([(${table.javaCamelName})]DO);
                 }
 
                 @GetMapping("/[(${table.javaCamelName})]/get")
