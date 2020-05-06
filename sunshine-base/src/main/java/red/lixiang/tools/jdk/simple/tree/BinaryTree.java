@@ -1,4 +1,4 @@
-package red.lixiang.tools.jdk.demo.tree;
+package red.lixiang.tools.jdk.simple.tree;
 
 /**
  * @author lixiang

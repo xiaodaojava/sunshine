@@ -1,4 +1,4 @@
-package red.lixiang.tools.jdk.demo.tree;
+package red.lixiang.tools.jdk.simple.tree;
 //practice exam 2 Q1
 
 public class LinkedList <E extends Comparable<E>>{
