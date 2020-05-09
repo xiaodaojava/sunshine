@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
@@ -22,6 +23,10 @@ public class ToolsLogger {
     public static final Logger LOGGER = Logger.getLogger("Tools");
 
     static FileHandler fileHandler= null;
+
+    public static boolean debug(){
+        return LOGGER.isLoggable(Level.CONFIG);
+    }
 
     public static void init(String path){
         String defaultPath = OSTools.userHomePath()+"/.tools/";
