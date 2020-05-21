@@ -64,7 +64,8 @@ public class KuberTools {
                 }
             }
             Pod pod = new Pod();
-            pod.setName(name).setNamespace(namespace);
+            pod.setName(name).setNamespace(namespace)
+                    .setCreateTime(metadata.getString("creationTimestamp"));
             result.add(pod);
         }
         return result;
