@@ -46,7 +46,16 @@ public class FileTools {
             return path;
         }
     }
+    public static String getFileNameFromPathNoSuffix(String path){
+        String fileName = getFileNameFromPath(path);
+        return fileName.substring(0,fileName.lastIndexOf("."));
+    }
 
+    /**
+     * 从路径上获取文件的目录
+     * @param path  如/asd/asf.pdf
+     * @return /asd/
+     */
     public static String getDirFromPath(String path){
         String separator = OSTools.fileSeparator();
         if(!path.contains(separator)){
@@ -224,9 +233,10 @@ public class FileTools {
      */
     public static void splitFile(String filePath) {
         //String filePath = "/Users/lixiang/Desktop/testPDF.pdf";
+        String purlFileName = getFileNameFromPathNoSuffix(filePath);
         File file = new File(filePath);
         String dirFromPath = FileTools.getDirFromPath(filePath);
-        String workDir = dirFromPath+"/split/";
+        String workDir = dirFromPath+purlFileName+"_split/";
         FilePart filePart = partInfoFromFile(file, FIFTY_MB);
         try {
             Files.write(Paths.get(workDir+"desc.hbb"),ByteTools.objectToByte(filePart));
