@@ -16,6 +16,7 @@
 package red.lixiang.tools.common.netty.file.server;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
@@ -31,50 +32,77 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
+import javax.net.ssl.SSLException;
+import java.security.cert.CertificateException;
+
+import static red.lixiang.tools.jdk.file.FilePart.FIFTY_MB;
+import static red.lixiang.tools.jdk.file.FilePart.SIXTY_MB;
+
 /**
  * 可以传送Object的代码, 摘抄自netty官网
  */
 public final class ObjectEchoServer {
 
-    static final boolean SSL = System.getProperty("ssl") != null;
-    static final int PORT = Integer.parseInt(System.getProperty("port", "8007"));
+    final boolean SSL = System.getProperty("ssl") != null;
+    final int PORT = Integer.parseInt(System.getProperty("port", "8007"));
 
-    public static void main(String[] args) throws Exception {
+    private Channel serverChannel = null;
+
+    /**
+     * 关闭netty服务
+     */
+    public void closeServer() {
+        if (serverChannel != null) {
+            serverChannel.close();
+        }
+    }
+
+    /**
+     * 开启netty服务
+     */
+    public void startServer(String workDir) {
         // Configure SSL.
         final SslContext sslCtx;
-        if (SSL) {
-            SelfSignedCertificate ssc = new SelfSignedCertificate();
-            sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
-        } else {
-            sslCtx = null;
-        }
-
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
+            if (SSL) {
+                SelfSignedCertificate ssc = new SelfSignedCertificate();
+                sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
+            } else {
+                sslCtx = null;
+            }
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .handler(new LoggingHandler(LogLevel.INFO))
-             .childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    ChannelPipeline p = ch.pipeline();
-                    if (sslCtx != null) {
-                        p.addLast(sslCtx.newHandler(ch.alloc()));
-                    }
-                    p.addLast(
-                            new ObjectEncoder(),
-                            new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new ObjectEchoServerHandler());
-                }
-             });
+                    .channel(NioServerSocketChannel.class)
+                    .handler(new LoggingHandler(LogLevel.INFO))
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel ch) {
+                            ChannelPipeline p = ch.pipeline();
+                            if (sslCtx != null) {
+                                p.addLast(sslCtx.newHandler(ch.alloc()));
+                            }
+                            p.addLast(
+                                    new ObjectEncoder(),
+                                    new ObjectDecoder(SIXTY_MB,ClassResolvers.cacheDisabled(null)),
+                                    new ObjectEchoServerHandler(workDir));
+                        }
+                    });
 
             // Bind and start to accept incoming connections.
-            b.bind(PORT).sync().channel().closeFuture().sync();
+            serverChannel = b.bind(PORT).sync().channel();
+            serverChannel.closeFuture().sync();
+        } catch (CertificateException | SSLException | InterruptedException e) {
+            e.printStackTrace();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    public static void main(String[] args) {
+        ObjectEchoServer server = new ObjectEchoServer();
+        server.startServer("/Users/lixiang/Desktop/work/");
     }
 }

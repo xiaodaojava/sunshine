@@ -17,6 +17,13 @@ package red.lixiang.tools.common.netty.file.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import red.lixiang.tools.jdk.ByteTools;
+import red.lixiang.tools.jdk.file.FilePart;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 /**
  * Handles both client-side and server-side handler depending on which
@@ -24,10 +31,31 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class ObjectEchoServerHandler extends ChannelInboundHandlerAdapter {
 
+    private final String workDir;
+
+    public ObjectEchoServerHandler(String workDir) {
+        this.workDir = workDir;
+    }
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        System.out.println("in read");
         // Echo back the received object to the client.
-        ctx.write(msg);
+        //ctx.write(msg);
+        FilePart filePart = (FilePart)msg;
+        String fileName = null;
+        if(filePart.getCurrentPart()==0){
+            //是描述文件
+             fileName = workDir+"desc.hbb";
+        }else {
+             fileName = workDir+filePart.getCurrentPart()+".hbb";
+        }
+        try {
+            Files.write(Paths.get( fileName),ByteTools.objectToByte(filePart));
+            ctx.writeAndFlush("OK");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

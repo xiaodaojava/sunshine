@@ -16,6 +16,7 @@
 package red.lixiang.tools.common.netty.file.client;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
@@ -28,50 +29,71 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import red.lixiang.tools.jdk.file.FileTools;
+
+import javax.net.ssl.SSLException;
 
 /**
  *
  */
 public final class ObjectEchoClient {
 
-    static final boolean SSL = System.getProperty("ssl") != null;
-    static final String HOST = System.getProperty("host", "127.0.0.1");
-    static final int PORT = Integer.parseInt(System.getProperty("port", "8007"));
-    static final int SIZE = Integer.parseInt(System.getProperty("size", "256"));
+    final boolean SSL = System.getProperty("ssl") != null;
+    final String HOST = System.getProperty("host", "127.0.0.1");
+    final int PORT = Integer.parseInt(System.getProperty("port", "8007"));
 
-    public static void main(String[] args) throws Exception {
+
+    Channel clientChannel = null;
+
+    public void closeClient() {
+        if (clientChannel != null) {
+            clientChannel.close();
+        }
+    }
+
+    public void startClient(String workDir) {
         // Configure SSL.
         final SslContext sslCtx;
-        if (SSL) {
-            sslCtx = SslContextBuilder.forClient()
-                .trustManager(InsecureTrustManagerFactory.INSTANCE).build();
-        } else {
-            sslCtx = null;
-        }
-
         EventLoopGroup group = new NioEventLoopGroup();
+
         try {
+            if (SSL) {
+                sslCtx = SslContextBuilder.forClient()
+                        .trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+            } else {
+                sslCtx = null;
+            }
             Bootstrap b = new Bootstrap();
             b.group(group)
-             .channel(NioSocketChannel.class)
-             .handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    ChannelPipeline p = ch.pipeline();
-                    if (sslCtx != null) {
-                        p.addLast(sslCtx.newHandler(ch.alloc(), HOST, PORT));
-                    }
-                    p.addLast(
-                            new ObjectEncoder(),
-                            new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new ObjectEchoClientHandler());
-                }
-             });
+                    .channel(NioSocketChannel.class)
+                    .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel ch) throws Exception {
+                            ChannelPipeline p = ch.pipeline();
+                            if (sslCtx != null) {
+                                p.addLast(sslCtx.newHandler(ch.alloc(), HOST, PORT));
+                            }
+                            p.addLast(
+                                    new ObjectEncoder(),
+                                    new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                                    new ObjectEchoClientHandler(workDir));
+                        }
+                    });
 
             // Start the connection attempt.
-            b.connect(HOST, PORT).sync().channel().closeFuture().sync();
+            clientChannel = b.connect(HOST, PORT).sync().channel();
+            clientChannel.closeFuture().sync();
+        } catch (SSLException | InterruptedException e) {
+            e.printStackTrace();
         } finally {
             group.shutdownGracefully();
         }
+    }
+
+    public static void main(String[] args) {
+        String file = "/Users/lixiang/Desktop/testPDF.pdf";
+        String workDir = FileTools.splitFile(file);
+        ObjectEchoClient client = new ObjectEchoClient();
+        client.startClient(workDir);
     }
 }

@@ -16,6 +16,7 @@ public class FilePart implements Serializable {
     public static final int ONE_MB = 1024*ONE_KB;
     public static final int TEN_MB = 10*ONE_MB;
     public static final int FIFTY_MB = 5*TEN_MB;
+    public static final int SIXTY_MB = 6*TEN_MB;
 
     /** 文件名称 */
     private String fileName;

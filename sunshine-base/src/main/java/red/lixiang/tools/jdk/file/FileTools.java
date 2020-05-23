@@ -238,7 +238,7 @@ public class FileTools {
 
     public static void main(String[] args) {
       //  splitFile("/Users/lixiang/Desktop/couxin.jpeg");
-        mergeFilePart("/Users/lixiang/Desktop/testPDF_split/");
+        mergeFilePart("/Users/lixiang/Desktop/work/");
     }
 
     /**
@@ -246,7 +246,7 @@ public class FileTools {
      *
      * @param filePath
      */
-    public static void splitFile(String filePath) {
+    public static String splitFile(String filePath) {
         //String filePath = "/Users/lixiang/Desktop/testPDF.pdf";
         String purlFileName = getFileNameFromPathNoSuffix(filePath);
         File file = new File(filePath);
@@ -280,5 +280,6 @@ public class FileTools {
                 e.printStackTrace();
             }
         }
+        return workDir;
     }
 }
