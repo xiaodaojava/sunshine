@@ -109,13 +109,13 @@ public class FileTools {
         return null;
     }
 
-    public static void deleteDirFiles(String path, String name,boolean selfFlag) {
+    public static void deleteDirFiles(String path, String name, boolean selfFlag) {
         try {
             Stream<Path> list = Files.list(Paths.get(path));
             list.forEach(x -> {
                 try {
-                    if (name != null ) {
-                        if(x.getFileName().toString().contains(name)){
+                    if (name != null) {
+                        if (x.getFileName().toString().contains(name)) {
                             Files.deleteIfExists(x);
                         }
                     } else {
@@ -125,12 +125,16 @@ public class FileTools {
                     e.printStackTrace();
                 }
             });
-            if(selfFlag){
+            if (selfFlag) {
                 Files.delete(Paths.get(path));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void deleteDirFiles(String path) {
+        deleteDirFiles(path, null, false);
     }
 
 
@@ -233,14 +237,14 @@ public class FileTools {
             System.out.println(count);
             byteChannel.close();
             //删除单个的文件
-            deleteDirFiles(workDir,".hbb",false);
+            deleteDirFiles(workDir, ".hbb", false);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-      //  splitFile("/Users/lixiang/Desktop/couxin.jpeg");
+        //  splitFile("/Users/lixiang/Desktop/couxin.jpeg");
         mergeFilePart("/Users/lixiang/Desktop/work/");
     }
 
