@@ -19,6 +19,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import red.lixiang.tools.jdk.ByteTools;
 import red.lixiang.tools.jdk.file.FilePart;
+import red.lixiang.tools.jdk.file.FileTools;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -57,6 +58,7 @@ public class FileServerHandler extends ChannelInboundHandlerAdapter {
             ctx.writeAndFlush("OK");
             if((++finished)==filePart.getTotalPart()+1){
                 //全部都完成了,可以关服务了
+                FileTools.mergeFilePart(workDir);
                 ctx.channel().close();
             }
         } catch (IOException e) {

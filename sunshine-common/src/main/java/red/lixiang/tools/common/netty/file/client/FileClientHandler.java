@@ -20,6 +20,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import red.lixiang.tools.jdk.ByteTools;
 import red.lixiang.tools.jdk.ToolsLogger;
 import red.lixiang.tools.jdk.file.FilePart;
+import red.lixiang.tools.jdk.file.FileTools;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -88,6 +89,7 @@ public class FileClientHandler extends ChannelInboundHandlerAdapter {
             if(count==finished){
                 //全部传输完, 就可以关闭连接了
                 ctx.channel().close();
+                FileTools.deleteDirFiles(workDir,null,true);
             }
         }
     }
