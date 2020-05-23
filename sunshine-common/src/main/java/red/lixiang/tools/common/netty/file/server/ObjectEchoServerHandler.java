@@ -33,6 +33,8 @@ public class ObjectEchoServerHandler extends ChannelInboundHandlerAdapter {
 
     private final String workDir;
 
+    private  int finished = 0;
+
     public ObjectEchoServerHandler(String workDir) {
         this.workDir = workDir;
     }
@@ -53,6 +55,10 @@ public class ObjectEchoServerHandler extends ChannelInboundHandlerAdapter {
         try {
             Files.write(Paths.get( fileName),ByteTools.objectToByte(filePart));
             ctx.writeAndFlush("OK");
+            if((++finished)==filePart.getTotalPart()+1){
+                //全部都完成了,可以关服务了
+                ctx.channel().close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

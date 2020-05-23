@@ -44,7 +44,6 @@ import static red.lixiang.tools.jdk.file.FilePart.SIXTY_MB;
 public final class ObjectEchoServer {
 
     final boolean SSL = System.getProperty("ssl") != null;
-    final int PORT = Integer.parseInt(System.getProperty("port", "8007"));
 
     private Channel serverChannel = null;
 
@@ -60,7 +59,7 @@ public final class ObjectEchoServer {
     /**
      * 开启netty服务
      */
-    public void startServer(String workDir) {
+    public void startServer(Integer port,String workDir) {
         // Configure SSL.
         final SslContext sslCtx;
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
@@ -91,7 +90,7 @@ public final class ObjectEchoServer {
                     });
 
             // Bind and start to accept incoming connections.
-            serverChannel = b.bind(PORT).sync().channel();
+            serverChannel = b.bind(port).sync().channel();
             serverChannel.closeFuture().sync();
         } catch (CertificateException | SSLException | InterruptedException e) {
             e.printStackTrace();
@@ -103,6 +102,6 @@ public final class ObjectEchoServer {
 
     public static void main(String[] args) {
         ObjectEchoServer server = new ObjectEchoServer();
-        server.startServer("/Users/lixiang/Desktop/work/");
+        server.startServer(52000,"/Users/lixiang/Desktop/work/");
     }
 }

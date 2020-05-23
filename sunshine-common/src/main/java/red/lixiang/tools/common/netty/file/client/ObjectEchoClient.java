@@ -39,8 +39,6 @@ import javax.net.ssl.SSLException;
 public final class ObjectEchoClient {
 
     final boolean SSL = System.getProperty("ssl") != null;
-    final String HOST = System.getProperty("host", "127.0.0.1");
-    final int PORT = Integer.parseInt(System.getProperty("port", "8007"));
 
 
     Channel clientChannel = null;
@@ -51,7 +49,7 @@ public final class ObjectEchoClient {
         }
     }
 
-    public void startClient(String workDir) {
+    public void startClient(String host, Integer port,String workDir) {
         // Configure SSL.
         final SslContext sslCtx;
         EventLoopGroup group = new NioEventLoopGroup();
@@ -71,7 +69,7 @@ public final class ObjectEchoClient {
                         public void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline p = ch.pipeline();
                             if (sslCtx != null) {
-                                p.addLast(sslCtx.newHandler(ch.alloc(), HOST, PORT));
+                                p.addLast(sslCtx.newHandler(ch.alloc(), host, port));
                             }
                             p.addLast(
                                     new ObjectEncoder(),
@@ -81,7 +79,7 @@ public final class ObjectEchoClient {
                     });
 
             // Start the connection attempt.
-            clientChannel = b.connect(HOST, PORT).sync().channel();
+            clientChannel = b.connect(host, port).sync().channel();
             clientChannel.closeFuture().sync();
         } catch (SSLException | InterruptedException e) {
             e.printStackTrace();
@@ -94,6 +92,6 @@ public final class ObjectEchoClient {
         String file = "/Users/lixiang/Desktop/testPDF.pdf";
         String workDir = FileTools.splitFile(file);
         ObjectEchoClient client = new ObjectEchoClient();
-        client.startClient(workDir);
+        client.startClient("10.211.55.12",52000,workDir);
     }
 }
