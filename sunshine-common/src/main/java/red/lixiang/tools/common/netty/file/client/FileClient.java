@@ -36,7 +36,7 @@ import javax.net.ssl.SSLException;
 /**
  *
  */
-public final class ObjectEchoClient {
+public final class FileClient {
 
     final boolean SSL = System.getProperty("ssl") != null;
 
@@ -74,7 +74,7 @@ public final class ObjectEchoClient {
                             p.addLast(
                                     new ObjectEncoder(),
                                     new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                                    new ObjectEchoClientHandler(workDir));
+                                    new FileClientHandler(workDir));
                         }
                     });
 
@@ -91,7 +91,7 @@ public final class ObjectEchoClient {
     public static void main(String[] args) {
         String file = "/Users/lixiang/Desktop/testPDF.pdf";
         String workDir = FileTools.splitFile(file);
-        ObjectEchoClient client = new ObjectEchoClient();
+        FileClient client = new FileClient();
         client.startClient("10.211.55.12",52000,workDir);
     }
 }

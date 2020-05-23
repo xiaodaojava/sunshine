@@ -35,13 +35,12 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 import javax.net.ssl.SSLException;
 import java.security.cert.CertificateException;
 
-import static red.lixiang.tools.jdk.file.FilePart.FIFTY_MB;
 import static red.lixiang.tools.jdk.file.FilePart.SIXTY_MB;
 
 /**
  * 可以传送Object的代码, 摘抄自netty官网
  */
-public final class ObjectEchoServer {
+public final class FileServer {
 
     final boolean SSL = System.getProperty("ssl") != null;
 
@@ -85,7 +84,7 @@ public final class ObjectEchoServer {
                             p.addLast(
                                     new ObjectEncoder(),
                                     new ObjectDecoder(SIXTY_MB,ClassResolvers.cacheDisabled(null)),
-                                    new ObjectEchoServerHandler(workDir));
+                                    new FileServerHandler(workDir));
                         }
                     });
 
@@ -101,7 +100,7 @@ public final class ObjectEchoServer {
     }
 
     public static void main(String[] args) {
-        ObjectEchoServer server = new ObjectEchoServer();
+        FileServer server = new FileServer();
         server.startServer(52000,"/Users/lixiang/Desktop/work/");
     }
 }

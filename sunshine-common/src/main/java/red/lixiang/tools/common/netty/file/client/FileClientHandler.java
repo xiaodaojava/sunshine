@@ -32,7 +32,7 @@ import java.util.List;
  * ping-pong traffic between the object echo client and server by sending the
  * first message to the server.
  */
-public class ObjectEchoClientHandler extends ChannelInboundHandlerAdapter {
+public class FileClientHandler extends ChannelInboundHandlerAdapter {
 
 
     private String workDir;
@@ -52,7 +52,7 @@ public class ObjectEchoClientHandler extends ChannelInboundHandlerAdapter {
      * Creates a client-side handler.
      * @param workDir
      */
-    public ObjectEchoClientHandler(String workDir) {
+    public FileClientHandler(String workDir) {
         this.workDir = workDir;
     }
 

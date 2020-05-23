@@ -29,13 +29,13 @@ import java.nio.file.StandardOpenOption;
  * Handles both client-side and server-side handler depending on which
  * constructor was called.
  */
-public class ObjectEchoServerHandler extends ChannelInboundHandlerAdapter {
+public class FileServerHandler extends ChannelInboundHandlerAdapter {
 
     private final String workDir;
 
     private  int finished = 0;
 
-    public ObjectEchoServerHandler(String workDir) {
+    public FileServerHandler(String workDir) {
         this.workDir = workDir;
     }
 

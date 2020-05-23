@@ -109,7 +109,7 @@ public class FileTools {
         return null;
     }
 
-    public static void deleteDirFiles(String path, String name) {
+    public static void deleteDirFiles(String path, String name,boolean selfFlag) {
         try {
             Stream<Path> list = Files.list(Paths.get(path));
             list.forEach(x -> {
@@ -125,6 +125,9 @@ public class FileTools {
                     e.printStackTrace();
                 }
             });
+            if(selfFlag){
+                Files.delete(Paths.get(path));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -230,7 +233,7 @@ public class FileTools {
             System.out.println(count);
             byteChannel.close();
             //删除单个的文件
-            deleteDirFiles(workDir,".hbb");
+            deleteDirFiles(workDir,".hbb",false);
         } catch (IOException e) {
             e.printStackTrace();
         }
