@@ -1,11 +1,14 @@
 package red.lixiang.tools.base.conf;
 
+import java.io.Serializable;
+
 /**
  * @author lixiang
  * @date 2020/2/21
  **/
-public class KubsConfig {
+public class KubsConfig implements Serializable {
 
+    private static final long serialVersionUID = 3787713783251533055L;
     private String confPath;
 
     private String confContent;

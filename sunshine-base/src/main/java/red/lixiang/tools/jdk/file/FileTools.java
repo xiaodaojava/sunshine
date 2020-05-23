@@ -1,12 +1,9 @@
-package red.lixiang.tools.jdk;
+package red.lixiang.tools.jdk.file;
 
 import red.lixiang.tools.jdk.io.IOTools;
 import red.lixiang.tools.jdk.os.OSTools;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -92,6 +89,65 @@ public class FileTools {
             e.printStackTrace();
         }
     }
+
+
+    public static FilePart getFromFile(File file,Integer readSize){
+        FilePart filePart = new FilePart();
+        String fileName = file.getName();
+        // 文件的总长度
+        long totalLength = file.length();
+        // 总共有多少段
+        int totalPart = (int) (totalLength/readSize)+1;
+
+        filePart.setTotalLength(totalLength)
+                .setCurrentLength(readSize)
+                .setTotalPart(totalPart)
+                .setCurrentPart(0)
+                .setFileName(fileName);
+        return filePart;
+    }
+
+    /**
+     *
+     * @param filePath  文件路径
+     * @param startPart  从第几个分段开始读,初始是1
+     * @param readSize  每次读多少个大小
+     */
+    public static FilePart readToFilePart(String filePath,Integer startPart,Integer readSize){
+        FilePart filePart = new FilePart();
+        File file = new File(filePath);
+        return readToFilePart(file, startPart, readSize);
+    }
+
+    public static FilePart readToFilePart(File file,Integer startPart,Integer readSize){
+        FilePart filePart = new FilePart();
+
+        String fileName = file.getName();
+        // 文件的总长度
+        long totalLength = file.length();
+        // 总共有多少段
+        int totalPart = (int) (totalLength/readSize)+1;
+        if(startPart>totalPart){
+            return null;
+        }
+        // 开始的位置
+        long startIndex = (startPart-1)*readSize;
+        filePart.setTotalLength(totalLength)
+                .setCurrentLength(readSize)
+                .setTotalPart(totalPart)
+                .setCurrentPart(startPart)
+                .setFileName(fileName);
+        byte[] bytes = new byte[readSize];
+        try (RandomAccessFile randomFile = new RandomAccessFile(file, "r")) {
+            randomFile.seek(startIndex);
+            randomFile.read(bytes);
+            filePart.setContents(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return filePart;
+    }
+
 
 
     public static void main(String[] args) {

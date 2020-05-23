@@ -35,6 +35,7 @@ dependencies {
 	implementation group: 'com.vladsch.flexmark',name: 'flexmark', version: '0.61.24'
 	implementation group: 'com.vladsch.flexmark', name: 'flexmark-ext-gfm-strikethrough', version: '0.61.24'
 	implementation group: 'com.vladsch.flexmark', name: 'flexmark-ext-tables', version: '0.61.24'
+	implementation group: 'io.netty', name: 'netty-all', version: '4.1.50.Final'
 
 
 }
