@@ -10,6 +10,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -63,9 +64,9 @@ public class ExcelTools {
                                 break;
 
                             case NUMERIC:
-                                value = "" + cell.getNumericCellValue();
+                                DecimalFormat df = new DecimalFormat("0");
+                                value = "" + df.format(cell.getNumericCellValue());
                                 break;
-
                             case STRING:
                                 value = cell.getStringCellValue();
                                 break;

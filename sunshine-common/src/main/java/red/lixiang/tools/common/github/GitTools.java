@@ -6,7 +6,7 @@ import red.lixiang.tools.common.github.model.ImageBed;
 import red.lixiang.tools.common.github.model.CommitRes;
 import red.lixiang.tools.common.github.model.UploadFileReq;
 import red.lixiang.tools.common.github.model.UploadFileRes;
-import red.lixiang.tools.jdk.FileTools;
+import red.lixiang.tools.jdk.file.FileTools;
 import red.lixiang.tools.jdk.JSONTools;
 import red.lixiang.tools.jdk.StringTools;
 import red.lixiang.tools.jdk.URLTools;
@@ -139,8 +139,10 @@ public class GitTools {
         String removeHost = URLTools.removeHost(originUrl).replace("/master", "");
         String cdnUrl = cdnHost + removeHost;
         String cdnMarkdownUrl = String.format("![](%s)", cdnUrl);
+        String htmlUrl = String.format("<img src=\"%s\"  />",originUrl);
         ImageBed bed = new ImageBed();
         bed.setOriginUrl(originUrl)
+                .setHtmlUrl(htmlUrl)
                 .setMarkdownUrl(markdownUrl)
                 .setCdnUrl(cdnUrl)
                 .setCdnMarkdownUrl(cdnMarkdownUrl);

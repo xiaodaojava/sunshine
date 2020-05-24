@@ -46,7 +46,7 @@ import java.util.Properties;
  * @author gaohongtao
  * @author panjuan
  */
-public final class SnowflakeGenerator {
+public final class IDTools {
     
     public static final long EPOCH;
     
@@ -88,7 +88,7 @@ public final class SnowflakeGenerator {
     }
     
 
-    public static synchronized Long generateKey() {
+    public static synchronized Long ID() {
         long currentMilliseconds = System.currentTimeMillis();
         if (waitTolerateTimeDifferenceIfNeed(currentMilliseconds)) {
             currentMilliseconds = System.currentTimeMillis();
@@ -156,7 +156,7 @@ public final class SnowflakeGenerator {
 //            long p = 101164884579L;
 //        System.out.println(p<<6);
         for (int i = 0; i < 10; i++) {
-           Long aLong = SnowflakeGenerator.generateKey();
+           Long aLong = IDTools.ID();
             System.out.println(aLong);
 
         }

@@ -48,6 +48,18 @@ public interface CommonModel {
         }
         return map;
     }
+    /**
+     * 对当前实体类的处理
+     * @return
+     */
+    default public Map<String,String> toStringMap(){
+        Map<String, Object> map = toMap();
+        Map<String,String> result = new HashMap<>(map.size());
+        map.forEach((key,value)->{
+            result.put(key,String.valueOf(value));
+        });
+        return result;
+    }
 
     /**
      * 对key需不需要特殊处理
