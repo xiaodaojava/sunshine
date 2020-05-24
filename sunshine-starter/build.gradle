@@ -3,8 +3,8 @@ plugins {
 	id 'maven-publish'
 	id 'signing'
 }
-sourceCompatibility = '14'
-targetCompatibility = '14'
+sourceCompatibility = '11'
+targetCompatibility = '11'
 
 dependencies {
 	compile project(":sunshine-common")
