@@ -17,7 +17,7 @@ dependencies {
 	compileOnly group: 'org.apache.dubbo', name: 'dubbo', version: '2.7.4.1'
 	compile group: 'org.springframework', name: 'spring-jdbc', version: '5.2.2.RELEASE'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.2.0.RELEASE'
-	implementation group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '3.6.0'
+	compileOnly group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '3.8.1'
 }
 
 // 后面的都是打包的配置
