@@ -15,7 +15,7 @@ public class Pod {
     /** 容器的创建时间 */
     private String createTime;
 
-    record status(String phase,String podIP,String containerStatuses,String hostIP,String startTime){}
+//    record status(String phase,String podIP,String containerStatuses,String hostIP,String startTime){}
 
 
     public String getCreateTime() {
