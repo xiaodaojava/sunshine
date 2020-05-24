@@ -239,15 +239,14 @@ public class DomainDescTemplates {
             import org.springframework.web.bind.annotation.GetMapping;
             import org.springframework.web.bind.annotation.PostMapping;
             import org.springframework.web.bind.annotation.ResponseBody;
-                        
-                        
+                            
             import java.util.Date;
             import java.util.HashMap;
             import java.util.List;
             import java.util.Map;
                         
             /**
-             * @Author 造飞机团队
+             * @author 造飞机团队
              **/
             @Controller
             public class [(${table.javaTableName})]Controller  {
@@ -268,8 +267,8 @@ public class DomainDescTemplates {
                         
                 @PostMapping("/[(${table.javaCamelName})]/save")
                 @ResponseBody
-                public BaseResponse<[(${table.javaTableName})]> save[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
-                    [(${table.javaTableName})] [(${table.javaCamelName})]DO =  [(${table.javaCamelName})]Manager.save[(${table.javaTableName})]([(${table.javaCamelName})]);
+                public BaseResponse<[(${table.javaTableName})]DO> save[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
+                    [(${table.javaTableName})]DO [(${table.javaCamelName})]DO =  [(${table.javaCamelName})]Manager.save[(${table.javaTableName})]([(${table.javaCamelName})]);
                     return  BaseResponse.success([(${table.javaCamelName})]DO);
                 }
 
