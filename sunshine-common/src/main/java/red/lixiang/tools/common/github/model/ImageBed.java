@@ -15,6 +15,20 @@ public class ImageBed {
     /** 加了cdn的jsdelivr的markdown链接 */
     private String cdnMarkdownUrl;
 
+    /**
+     * 使用了img标签的
+     */
+    private String htmlUrl;
+
+    public String getHtmlUrl() {
+        return htmlUrl;
+    }
+
+    public ImageBed setHtmlUrl(String htmlUrl) {
+        this.htmlUrl = htmlUrl;
+        return this;
+    }
+
     public String getOriginUrl() {
         return originUrl;
     }

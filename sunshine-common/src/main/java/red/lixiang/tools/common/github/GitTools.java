@@ -139,8 +139,10 @@ public class GitTools {
         String removeHost = URLTools.removeHost(originUrl).replace("/master", "");
         String cdnUrl = cdnHost + removeHost;
         String cdnMarkdownUrl = String.format("![](%s)", cdnUrl);
+        String htmlUrl = String.format("<img src=\"%s\"  />",originUrl);
         ImageBed bed = new ImageBed();
         bed.setOriginUrl(originUrl)
+                .setHtmlUrl(htmlUrl)
                 .setMarkdownUrl(markdownUrl)
                 .setCdnUrl(cdnUrl)
                 .setCdnMarkdownUrl(cdnMarkdownUrl);
