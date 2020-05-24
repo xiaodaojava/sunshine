@@ -59,7 +59,7 @@ public class FileServerHandler extends ChannelInboundHandlerAdapter {
             if((++finished)==filePart.getTotalPart()+1){
                 //全部都完成了,可以关服务了
                 FileTools.mergeFilePart(workDir);
-                ctx.channel().close();
+                ctx.channel().parent().close();
             }
         } catch (IOException e) {
             e.printStackTrace();
