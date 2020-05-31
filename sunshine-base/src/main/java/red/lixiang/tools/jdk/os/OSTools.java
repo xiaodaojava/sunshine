@@ -16,6 +16,10 @@ public class OSTools {
         return osName.toLowerCase().contains("mac");
     }
 
+    /**
+     * /Users/lixiang
+     * @return
+     */
     public static String userHomePath(){
         String userHome  = System.getProperty("user.home");
         return userHome;
@@ -23,6 +27,11 @@ public class OSTools {
     public static String fileSeparator(){
         String userHome  = System.getProperty("file.separator");
         return userHome;
+    }
+
+    public static void main(String[] args) {
+        String s = userHomePath();
+        System.out.println(s);
     }
 
 
