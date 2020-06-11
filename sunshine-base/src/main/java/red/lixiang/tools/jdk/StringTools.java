@@ -157,4 +157,20 @@ public class StringTools {
         return !isBlank(s);
     }
 
+    /**
+     * 获取指定长度的简要信息
+     * @param s 原来的内容
+     * @param num 简要信息的长度
+     * @return
+     */
+    public static String getBrief(String s,Integer num){
+
+        if(isBlank(s) || s.length() < num ){
+            return s;
+        }
+
+        return s.substring(0,num);
+    }
+
+
 }
