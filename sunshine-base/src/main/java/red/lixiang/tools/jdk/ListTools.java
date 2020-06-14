@@ -144,9 +144,6 @@ public class ListTools {
         return null;
     }
 
-    public static boolean isEmpty(List list) {
-        return null == list || list.isEmpty();
-    }
 
     /**
      * 将一个list均分成n个list

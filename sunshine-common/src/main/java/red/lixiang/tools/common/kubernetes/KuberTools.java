@@ -3,7 +3,9 @@ package red.lixiang.tools.common.kubernetes;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import red.lixiang.tools.common.kubernetes.models.Container;
 import red.lixiang.tools.common.kubernetes.models.Pod;
+import red.lixiang.tools.jdk.ListTools;
 import red.lixiang.tools.jdk.StringTools;
 import red.lixiang.tools.jdk.io.IOTools;
 
@@ -23,7 +25,9 @@ import java.util.List;
  **/
 public class KuberTools {
     public static void main(String[] args) throws Exception {
-
+        KubernetesConfig config = new KubernetesConfig("/Users/lixiang/.sunflower/kube/360-test-hlwyy");
+        List<Pod> pods = getAllPods("forest-service", config);
+        System.out.println(pods);
     }
 
     public static String  deletePos(Pod pod,KubernetesConfig config){
@@ -35,7 +39,7 @@ public class KuberTools {
         return result;
     }
 
-    public static String getPodLogs(Integer lines,Pod pod, KubernetesConfig config){
+    public static String getPodLogs(Integer lines,Pod pod,Container container, KubernetesConfig config){
         lines = lines == null? 1000:lines;
         StringBuilder builder  = new StringBuilder().append(config.getServerApi())
                 .append("/api/v1/namespaces/")
@@ -43,6 +47,9 @@ public class KuberTools {
                 .append("/pods/").append(pod.getName())
                 .append("/log?follow=false&pretty=false&previous=false&timestamps=false")
                 .append("&tailLines=").append(lines);
+        if(container!=null){
+            builder.append("&container=").append(container.getName());
+        }
         String result = connect(builder.toString(), null,"GET", config);
         return result;
     }
@@ -63,9 +70,15 @@ public class KuberTools {
                     continue;
                 }
             }
+
             Pod pod = new Pod();
             pod.setName(name).setNamespace(namespace)
                     .setCreateTime(metadata.getString("creationTimestamp"));
+            //获取container
+            JSONObject spec = jObj.getJSONObject("spec");
+            JSONArray containers = spec.getJSONArray("containers");
+            List<Container> containerList = containers.toJavaList(Container.class);
+            pod.setContainerList(containerList);
             result.add(pod);
         }
         return result;
@@ -90,8 +103,8 @@ public class KuberTools {
             //验证主机
             conn.setHostnameVerifier((s, sslSession) -> true);
             try {
-                SSLSocketFactory sslSocketFactory = initCert(kubernetesConfig.getUserClientKey(), kubernetesConfig.getUserClientCertificate());
-                conn.setSSLSocketFactory(sslSocketFactory);
+                SSLContext sslContext = initCert(kubernetesConfig.getUserClientKey(), kubernetesConfig.getUserClientCertificate());
+                conn.setSSLSocketFactory(sslContext.getSocketFactory());
             } catch (Exception e) {
                 throw new Exception("证书加载错误");
             }
@@ -109,12 +122,13 @@ public class KuberTools {
         }
         return null;
     }
+
     /**
      * 加载证书
      * @param key 证书的key
      * @param pwd 证书的密码
      */
-    private static SSLSocketFactory initCert(String key,String pwd ) throws Exception {
+    public static SSLContext initCert(String key,String pwd ) throws Exception {
         try {
             //初始化秘钥管理器
             final KeyManager[] keyManagers = SSLUtils.keyManagers(Base64.getDecoder().decode(pwd), Base64.getDecoder().decode(key), "RSA", "", null, null);
@@ -137,7 +151,7 @@ public class KuberTools {
 
             // 第一个参数是授权的密钥管理器，用来授权验证。TrustManager[]第二个是被授权的证书管理器，用来验证服务器端的证书。第三个参数是一个随机数值，可以填写null
             sslContext.init(keyManagers, new TrustManager[]{tm}, null);
-            return sslContext.getSocketFactory();
+            return sslContext;
         }catch(Exception e){
             e.printStackTrace();
             throw new Exception(e.getMessage());

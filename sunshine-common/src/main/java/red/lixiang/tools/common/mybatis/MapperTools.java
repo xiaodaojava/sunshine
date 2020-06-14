@@ -136,7 +136,7 @@ public class MapperTools {
                     } else if (qc.listQuery()) {
                         // 如果是list查询
                         List list = (List) value;
-                        if (!ListTools.isEmpty(list)) {
+                        if (!ListTools.isBlank(list)) {
                             sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " in (" + convertList2Str(list, qc.classType()) + ")");
                         }
                     }else if(qc.biggerRich()){

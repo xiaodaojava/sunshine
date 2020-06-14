@@ -1,5 +1,7 @@
 package red.lixiang.tools.common.kubernetes.models;
 
+import java.util.List;
+
 /**
  * @author lixiang
  * @date 2020/2/23
@@ -15,8 +17,19 @@ public class Pod {
     /** 容器的创建时间 */
     private String createTime;
 
-//    record status(String phase,String podIP,String containerStatuses,String hostIP,String startTime){}
+    private List<Container> containerList;
 
+    record status(String phase,String podIP,String containerStatuses,String hostIP,String startTime){}
+
+
+    public List<Container> getContainerList() {
+        return containerList;
+    }
+
+    public Pod setContainerList(List<Container> containerList) {
+        this.containerList = containerList;
+        return this;
+    }
 
     public String getCreateTime() {
         return createTime;

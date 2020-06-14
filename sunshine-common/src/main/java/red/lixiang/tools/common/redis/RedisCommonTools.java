@@ -104,6 +104,7 @@ public class RedisCommonTools {
         scanCursor = scan;
 //        connect.close();
 //        client.shutdown();
+
         return scan.getKeys();
     }
 
