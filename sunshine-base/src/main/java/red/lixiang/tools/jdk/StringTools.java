@@ -1,6 +1,7 @@
 package red.lixiang.tools.jdk;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -172,5 +173,29 @@ public class StringTools {
         return s.substring(0,num);
     }
 
+    /**
+     * 按字典升序的比较器
+     */
+    public static Comparator<String> StringComparator = (o1, o2) -> {
+        char[] chars1=o1.toCharArray();
+        char[] chars2=o2.toCharArray();
+        int i=0;
+        while(i<chars1.length && i<chars2.length){
+            if(chars1[i]>chars2[i]){
+                return 1;
+            }else if(chars1[i]<chars2[i]){
+                return -1;
+            }else{
+                i++;
+            }
+        }
+        if(i==chars1.length){  //o1到头
+            return -1;
+        }
+        if(i== chars2.length){ //o2到头
+            return 1;
+        }
+        return 0;
+    };
 
 }
