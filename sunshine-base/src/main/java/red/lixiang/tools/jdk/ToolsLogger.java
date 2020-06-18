@@ -64,7 +64,7 @@ public class ToolsLogger {
     }
 
     public static void error(String msg, Throwable t){
-        LOGGER.severe(msg+" "+t.getLocalizedMessage());
+        LOGGER.severe(msg+" "+t.getMessage());
     }
 
     public static void error(String msg){
