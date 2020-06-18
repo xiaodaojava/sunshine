@@ -13,6 +13,7 @@ public class CommitRes {
     private String url;
     private String sha;
 
+    // 因为这是一个record类型, 用fastjson解析会出错,所以先禁用掉fastJson的解析
     @JSONField(serialize = false,deserialize = false)
     List<File> files;
 
@@ -43,6 +44,32 @@ public class CommitRes {
         return this;
     }
 
-    public record File(@SerializedName("raw_url") String rawUrl){};
+    public static class File{
+        @SerializedName("raw_url")
+        private String rawUrl;
+        private String status;
+
+        public boolean removed(){
+            return "removed".equals(status);
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public File setStatus(String status) {
+            this.status = status;
+            return this;
+        }
+
+        public String getRawUrl() {
+            return rawUrl;
+        }
+
+        public File setRawUrl(String rawUrl) {
+            this.rawUrl = rawUrl;
+            return this;
+        }
+    };
 
 }

@@ -6,6 +6,7 @@ import red.lixiang.tools.common.github.model.ImageBed;
 import red.lixiang.tools.common.github.model.CommitRes;
 import red.lixiang.tools.common.github.model.UploadFileReq;
 import red.lixiang.tools.common.github.model.UploadFileRes;
+import red.lixiang.tools.jdk.ToolsLogger;
 import red.lixiang.tools.jdk.file.FileTools;
 import red.lixiang.tools.jdk.JSONTools;
 import red.lixiang.tools.jdk.StringTools;
@@ -38,7 +39,10 @@ public class GitTools {
         for (CommitRes commitRes : commitResList) {
             List<CommitRes> commitDetail = lastCommits(config, null, commitRes.getSha());
             CommitRes.File file = commitDetail.get(0).getFiles().get(0);
-            urlList.add(file.rawUrl());
+            if(file.removed()){
+                continue;
+            }
+            urlList.add(file.getRawUrl());
         }
         return urlList;
     }
@@ -68,6 +72,7 @@ public class GitTools {
         String body = response.getBody();
         if (StringTools.isNotBlank(sha)) {
             //只查一个的时候, 返回值不是List
+            ToolsLogger.plainInfo(body);
             CommitRes commitRes = JSONTools.toObject(body, CommitRes.class);
             return Collections.singletonList(commitRes);
         }

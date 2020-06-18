@@ -65,9 +65,9 @@ public class HttpTools {
         try {
             Map<String, String> paramMap = request.getParamMap();
             String url = request.getUrl();
-            // 在url后面拼接参数
+            // 在url后面拼接参数,这里要注意,本来url后面就带了参数,又有paraMap的存在
             if (null != paramMap) {
-                StringBuilder querySB = new StringBuilder("?");
+                StringBuilder querySB = new StringBuilder(url.contains("?")?"&":"?");
                 paramMap.forEach((key, value) -> querySB.append(key).append("=").append(value).append("&"));
                 //去掉最后一个 &
                 String query = querySB.substring(0, querySB.length() - 1);
