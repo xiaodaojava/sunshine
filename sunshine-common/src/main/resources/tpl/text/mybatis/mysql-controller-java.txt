@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author 造飞机团队
+ * @author 造飞机团队
  **/
 @Controller
 public class [(${table.javaTableName})]Controller  {
@@ -42,11 +42,9 @@ public class [(${table.javaTableName})]Controller  {
 
     @PostMapping("/[(${table.javaCamelName})]/save")
     @ResponseBody
-    public BaseResponse<String> save[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
-        BaseResponse<String> baseResponse = new BaseResponse<>();
-        [(${table.javaCamelName})]Manager.save[(${table.javaTableName})]([(${table.javaCamelName})]);
-        baseResponse.setData("OK");
-        return  baseResponse;
+    public BaseResponse<[(${table.javaTableName})]> save[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
+          [(${table.javaTableName})] [(${table.javaCamelName})]DO =  [(${table.javaCamelName})]Manager.save[(${table.javaTableName})]([(${table.javaCamelName})]);
+          return  BaseResponse.success([(${table.javaCamelName})]DO);
     }
 
 
