@@ -8,5 +8,5 @@ public interface GreetCopy {
     /**
      * 加油的接口定义
      */
-    String cheer();
+    void cheer();
 }

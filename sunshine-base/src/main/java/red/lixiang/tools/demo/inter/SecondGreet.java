@@ -1,6 +1,6 @@
 package red.lixiang.tools.demo.inter;
 
-import red.lixiang.tools.demo.proxy.dynamic.Greet;
+import red.lixiang.tools.demo.Greet;
 
 /**
  * @author lixiang

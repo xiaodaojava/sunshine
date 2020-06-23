@@ -1,6 +1,6 @@
 package red.lixiang.tools.demo.proxy.dynamic.normal;
 
-import red.lixiang.tools.demo.proxy.dynamic.Greet;
+import red.lixiang.tools.demo.Greet;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;

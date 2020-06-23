@@ -1,4 +1,4 @@
-package red.lixiang.tools.demo.proxy.dynamic;
+package red.lixiang.tools.demo;
 
 /**
  * @author lixiang
