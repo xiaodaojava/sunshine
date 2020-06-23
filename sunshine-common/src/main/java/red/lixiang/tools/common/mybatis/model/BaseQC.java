@@ -25,12 +25,35 @@ public class BaseQC implements Serializable {
     /** 更新时间 */
     private Date updateTime;
 
+    /** 除了框架自动设置的url之外,可以手工添加一些条件,如is null , != 之类的 */
+    private String appendWhereSql;
+
+    public String getAppendWhereSql() {
+        return appendWhereSql;
+    }
+
+    public BaseQC setAppendWhereSql(String appendWhereSql) {
+        this.appendWhereSql = appendWhereSql;
+        return this;
+    }
+
     public Sort getSort() {
         return sort;
     }
 
     public BaseQC setSort(Sort sort) {
         this.sort = sort;
+        return this;
+    }
+
+    /**
+     * 添加示例 update_time desc,id asc
+     * @param sort
+     */
+    public BaseQC addSort(String sort) {
+        Sort sort1 = new Sort();
+        sort1.addSort(sort);
+        this.sort = sort1;
         return this;
     }
 

@@ -106,6 +106,13 @@ public class MapperTools {
                     continue;
                 }
 
+                // 如果是额外加上的sql
+                if("appendWhereSql".equals(fieldName) ){
+                    String appendWhereSql  = (String) value;
+                    sql.WHERE(appendWhereSql);
+                    continue;
+                }
+
                 if (field.isAnnotationPresent(QC.class)) {
                     QC qc = field.getAnnotation(QC.class);
                     if(qc.skipRich()){
