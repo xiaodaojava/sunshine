@@ -58,6 +58,20 @@ public class BaseProvider implements ProviderMethodResolver {
     }
 
     /**
+     * @see BaseMapper#countByQuery(BaseQC) (BaseQC)
+     * @param qc
+     * @return
+     */
+    public String countByQuery(BaseQC qc){
+        SQL sql = new SQL() {{
+            SELECT("count(1)");
+        }};
+        MapperTools.richWhereSql(sql,qc);
+        sql.FROM(tableNameFromObj(qc));
+        return sql.toString();
+    }
+
+    /**
      * @see BaseMapper#insert(Object)
      * @param t
      * @return
