@@ -54,6 +54,15 @@ public interface BaseMapper<T> {
     @SelectProvider(type = BaseProvider.class)
     List<T> findByQuery(BaseQC qc);
 
+    /**
+     * 通过条件查询数量
+     * @see BaseProvider#countByQuery(BaseQC)
+     * @param qc
+     * @return
+     */
+    @SelectProvider(type = BaseProvider.class)
+    Long countByQuery(BaseQC qc);
+
 
     /**
      * 插入
