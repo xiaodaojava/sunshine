@@ -17,7 +17,7 @@ dependencies {
 	compileOnly group: 'org.yaml', name: 'snakeyaml', version: '1.25'
 	compileOnly group: 'org.jsoup', name: 'jsoup', version: '1.12.1'
 	compileOnly (group: 'com.ctrip.framework.apollo', name: 'apollo-client', version: '1.3.0')
-//	implementation group: 'org.mybatis', name: 'mybatis', version: '3.5.4'
+	compileOnly group: 'org.mybatis', name: 'mybatis', version: '3.5.4'
 	compileOnly group: 'io.lettuce', name: 'lettuce-core', version: '5.2.2.RELEASE'
 	compileOnly group: 'com.hierynomus', name: 'sshj', version: '0.27.0'
 	compileOnly group: 'com.vladsch.flexmark',name: 'flexmark', version: '0.61.24'

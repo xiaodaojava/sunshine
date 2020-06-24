@@ -19,7 +19,7 @@ public class Pod {
 
     private List<Container> containerList;
 
-    record status(String phase,String podIP,String containerStatuses,String hostIP,String startTime){}
+//    record status(String phase,String podIP,String containerStatuses,String hostIP,String startTime){}
 
 
     public List<Container> getContainerList() {
