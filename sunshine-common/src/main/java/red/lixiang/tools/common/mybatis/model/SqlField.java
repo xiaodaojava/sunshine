@@ -19,4 +19,11 @@ public @interface SqlField {
     String salt() default "";
     /** 哪个字段是加密之后的值 */
     String aes() default "";
+
+    /** 主键字段,一般是id, 需不需要使用雪花算法生成 */
+    boolean snowId() default false;
+
+    boolean createTime() default false;
+
+    boolean updateTime() default false;
 }

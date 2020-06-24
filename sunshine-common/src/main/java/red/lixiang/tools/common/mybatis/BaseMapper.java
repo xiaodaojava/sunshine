@@ -1,5 +1,6 @@
 package red.lixiang.tools.common.mybatis;
 
+import org.apache.ibatis.annotations.*;
 import red.lixiang.tools.common.mybatis.model.BaseQC;
 
 import java.util.List;
@@ -9,43 +10,88 @@ import java.util.List;
  * @date 2020/6/23
  **/
 public interface BaseMapper<T> {
+
+    /**
+     * 需要子类重写的返回,返回当前的Mapper.class
+     *
+     * @return
+     */
+     Class<?> getMapperClass();
+
     /**
      * 查找全部
+     *
+     * @see BaseProvider#findAll(Class)
      */
-    List<T> findAll();
+    @SelectProvider(type = BaseProvider.class)
+    List<T> findAll(Class<?> tClass);
+
+    default List<T> findAll() {
+        return this.findAll(getMapperClass());
+    }
+
 
     /**
      * 通过ID查找
+     * @see BaseProvider#findById(Long, Class)
      * @param id
      * @return
      */
-    T findById(Long id);
+    @SelectProvider(type = BaseProvider.class)
+    T findById(@Param("id") Long id, Class<?> tClass);
+
+    default T findById(Long id) {
+        return this.findById(id, getMapperClass());
+    }
+
 
     /**
      * 通过条件查询
+     * @see BaseProvider#findByQuery(BaseQC)
      * @param qc
      * @return
      */
-    T findByQuery(BaseQC qc);
+    @SelectProvider(type = BaseProvider.class)
+    List<T> findByQuery(BaseQC qc);
+
 
     /**
-     * 保存,如果ID存在则更新,不存在则新增
+     * 插入
+     * @see BaseProvider#insert(Object)
      * @param t
      * @return
      */
-    T save(T t);
+    @InsertProvider(type = BaseProvider.class)
+    int insert(T t);
+
+    /**
+     * 更新,只根据id更新
+     * @see BaseProvider#update(Object)
+     * @param t
+     * @return
+     */
+    @UpdateProvider(type = BaseProvider.class)
+    int update(T t);
 
     /**
      * 通过ID进行删除
+     * @see BaseProvider#removeById(long, Class)
      * @param id
      * @return
      */
-    int removeById(Long id);
+    @DeleteProvider(type = BaseProvider.class)
+    int removeById(@Param("id")Long id, Class<?> tClass);
+
+    default int removeById(Long id){
+        return removeById(id,getMapperClass());
+    }
 
     /**
      * 通过查询条件删除
+     *
      * @param qc
      * @return
      */
+    @DeleteProvider(type = BaseProvider.class)
     int removeByQuery(BaseQC qc);
 }

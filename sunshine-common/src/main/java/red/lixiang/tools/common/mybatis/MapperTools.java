@@ -9,6 +9,7 @@ import red.lixiang.tools.common.mybatis.model.Page;
 import red.lixiang.tools.common.mybatis.model.QC;
 import red.lixiang.tools.common.mybatis.model.Sort;
 import red.lixiang.tools.common.mybatis.model.SqlField;
+import red.lixiang.tools.jdk.IDTools;
 import red.lixiang.tools.jdk.ListTools;
 import red.lixiang.tools.jdk.StringTools;
 import red.lixiang.tools.jdk.reflect.ReflectTools;
@@ -179,20 +180,23 @@ public class MapperTools {
             for (Field field : declaredFields) {
                 field.setAccessible(true);
                 String fieldName = field.getName();
-                Object value = field.get(t);
                 if(!field.isAnnotationPresent(SqlField.class)){
                     continue;
                 }
+                SqlField sqlField = field.getAnnotation(SqlField.class);
+                if(sqlField.snowId()){
+                    // 如果是需要雪花算法生成id
+                    field.set(t, IDTools.ID());
+                }
+                if(sqlField.createTime() || sqlField.updateTime()){
+                    field.set(t, new Date());
+                }
+                Object value = field.get(t);
+
                 if(Objects.isNull(value)){
                     continue;
                 }
-                if (field.isAnnotationPresent(QC.class)) {
-                    QC qc = field.getAnnotation(QC.class);
-                    if (qc.skipRich()) {
-                        continue;
-                    }
-                }
-                SqlField sqlField = field.getAnnotation(SqlField.class);
+
                 if(sqlField.security() && securityFlag){
                     //需要加密特殊处理的
                     String aesFieldName = sqlField.aes();
@@ -207,6 +211,7 @@ public class MapperTools {
                         aesField.set(t,kv.getValue());
                     }
                 }
+
                 // 如果值不为空的话，往里面拼接insertSQL
                 sql.VALUES(StringTools.camel2UnderScope(fieldName), String.format("#{%s}", fieldName));
             }
@@ -232,20 +237,19 @@ public class MapperTools {
             for (Field field : declaredFields) {
                 field.setAccessible(true);
                 String fieldName = field.getName();
-                Object value = field.get(t);
                 if(!field.isAnnotationPresent(SqlField.class)){
                     continue;
                 }
+                SqlField sqlField = field.getAnnotation(SqlField.class);
+                if(sqlField.updateTime()){
+                    field.set(t,new Date());
+                }
+                Object value = field.get(t);
+
                 if(Objects.isNull(value)){
                     continue;
                 }
-                if (field.isAnnotationPresent(QC.class)) {
-                    QC qc = field.getAnnotation(QC.class);
-                    if (qc.skipRich()) {
-                        continue;
-                    }
-                }
-                SqlField sqlField = field.getAnnotation(SqlField.class);
+
                 if(sqlField.security() && securityFlag){
                     //需要加密特殊处理的
                     String aesFieldName = sqlField.aes();
@@ -264,6 +268,7 @@ public class MapperTools {
 //                    }
 
                 }
+
                 // 如果值不为空的话，往里面拼接updateSQL
                 sql.SET(StringTools.camel2UnderScope(fieldName) + "=" + String.format("#{%s}", fieldName));
 
