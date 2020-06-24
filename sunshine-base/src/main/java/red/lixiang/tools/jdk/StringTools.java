@@ -140,12 +140,18 @@ public class StringTools {
         char[] chars = camel.toCharArray();
         StringBuilder sb =new StringBuilder();
 
+        int i = 0;
         for (char aChar : chars) {
+
             if(Character.isUpperCase(aChar)){
-                sb.append("_").append(Character.toLowerCase(aChar));
+                if(i!=0){
+                    sb.append("_");
+                }
+                sb.append(Character.toLowerCase(aChar));
             }else {
                 sb.append(aChar);
             }
+            i++;
         }
         return sb.toString();
     }
@@ -197,5 +203,7 @@ public class StringTools {
         }
         return 0;
     };
-
+    public static void main(String[] args) {
+        System.out.println(camel2UnderScope("createTimeDate"));
+    }
 }

@@ -109,8 +109,9 @@ public class ReflectTools {
     }
 
     public static void doGetModelFields(Class<?> clazz, Map<String, List<String>> map) {
-
+        // red.lixiang.tools.xxxx
         String clazzName = clazz.getCanonicalName();
+        // xxxx
         String clazzSimpleName = clazz.getSimpleName();
         // 为了防止循环引用,先加入到map中
         List<String> list = new ArrayList<>();
