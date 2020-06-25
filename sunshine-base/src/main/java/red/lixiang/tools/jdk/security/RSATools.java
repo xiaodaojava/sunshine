@@ -19,6 +19,8 @@ import java.util.Map;
  * RSA签名算法：MD2withRSA、MD5withRSA、SHA1withRSA，为jdk实现
  * 1.秘钥长度为64的倍数，在512~65536之间，默认长度1024，签名长度和秘钥长度相同
  * 签名算法：SHA256withRSA，为BC实现，秘钥默认长度为2048
+ *
+ *
  */
 public class RSATools {
 
@@ -30,7 +32,7 @@ public class RSATools {
     /**
      * 秘钥长度，必须是64的倍数，在512~65536之间
      */
-    private static final int KEY_SIZE = 512;
+    private static final int KEY_SIZE = 4098;
     //公钥
     private static final String PUBLIC_KEY = "PUBLIC_KEY";
     //私钥
@@ -53,22 +55,22 @@ public class RSATools {
         System.out.println("私钥：" + Base64.getEncoder().encodeToString(privateKey));
         System.out.println("公钥：" + Base64.getEncoder().encodeToString(publicKey));
 
-        String source = "Burning by Maria Arredondo";
-        byte[] encryptData = RSATools.encryptByPrivateKey(source.getBytes(), privateKey);
-        System.out.println("私钥加密后数据：" + new String(encryptData));
-        byte[] decryptData = RSATools.decryptByPublicKey(encryptData, publicKey);
-        System.out.println("公钥解密后数据：" + new String(decryptData));
-
-        /**
-         * 签名验证
-         */
-        String privateKeyStr = readKeyFromFile(PRIVATE_PATH);
-        String publicKeyStr = readKeyFromFile(PUBLIC_PATH);
-
-        String signSource = "Love Mail";
-        String sign = signByPrivateKey(signSource, privateKeyStr);
-        System.out.println("私钥签名值：" + sign);
-        System.out.println("公钥签名校验结果：" + verifySignByPublic(signSource, publicKeyStr, sign));
+//        String source = "Burning by Maria Arredondo";
+//        byte[] encryptData = RSATools.encryptByPrivateKey(source.getBytes(), privateKey);
+//        System.out.println("私钥加密后数据：" + new String(encryptData));
+//        byte[] decryptData = RSATools.decryptByPublicKey(encryptData, publicKey);
+//        System.out.println("公钥解密后数据：" + new String(decryptData));
+//
+//        /**
+//         * 签名验证
+//         */
+//        String privateKeyStr = readKeyFromFile(PRIVATE_PATH);
+//        String publicKeyStr = readKeyFromFile(PUBLIC_PATH);
+//
+//        String signSource = "Love Mail";
+//        String sign = signByPrivateKey(signSource, privateKeyStr);
+//        System.out.println("私钥签名值：" + sign);
+//        System.out.println("公钥签名校验结果：" + verifySignByPublic(signSource, publicKeyStr, sign));
     }
 
     /**
