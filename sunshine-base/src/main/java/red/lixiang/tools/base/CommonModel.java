@@ -1,6 +1,7 @@
 package red.lixiang.tools.base;
 
 import red.lixiang.tools.base.annotation.EnhanceTool;
+import red.lixiang.tools.jdk.JSONTools;
 import red.lixiang.tools.jdk.StringTools;
 
 import java.lang.reflect.Field;
@@ -19,7 +20,7 @@ public interface CommonModel {
      * 对当前实体类的处理
      * @return
      */
-    default public Map<String,Object> toMap(){
+    default  Map<String,Object> toMap(){
         Map<String,Object> map = new HashMap<>();
         Field[] fields = this.getClass().getDeclaredFields();
         for (Field field : fields) {
@@ -52,13 +53,22 @@ public interface CommonModel {
      * 对当前实体类的处理
      * @return
      */
-    default public Map<String,String> toStringMap(){
+    default  Map<String,String> toStringMap(){
         Map<String, Object> map = toMap();
         Map<String,String> result = new HashMap<>(map.size());
         map.forEach((key,value)->{
             result.put(key,String.valueOf(value));
         });
         return result;
+    }
+
+    /**
+     * 把一个对象转成Json
+     * @return
+     */
+    default String toJson(){
+        Map<String, Object> map = toMap();
+        return JSONTools.toJson(map);
     }
 
     /**

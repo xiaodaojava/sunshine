@@ -44,7 +44,7 @@ public class ToolAutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = "tools.oss",name = "access-key")
     @ConditionalOnClass(OSSClient.class)
-    public AliOssTools getOssUtils(){
+    public AliOssTools getOssTools(){
         OSSProperty ossProperty = toolsProperty.getOss();
         DefaultCredentialProvider provider = new DefaultCredentialProvider(ossProperty.getAccessKey(),ossProperty.getAccessSecret());
         OSSClient client = new OSSClient(ossProperty.getEndpoint(),provider,null);
