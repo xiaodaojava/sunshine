@@ -5,9 +5,11 @@ import org.apache.dubbo.config.spring.beans.factory.annotation.ReferenceAnnotati
 import org.apache.dubbo.rpc.RpcContext;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import red.lixiang.tools.base.KV;
+import red.lixiang.tools.jdk.StringTools;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -53,6 +55,40 @@ public class ContextHolder  {
             return defaultValue;
         }
         return applicationContext.getEnvironment().getProperty(key, defaultValue);
+    }
+
+    public static Map<String,String> getPropertyMap(String key, String defaultValue){
+        String properties = getProperty(key,defaultValue);
+        List<KV> convert = convert(properties);
+        return convert.stream().collect(Collectors.toMap(KV::getValue,KV::getName));
+    }
+
+    public static List<KV> getPropertyList(String key, String defaultValue){
+        String properties = getProperty(key,defaultValue);
+        List<KV> convert = convert(properties);
+        return convert;
+    }
+
+    private static List<KV> convert(String content) {
+        List<KV> result = new ArrayList<>();
+        if (!StringTools.isBlank(content)) {
+            String[] valueArray = content.split(";");
+            for (String sysDicValue : valueArray) {
+                String[] sysDicValueArray = sysDicValue.split(":");
+                if (sysDicValueArray.length == 2) {
+                    KV sys = new KV();
+                    try {
+                        sys.setId(Long.parseLong(sysDicValueArray[0]));
+                    } catch (Exception e) {
+
+                    }
+                    sys.setValue(sysDicValueArray[0]);
+                    sys.setName(sysDicValueArray[1]);
+                    result.add(sys);
+                }
+            }
+        }
+        return result;
     }
 
     public static void setDubboContext(String key , String value){

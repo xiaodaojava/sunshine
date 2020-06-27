@@ -41,15 +41,15 @@ public class ToolAutoConfiguration {
         return new ThreadPoolTools();
     }
 
-    @Bean
-    @ConditionalOnProperty(prefix = "tools.oss",name = "access-key")
-    @ConditionalOnClass(OSSClient.class)
-    public AliOssTools getOssTools(){
-        OSSProperty ossProperty = toolsProperty.getOss();
-        DefaultCredentialProvider provider = new DefaultCredentialProvider(ossProperty.getAccessKey(),ossProperty.getAccessSecret());
-        OSSClient client = new OSSClient(ossProperty.getEndpoint(),provider,null);
-        return new AliOssTools().setOssClient(client);
-    }
+//    @Bean
+//    @ConditionalOnProperty(prefix = "tools.oss",name = "access-key")
+//    @ConditionalOnClass(OSSClient.class)
+//    public AliOssTools getOssTools(){
+//        OSSProperty ossProperty = toolsProperty.getOss();
+//        DefaultCredentialProvider provider = new DefaultCredentialProvider(ossProperty.getAccessKey(),ossProperty.getAccessSecret());
+//        OSSClient client = new OSSClient(ossProperty.getEndpoint(),provider,null);
+//        return new AliOssTools().setOssClient(client);
+//    }
 
 //    @Bean
 //    @ConditionalOnClass(SqlSessionFactory.class)

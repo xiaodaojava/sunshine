@@ -6,6 +6,8 @@ import org.apache.ibatis.jdbc.SQL;
 import red.lixiang.tools.common.mybatis.model.BaseQC;
 import red.lixiang.tools.jdk.StringTools;
 
+import static red.lixiang.tools.common.mybatis.MapperTools.tableNameFromCls;
+import static red.lixiang.tools.common.mybatis.MapperTools.tableNameFromObj;
 import static red.lixiang.tools.common.mybatis.MybatisToolCache.MAPPER_TABLE_CACHE;
 
 /**
@@ -128,19 +130,24 @@ public class BaseProvider implements ProviderMethodResolver {
     }
 
 
-
-    private String tableNameFromObj(Object qc){
-        return tableNameFromCls(qc.getClass());
+    /**
+     * @see BaseMapper#selectOne(String)
+     * @param sql
+     * @return
+     */
+    public String selectOne(String sql){
+        return sql;
+    }
+    /**
+     * @see BaseMapper#selectList (String)
+     * @param sql
+     * @return
+     */
+    public String selectList(String sql){
+        return sql;
     }
 
-    private String tableNameFromCls(Class<?> clazz){
-        return MAPPER_TABLE_CACHE.computeIfAbsent(clazz,cls->{
-            String simpleName = cls.getSimpleName();
-            String s = simpleName.replaceAll("Mapper", "");
-            s = s.replaceAll("DAO", "");
-            s = s.replaceAll("QC", "");
-            s = s.replaceAll("DO", "");
-            return StringTools.camel2UnderScope(s);});
-    }
+
+
 
 }

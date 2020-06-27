@@ -69,4 +69,9 @@ public class Page implements Serializable {
     public static Page getOne(){
         return ONE;
     }
+
+    public static void main(String[] args) {
+        Page page = new Page(2,10);
+        System.out.println(page.getStartIndex());
+    }
 }

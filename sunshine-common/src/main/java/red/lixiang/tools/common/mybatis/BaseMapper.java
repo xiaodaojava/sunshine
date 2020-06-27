@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.*;
 import red.lixiang.tools.common.mybatis.model.BaseQC;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lixiang
@@ -103,4 +104,23 @@ public interface BaseMapper<T> {
      */
     @DeleteProvider(type = BaseProvider.class)
     int removeByQuery(BaseQC qc);
+
+    /**
+     * 任意sql查询一个
+     * @see BaseProvider#selectOne(String)
+     * @param sql
+     * @return
+     */
+    @SelectProvider(type =  BaseProvider.class)
+    T selectOne(String sql);
+
+    /**
+     * 任意sql查询多个
+     * @see BaseProvider#selectList (String)
+     * @param sql
+     * @return
+     */
+    @SelectProvider(type =  BaseProvider.class)
+    List<T> selectList(String sql);
+
 }

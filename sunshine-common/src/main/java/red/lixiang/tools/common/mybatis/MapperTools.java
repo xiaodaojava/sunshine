@@ -21,6 +21,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static red.lixiang.tools.common.mybatis.MybatisToolCache.MAPPER_TABLE_CACHE;
+
 /**
  * @Author lixiang
  * @CreateTime 2019-07-15
@@ -92,7 +94,11 @@ public class MapperTools {
                     if(p.getPageIndex() !=null && p.getPageSize()!=null){
                         sql.LIMIT(p.getPageSize());
                         sql.OFFSET(p.getStartIndex());
-                    }else {
+                    }else if(p.getPageSize() !=null && p.getStartIndex()!=null){
+                        sql.LIMIT(p.getPageSize());
+                        sql.OFFSET(p.getStartIndex());
+                    }
+                    else {
                         //如果没有设置page,则默认取100条
                         sql.LIMIT(100);
                         sql.OFFSET(0);
@@ -317,6 +323,20 @@ public class MapperTools {
             return tList.get(0);
         }
         throw new RuntimeException("too many result");
+    }
+
+    public static  String tableNameFromObj(Object qc){
+        return tableNameFromCls(qc.getClass());
+    }
+
+    public static  String tableNameFromCls(Class<?> clazz){
+        return MAPPER_TABLE_CACHE.computeIfAbsent(clazz,cls->{
+            String simpleName = cls.getSimpleName();
+            String s = simpleName.replaceAll("Mapper", "");
+            s = s.replaceAll("DAO", "");
+            s = s.replaceAll("QC", "");
+            s = s.replaceAll("DO", "");
+            return StringTools.camel2UnderScope(s);});
     }
 
 
