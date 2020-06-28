@@ -12,6 +12,7 @@ import red.lixiang.tools.jdk.StringTools;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
@@ -56,6 +57,19 @@ public class MybatisTools {
                 SqlSource sqlSource = new RawSqlSource(configuration, sql.toString(),Map.class);
                 addSelectMappedStatement(msId,sqlSource, Map.class);
             }
+            if(plusSql.sqlType().equals("delete")){
+                String[] params = plusSql.whereParam();
+                SQL sql = new SQL() {
+                    {
+                        DELETE_FROM(MapperTools.tableNameFromCls(cls));
+                        for (String param : params) {
+                            WHERE(StringTools.camel2UnderScope(param) +" = #{"+param+"}");
+                        }
+                    }
+                };
+                SqlSource sqlSource = new RawSqlSource(configuration, sql.toString(),Object.class);
+                addUpdateMappedStatement(msId,sqlSource,SqlCommandType.DELETE);
+            }
 
         }
     }
@@ -83,6 +97,27 @@ public class MybatisTools {
         configuration.addMappedStatement(ms);
     }
 
+    /**
+     * 创建一个简单的MS
+     * 可以执行,新增/更新/删除操作用
+     *
+     * @param msId
+     * @param sqlSource      执行的sqlSource
+     * @param sqlCommandType 执行的sqlCommandType
+     */
+    private void addUpdateMappedStatement(String msId, SqlSource sqlSource, SqlCommandType sqlCommandType) {
+        ResultMap inlineResultMap = new ResultMap.Builder(
+                configuration,
+                msId + "-Inline",
+                Long.class,
+                new ArrayList<>(),
+                null).build();
+        MappedStatement ms = new MappedStatement.Builder(configuration, msId, sqlSource, sqlCommandType)
+                .resultMaps(Collections.singletonList(inlineResultMap))
+                .build();
+        //缓存
+        configuration.addMappedStatement(ms);
+    }
 //    public MybatisTools init(Class<?> mapperCls){
 //        String resource = mapperCls.getName().replace('.', '/') + ".java (best guess)";
 //        this.builderAssistant = new MapperBuilderAssistant(configuration, resource);
