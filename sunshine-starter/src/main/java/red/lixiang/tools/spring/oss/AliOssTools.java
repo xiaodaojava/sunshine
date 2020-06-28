@@ -1,6 +1,7 @@
 package red.lixiang.tools.spring.oss;
 
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.common.auth.DefaultCredentialProvider;
 import com.aliyun.oss.model.OSSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import red.lixiang.tools.starter.spring.boot.ToolsProperty;
@@ -20,7 +21,13 @@ public class AliOssTools {
 
     private ToolsProperty toolsProperty;
 
-
+    public AliOssTools init(){
+        OSSProperty ossProperty = toolsProperty.getOss();
+        DefaultCredentialProvider provider = new DefaultCredentialProvider(ossProperty.getAccessKey(),ossProperty.getAccessSecret());
+        OSSClient client = new OSSClient(ossProperty.getEndpoint(),provider,null);
+        this.ossClient = client;
+        return this;
+    }
 
     public AliOssTools setToolsProperty(ToolsProperty toolsProperty) {
         this.toolsProperty = toolsProperty;

@@ -13,7 +13,7 @@ public class ThreadPoolTools {
     private int minPoolSize = 10;
 
     /** 线程池维护线程的最大数量 */
-    private int maxPoolSize = 500;
+    private int maxPoolSize = 100;
 
     /** 线程池维护线程所允许的空闲时间 */
     private int idleSeconds = 1800;
