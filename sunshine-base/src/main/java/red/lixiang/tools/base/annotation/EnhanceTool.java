@@ -48,7 +48,7 @@ public @interface EnhanceTool {
     /**
      * 这个要是下划线的形式
      */
-    String targetIdentity() default "";
+    String targetIdentity() default "id";
 
 
     // 源头的值是哪一个

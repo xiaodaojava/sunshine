@@ -1,5 +1,6 @@
 package red.lixiang.tools.spring.convert;
 
+import org.apache.ibatis.jdbc.SQL;
 import red.lixiang.tools.base.annotation.EnhanceTool;
 import red.lixiang.tools.common.convertor.Convertor;
 import red.lixiang.tools.common.mybatis.BaseMapper;
@@ -62,13 +63,14 @@ public class ConvertorTools {
                     // 走默认SQL的方式
                     Class<?> targetEntity = enhance.targetEntity();
                     String tableName = MapperTools.tableNameFromCls(targetEntity);
-                    StringBuilder sqlBuilder = new StringBuilder("select ");
-                    sqlBuilder.append(enhance.targetField())
-                            .append(" from ").append(tableName)
-                            .append(" where ").append(enhance.targetIdentity())
-                            .append(" = ").append(sourceObj);
+                    SQL sql = new SQL(){{
+                        SELECT(enhance.targetField());
+                        FROM(tableName);
+                        WHERE(enhance.targetField()+"="+sourceObj);
+                    }};
+
                     BaseMapper baseMapper = (BaseMapper) ContextHolder.getApplicationContext().getBean(tableName + "Mapper");
-                    Object o = baseMapper.selectOne(sqlBuilder.toString());
+                    Object o = baseMapper.selectOne(sql.toString());
                     Field targetObjField = o.getClass().getField(enhance.targetField());
                     targetObjField.setAccessible(true);
                     field.set(t, targetObjField.get(o));
@@ -101,14 +103,24 @@ public class ConvertorTools {
             EnhanceTool enhance = field.getAnnotation(EnhanceTool.class);
             Class<?> convertorClass = enhance.convertor();
             String sourceFieldName = enhance.source();
+            Field sourceField = null;
+            try {
+                sourceField = cls.getDeclaredField(sourceFieldName);
+                sourceField.setAccessible(true);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+
             if (StringTools.isBlank(sourceFieldName) && StringTools.isBlank(enhance.targetField())) {
                 continue;
             }
             HashSet<Object> set = new HashSet<>();
             for (T t : list) {
                 try {
-                    Object o = field.get(t);
-                    set.add(o);
+                    Object o = sourceField.get(t);
+                    if(o!=null){
+                        set.add(o);
+                    }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -143,21 +155,22 @@ public class ConvertorTools {
             Class<?> targetClass = enhanceTool.targetEntity();
             String targetField = enhanceTool.targetField();
             String targetIdentity = enhanceTool.targetIdentity();
-            String tableName = MapperTools.tableNameFromCls(targetClass);
-            StringBuilder sqlBuilder = new StringBuilder("select ")
-                    .append(targetField).append(" , ").append(targetIdentity)
-                    .append(" from ").append(tableName).append(" where '")
-                    .append(targetIdentity).append("' in (").append(MapperTools.convertList2Str(objectList))
-                    .append(")");
+            String tableName = MapperTools.pureTableNameFromCls(targetClass);
+            SQL sql = new SQL(){{
+                SELECT(targetIdentity,targetField);
+                FROM(tableName);
+                WHERE(targetIdentity +" in ("+MapperTools.convertList2Str(objectList)+")");
+            }};
+
             BaseMapper baseMapper = (BaseMapper) ContextHolder.getApplicationContext().getBean(tableName + "Mapper");
-            List selectList = baseMapper.selectList(sqlBuilder.toString());
+            List selectList = baseMapper.selectList(sql.toString());
             // 把这个list变成map的形式, key是targetIdentity , value是targetField
             Map<Object, Object> pairMap = new HashMap<>();
             for (Object o : selectList) {
                 Class<?> aClass = o.getClass();
                 try {
-                    Field field = aClass.getField(targetField);
-                    Field identityField = aClass.getField(targetIdentity);
+                    Field field = aClass.getDeclaredField(targetField);
+                    Field identityField = aClass.getDeclaredField(targetIdentity);
                     field.setAccessible(true);
                     identityField.setAccessible(true);
                     pairMap.put(identityField.get(o), field.get(o));
@@ -172,11 +185,11 @@ public class ConvertorTools {
           valueMap.forEach((key,map)->{
               try {
                   EnhanceTool enhanceTool = key.getAnnotation(EnhanceTool.class);
-                  Field sourceField = cls.getField(enhanceTool.source());
+                  Field sourceField = cls.getDeclaredField(enhanceTool.source());
                   if (!sourceField.canAccess(t)) {
                       sourceField.setAccessible(true);
                   }
-                  Object o = map.get(sourceField);
+                  Object o = map.get(sourceField.get(t));
                   key.set(t, o);
               } catch (NoSuchFieldException | IllegalAccessException e) {
                   e.printStackTrace();

@@ -330,6 +330,9 @@ public class MapperTools {
     }
 
     public static  String tableNameFromCls(Class<?> clazz){
+        return "`"+pureTableNameFromCls(clazz)+"`";
+    }
+    public static  String pureTableNameFromCls(Class<?> clazz){
         return MAPPER_TABLE_CACHE.computeIfAbsent(clazz,cls->{
             String simpleName = cls.getSimpleName();
             String s = simpleName.replaceAll("Mapper", "");

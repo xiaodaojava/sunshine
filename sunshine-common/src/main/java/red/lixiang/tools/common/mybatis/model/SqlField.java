@@ -20,6 +20,12 @@ public @interface SqlField {
     /** 哪个字段是加密之后的值 */
     String aes() default "";
 
+    /** 字段说明,可用于生成前端表格的数据 */
+    String remark() default "";
+
+    /** 表格是否可编辑 */
+    boolean tableEditable() default false;
+
     /** 主键字段,一般是id, 需不需要使用雪花算法生成 */
     boolean snowId() default false;
 
