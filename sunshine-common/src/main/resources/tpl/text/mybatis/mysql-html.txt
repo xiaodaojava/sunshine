@@ -1,320 +1,250 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+<head th:replace="macro/head-macro::common_frame(~{::title},~{links},~{})">
+
+    <title>进销存管理系统</title>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="信息设置页面">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <title>管理页面</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" href="/static/vendor/bootstrap/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    <!-- MetisMenu CSS -->
-    <link href="/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="/dist/css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- bootstrap-table -->
-    <link th:href="@{/vendor/bootstrap-table/bootstrap-table.min.css}"
-          href="/static/vendor/bootstrap-table/bootstrap-table.css" rel="stylesheet" type="text/css">
-
-    <link th:href="@{/vendor/bootstrap3-editable/css/bootstrap-editable.css}"
-          href="/static/vendor/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" type="text/css">
-
-
-    <!-- Custom Fonts -->
-    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+    <!-- Custom fonts for this template-->
+    <!--  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">-->
 
 </head>
 
-<body>
+<body id="page-top">
 
+<!-- Page Wrapper -->
 <div id="wrapper">
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/admin/index">管理页面</a>
-        </div>
-        <!-- /.navbar-header -->
+    <div th:replace="macro/head-macro::common_menu(menuList=${menuList})"></div>
 
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
 
-        <!--<ul th:include="headMacro::index_top" class="nav navbar-top-links navbar-right"></ul>-->
+        <!-- Main Content -->
+        <div id="content">
 
-        <!-- /.navbar-top-links -->
+            <!-- Topbar -->
+            <nav th:replace="macro/head-macro::top_bar(userInfo=${userInfo})"></nav>
+            <!-- End of Topbar -->
 
-        <div th:include="headMacro::index_side" class="navbar-default sidebar" role="navigation"></div>
-    </nav>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
 
-    <div id="page-wrapper">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">管理页面</h1>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
-        <!-- /.row -->
-
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-default">
-
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                        <div class="col-md-1">
-                            <input type="button" class="btn btn-default" data-toggle="modal"
-                                   href="#modal-newModal" value="新增商品"/>
-                        </div>
-                        <table id="${config.modelCamelName}Table"/>
-                    </div>
-                    <!-- /.panel-body -->
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">商品管理</h1>
                 </div>
-                <!-- /.panel -->
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
 
-    </div>
-    <!-- /#page-wrapper -->
-    <div id="Modal"></div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
 
-    <div class="modal fade" id="modal-newModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">新增商品</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <input type="file" id="excelFile" class="btn btn-file" value="上传excel">
-                    </div>
-                    <div class="row">
-                        <% for(column in table.fieldList) { %>
-                        <div class="form-group col-lg-6">
-                            <label  class="col-lg-2 control-label">${column.remark}</label>
-                            <div class="col-lg-10">
-                            <input  query="new" name="${column.camelName}" class="form-control input-lg" />
+                            <div class="panel-head">
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <label>搜索条件1:</label>
+                                        <input v-model="searchParams.name" class="form-control" type="text"
+                                               placeholder="请输入手机号">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>搜索条件2:</label>
+                                        <input v-model="searchParams.id" class="form-control" type="text"
+                                               placeholder="请输入姓名">
+                                    </div>
+                                </form>
+
+                                <div class="row">
+                                    <input type="button" class="btn btn-info col-md-1 offset-5" @click="search"
+                                           value="搜索"/>
+                                    <input type="button" class="btn btn-danger col-md-1" v-on:click="reset" value="重置"/>
+                                </div>
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <!--  这一块加搜索的条件   -->
+
+                                <div id="toolbar" class="toolbar">
+                                    <button v-on:click="addEntity" type="button"
+                                            class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                                    </button>
+
+                                    <button v-on:click="deleteRow" type="button"
+                                            class="btn btn-danger">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>删除
+                                    </button>
+
+                                    <button v-on:click="updateRow" type="button"
+                                            class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>更新
+                                    </button>
+
+
+                                </div>
+
+                                <div id="dataTable">
+                                    <bootstrap-table
+                                            ref="table"
+                                            :columns="columns"
+                                            :options="options"></bootstrap-table>
+                                </div>
                             </div>
                         </div>
-                        <% } %>
+                        <!-- /.panel-body -->
                     </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- End of Main Content -->
+<!--    这是一个新增的框框-->
+    <div class="modal fade bd-example-modal-lg" id="entity_add">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6 row">
+                                <label>名称:</label>
+                                <div class="col-md-9">
+                                    <input v-model="entity.name" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 row">
+                                <label>手机号:</label>
+                                <div class="col-md-9">
+                                    <input v-model="entity.mobile" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" v-on:click="saveEntity" class="btn btn-primary">保存</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" id="save${column.modelName}" class="btn btn-primary">导入</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
+    </div>
 </div>
-<!-- /#wrapper -->
+<!-- End of Content Wrapper -->
+<!-- Footer -->
+<footer th:replace="macro/head-macro::common_footer"></footer>
+<!-- End of Footer -->
+<!-- End of Page Wrapper -->
 
-<!-- jQuery -->
+<div th:replace="macro/head-macro::common_js"></div>
+
+<script type="text/javascript">
+
+    var domainName = 'java技术大本营';
 
 
-<!-- Bootstrap Core JavaScript -->
-<script src="/js/base.js"></script>
-
-<script th:src="@{/vendor/jquery/jquery.min.js}" src="/static/vendor/jquery/jquery.min.js"></script>
-
-<script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}" src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
-<script th:src="@{https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js}"
-        src="/static/vendor/bootstrap-table/bootstrap-table.js"></script>
-<!--<script th:src="@{/vendor/bootstrap-table/locale/bootstrap-table-zh-CN.min.js}" src="/static/vendor/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>-->
-
-<script th:src="@{/vendor/bootstrap-table/extensions/editable/bootstrap-table-editable.min.js}"
-        src="/static/vendor/bootstrap-table/extensions/editable/bootstrap-table-editable.js"></script>
-
-<script th:src="@{/vendor/bootstrap3-editable/js/bootstrap-editable.min.js}"
-        src="/static/vendor/bootstrap3-editable/js/bootstrap-editable.js"></script>
-<script th:src="@{/vendor/wangEditor/wangEditor.js}" src="/static/vendor/wangEditor/wangEditor.js"></script>
-
-<!-- Metis Menu Plugin JavaScript -->
-<script src="/vendor/metisMenu/metisMenu.min.js"></script>
-<script src="/dist/js/sb-admin-2.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script>
-
-    var itemTable = $("#itemTable").bootstrapTable({
-        url: '/${config.modelCamelName}/list',         //请求后台的URL（*）
-        method: 'get',                      //请求方式（*）
-        toolbar: '#toolbar',                //工具按钮用哪个容器
-        striped: true,                      //是否显示行间隔色
-        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-        pagination: true,                   //是否显示分页（*）
-        sortable: true,                     //是否启用排序
-        //sortOrder: "asc",                   //排序方式
-        queryParams: funcDtion (params) {
-            return params;
-        },//传递参数（*）
-        sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-        queryParamsType: '',
-        pageNumber: 1,                       //初始化加载第一页，默认第一页
-        pageSize: 10,                       //每页的记录行数（*）
-        pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-        search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-        showColumns: true,                  //是否显示所有的列
-        showRefresh: true,                  //是否显示刷新按钮
-        minimumCountColumns: 2,             //最少允许的列数
-        clickToSelect: true,                //是否启用点击选中行
-        height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-        uniqueId: "id",                     //每一行的唯一标识，一般为主键列
-        cardView: false,                    //是否显示详细视图
-        detailView: false,                   //是否显示父子表
-        onEditableSave: function (field, row, oldValue, $el) {
-            row.startTime = formatDateTime(row.startTime);
-            row.endTime = formatDateTime(row.endTime);
-            row.createTime = null;
-            $.ajax({
-                type: "post",
-                url: "/${config.modelCamelName}/save",
-                data: row,
-                success: function (data) {
-
-                }
-
-            });
-        },
-        columns: [
-            {
-                field: 'operate',
-                title: '操作',
-                align: 'center',
-                // events: operateEvents,
-                formatter: function (value, row, index) {
-
-                    var id = row['id'];
-                    return '<input type="button" onclick="showDetail(' + row['id'] + ')"  class="btn btn-primary" data-value="' + row['id'] + '" value="详情">'+
-                        '<input type="button" onclick="delete${config.modelName}(' + row['id'] + ')"  class="btn btn-danger" data-value="' + row['id'] + '" value="删除">';
-
-                }
+    var app = new Vue({
+            el: '#wrapper',
+            components: {
+                'bootstrap-table': BootstrapTable
             },
-            <% for(column in table.fieldList) { %>
-            {
-                field: '${column.camelName}',
-                title: '${column.remark}',
+            data: {
+                searchParams: {},
+                columns: [],
+                entity:{},
+                options: {
+                    ...defaultTableOptions,
+                    url: '/simple/' + domainName + '/query',
+                    onEditableSave: function (field, row, index, oldValue, $el) {
+                        postRequest('/simple/' + domainName + '/save', row)
+                            .then(res => {
+                                refreshTable();
+                            })
+                    },
+                },
+
+
             },
-            <% } %>
+            created: function () {
+                getTableFields(domainName).then(res => {
+                    this.columns=res;
+                    //需要对表格做什么操作,在这里面加,比如前商加一个checkBox等
+                });
+            },
 
-            ]
-    });
-    var editor;
-
-    function showDetail(id) {
-        console.log(id)
-        $("#Modal").load("/item/showDetail?id=" + id + " #modalContent", function () {
-            $('#myModal').modal('show');
-            var E = window.wangEditor
-            editor = new E('#editor')
-            editor.customConfig.uploadImgServer = '/utils/uploadImage';
-            editor.customConfig.uploadFileName = 'file';
-            editor.create()
-        });
-    }
-
-    $("body").on('click','#saveItem', function (event) {
-        var item = {
-            categoryId: $("#categoryId").val(),
-            skuDesc: editor.txt.html(),
-            id: $("#itemId").val()
-        }
-
-        $.ajax({
-            url: '/item/save',
-            type:'POST',
-            data:item,
-            success: function (datas) {
-                alert("保存成功");
-            }
-        })
-    })
-
-    $("#importExcel").on('click',function (event) {
-        var formFile = new FormData();
-
-        var excelFile = document.getElementById("excelFile").files[0]; // js 获取文件对象
-        if (typeof (excelFile) !== "undefined" && excelFile.size > 0) {
-            // formFile.append("action", "UploadVMKImagePath");
-            formFile.append("excelFile", excelFile);
-            $.ajax({
-                url: '/item/importExcel',
-                type:'POST',
-                data:formFile,
-                processData: false,//用于对data参数进行序列化处理 这里必须false
-                contentType: false, //必须
-                success: function (datas) {
-                    alert("保存成功");
+            methods: {
+                addEntity: function () {
+                    this.role = {};
+                    toggleAddModal();
+                },
+                search: function () {
+                    this.$refs.table.refresh({silent: true, query: this.searchParams});
+                },
+                reset: function () {
+                    this.searchParams = {};
+                },
+                saveEntity: function () {
+                    postRequest('/simple/' + domainName + '/save', this.passport)
+                        .then(res => {
+                            toggleAddModal();
+                            this.$refs.table.refresh();
+                        })
+                },
+                deleteRow: function (event) {
+                    let selectList = this.$refs.table.getSelections()
+                    for (let i = 0; i < selectList.length; i++) {
+                        let row = selectList[i];
+                        let id = row.id;
+                        axiosRequest({
+                            url: '/simple/' + domainName + '/remove',
+                            params: {id: id}
+                        }).then(res => {
+                            console.log(res);
+                            this.$refs.table.refresh();
+                        })
+                    }
+                },
+                updateRow: function (event) {
+                    let selectList = this.$refs.table.getSelections()
+                    let one = selectList[0];
+                    this.entity = one;
+                    toggleAddModal();
                 }
-            })
-        }else {
-            var param  = getParam('new');
-            console.log(param)
-            $.ajax({
-                url: '/item/save',
-                type:'POST',
-                data:param,
-                success: function (datas) {
-                    alert("保存成功");
-                }
-            })
-        }
-
-
-
-
-    })
-
-    function deleteItem(id) {
-        $.ajax({
-            url: '/item/delete?id='+id,
-            type:'GET',
-            success: function (datas) {
-                itemTable.bootstrapTable('refresh');
-                alert("保存成功");
             }
-        })
-    }
-    function convertTime() {
-        var t = $("#timestamp").val();
+        }
+    )
 
-     var time = formatDateTime(parseInt(t));
-     $("#timestamp").val(time);
-    }
 
-    function formatDateTime(inputTime) {
-        var date = new Date(inputTime);
-        var y = date.getFullYear();
-        var m = date.getMonth() + 1;
-        m = m < 10 ? ('0' + m) : m;
-        var d = date.getDate();
-        d = d < 10 ? ('0' + d) : d;
-        var h = date.getHours();
-        h = h < 10 ? ('0' + h) : h;
-        var minute = date.getMinutes();
-        var second = date.getSeconds();
-        minute = minute < 10 ? ('0' + minute) : minute;
-        second = second < 10 ? ('0' + second) : second;
-        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+
+    function refreshTable() {
+        app.$refs.table.refresh();
     }
 
+    function toggleAddModal() {
+        $("#entity_add").modal('toggle');
+    }
 
+    function getSearchParams() {
+        if (app === undefined) {
+            return {};
+        }
+        return app.searchParams;
+    }
 
 
 </script>

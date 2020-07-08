@@ -10,11 +10,9 @@ public class [(${table.javaTableName})]DO implements Serializable{
 
    [# th:each="field : ${table.fieldList}"]
    /** [(${field.remark})]  */
-   @SqlField
+   @SqlField(remark = "[(${field.remark})]")
    private [(${field.javaType})] [(${field.camelName})];
-
    [/]
-
 
    [# th:each="field : ${table.fieldList}"]
    public [(${field.javaType})] get[(${field.javaName})]() {

@@ -2,10 +2,12 @@ package [(${basePackage})].dao.[(${domainName})];
 
 import [(${basePackage})].models.dos.[(${table.javaTableName})]DO;
 import [(${basePackage})].models.qc.[(${table.javaTableName})]QC;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+import red.lixiang.tools.common.mybatis.BaseMapper;
 
-import java.util.List;
+import static red.lixiang.tools.common.mybatis.MybatisToolCache.DOMAIN_DO_CACHE;
+import static red.lixiang.tools.common.mybatis.MybatisToolCache.DOMAIN_QC_CACHE;
 
 /**
  * 本类只做简单的增删改查,复杂的用mapper自己手写,也可以写在Provider里面
@@ -13,52 +15,12 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface [(${table.javaTableName})]Mapper {
+public interface [(${table.javaTableName})]Mapper extends BaseMapper<RoleDO> {
 
-    /**
-     * 获取列表
-     * @param [(${table.javaCamelName})]QC
-     * @see [(${table.javaTableName})]Provider#list[(${table.javaTableName})]s([(${table.javaTableName})]QC)
-     * @return
-     */
-    @SelectProvider(type = [(${table.javaTableName})]Provider.class)
-    List<[(${table.javaTableName})]DO> list[(${table.javaTableName})]s([(${table.javaTableName})]QC [(${table.javaCamelName})]QC);
-
-    /**
-     * 获取数量
-     * @param [(${table.javaCamelName})]QC
-     * @see [(${table.javaTableName})]Provider#count[(${table.javaTableName})]s([(${table.javaTableName})]QC)
-     * @return
-     */
-    @SelectProvider(type = [(${table.javaTableName})]Provider.class)
-    long count[(${table.javaTableName})]s([(${table.javaTableName})]QC [(${table.javaCamelName})]QC);
-
-    /**
-     * 插入
-     * @param [(${table.javaCamelName})]
-     * @see [(${table.javaTableName})]Provider#insert[(${table.javaTableName})]([(${table.javaTableName})]DO)
-     * @return
-     */
-    @InsertProvider(type = [(${table.javaTableName})]Provider.class)
-    @SelectKey(keyColumn = "id",resultType = Long.class,before = false,keyProperty = "id",statement ="SELECT LAST_INSERT_ID()" )
-    int insert[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]);
-
-    /**
-     * 更新,必须要有id
-     * @param [(${table.javaCamelName})]
-     * @see [(${table.javaTableName})]Provider#update[(${table.javaTableName})]([(${table.javaTableName})]DO)
-     * @return
-     */
-    @UpdateProvider(type = [(${table.javaTableName})]Provider.class)
-    int update[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]);
-
-
-    /**
-    * 删除,必须要有id
-    * @param id
-    * @see [(${table.javaTableName})]Provider#remove[(${table.javaTableName})]ById(long id)
-    * @return
-    */
-    @UpdateProvider(type = [(${table.javaTableName})]Provider.class)
-    int remove[(${table.javaTableName})]ById(long id);
+     @Override
+     default Class<?> getMapperClass(){
+        DOMAIN_QC_CACHE.put("[(${table.javaCamelName})]", [(${table.javaTableName})]QC.class);
+        DOMAIN_DO_CACHE.put("[(${table.javaCamelName})]", [(${table.javaTableName})]DO.class);
+        return [(${table.javaTableName})]Mapper.class;
+     }
 }
