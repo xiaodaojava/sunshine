@@ -11,7 +11,7 @@ import java.util.Date;
 public class BaseQC implements Serializable {
 
     @QC(skipRich = true)
-    private static final long serialVersionUID = 3128244594458652839L;
+    protected static final long serialVersionUID = 3128244594458652839L;
 
     /** 排序条件 */
     private Sort sort;

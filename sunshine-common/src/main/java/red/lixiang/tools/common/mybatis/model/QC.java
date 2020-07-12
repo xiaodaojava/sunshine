@@ -18,6 +18,9 @@ public @interface QC {
     /** 是否是list的查询 */
     boolean listQuery() default false;
 
+    /** 不包含某些数据的查询 */
+    boolean notInQuery() default false;
+
     /** 是否是like匹配查询 */
     boolean likeQuery() default false;
 

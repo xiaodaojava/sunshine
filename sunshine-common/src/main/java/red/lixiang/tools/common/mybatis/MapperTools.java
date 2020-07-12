@@ -153,6 +153,11 @@ public class MapperTools {
                         if (!ListTools.isBlank(list)) {
                             sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " in (" + convertList2Str(list, qc.classType()) + ")");
                         }
+                    }else if(qc.notInQuery()){
+                        List list = (List) value;
+                        if (!ListTools.isBlank(list)) {
+                            sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + "  not in  (" + convertList2Str(list, qc.classType()) + ")");
+                        }
                     }else if(qc.biggerRich()){
                         // 如果是大于查询
                         sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " > #{" + fieldName + "}");
