@@ -116,6 +116,20 @@ public class StringTools {
         return first+addStr+last;
     }
 
+    /**
+     * 向一个String 在 指定字符串 addFlag最后一次出现位置之前添加 addStr
+     * @param originalStr
+     * @param addFlag
+     * @param addStr
+     * @return
+     */
+    public static String insertIntoStringBL(String originalStr,String addFlag,String addStr){
+        int index = originalStr.lastIndexOf(addFlag);
+        String first  = originalStr.substring(0,index);
+        String last = originalStr.substring(index);
+        return first+addStr+last;
+    }
+
 
     /**
      * 下划线转成驼蜂命名
@@ -204,6 +218,8 @@ public class StringTools {
         return 0;
     };
     public static void main(String[] args) {
-        System.out.println(camel2UnderScope("createTimeDate"));
+        String sql = "select * from order order by id desc limit 10,1";
+        String bl = insertIntoStringBL(sql, "order", " where 1=1 ");
+        System.out.println(bl);
     }
 }

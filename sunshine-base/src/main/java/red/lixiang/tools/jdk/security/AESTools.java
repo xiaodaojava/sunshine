@@ -69,7 +69,7 @@ public class AESTools {
         if(StringTools.isBlank(saltStr)){
             return security;
         }
-        String content = AESTools.AESDncode(saltStr, aesStr);
+        String content = AESTools.AESDecode(saltStr, aesStr);
         String fake  = security.substring(security.length()/3,security.length()/3*2+1);
         security=security.replace(fake,content);
         return security;
@@ -129,7 +129,7 @@ public class AESTools {
      * 2.将加密后的字符串反纺成byte[]数组
      * 3.将加密内容解密
      */
-    public static String AESDncode(String encodeRules,String content){
+    public static String AESDecode(String encodeRules, String content){
         try {
             //1.构造密钥生成器，指定为AES算法,不区分大小写
             KeyGenerator keygen=KeyGenerator.getInstance("AES");
