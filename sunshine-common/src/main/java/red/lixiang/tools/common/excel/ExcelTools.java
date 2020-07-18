@@ -16,7 +16,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-
 /**
  * @Author lixiang
  * @CreateTime 2019/11/29
@@ -25,6 +24,131 @@ public class ExcelTools {
 
     public static <T> List<T> excelToList(InputStream inputStream, List<CellField> cellFieldList, Class<T> clazz) {
         return excelToList(inputStream, cellFieldList, clazz, true);
+    }
+
+    /**
+     * 从文件中获取sheet
+     *
+     * @param inputStream
+     * @param newFlag
+     * @return
+     */
+    public static Sheet sheetFromFile(InputStream inputStream, boolean newFlag) {
+        try {
+            //fileInputStream就是一个book
+            Workbook xssfWorkbook = newFlag ? new XSSFWorkbook(inputStream) : new HSSFWorkbook(inputStream);
+            //从book中获取第一个sheet
+            Sheet xssfSheet = xssfWorkbook.getSheetAt(0);
+            return xssfSheet;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 把Excel的Row转成实体类Bean
+     *
+     * @param row
+     * @param cellFieldList
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> T rowToBean(Sheet sheet, Row row, List<CellField> cellFieldList, Class<T> clazz) {
+
+        try {
+            // 把clazz进行实例化
+            T t = clazz.getDeclaredConstructor().newInstance();
+            // 把cellFieldList转成map<列名,java实体类名称>
+            Map<String, String> cellMap = cellFieldList.stream().collect(Collectors.toMap(CellField::getCellName, CellField::getJavaName));
+            // 先从sheet 获取第一行
+            Row header = sheet.getRow(0);
+            // 遍历传进来的row
+            short cellNum = header.getLastCellNum();
+            for (int i = 0; i < cellNum; i++) {
+                // 获取excel列名
+                String cellName = header.getCell(i).getStringCellValue();
+                Field field = clazz.getDeclaredField(cellMap.get(cellName));
+                field.setAccessible(true);
+                // 获取excel中的值
+                Cell cell = row.getCell(i);
+                String value = cellValue(cell);
+                if(StringTools.isBlank(value)){
+                    continue;
+                }
+                // 把值注入到实体类中
+                setEntityValue(field,value,t);
+            }
+            return t;
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取Excel中cell的值
+     * @param cell
+     * @return
+     */
+    private static String cellValue(Cell cell) {
+        if (cell == null) {
+            return null;
+        }
+        String value = "";
+        switch (cell.getCellType()) {
+            case FORMULA:
+                value = cell.getCellFormula();
+                break;
+            case NUMERIC:
+                DecimalFormat df = new DecimalFormat("0");
+                value = "" + df.format(cell.getNumericCellValue());
+                break;
+            case STRING:
+                value = cell.getStringCellValue();
+                break;
+
+            case BLANK:
+                value = null;
+                break;
+
+            case BOOLEAN:
+                value = "" + cell.getBooleanCellValue();
+                break;
+
+            case ERROR:
+                value = "" + cell.getErrorCellValue();
+                break;
+
+            default:
+                value = "" + cell.getStringCellValue();
+        }
+        return value;
+    }
+
+    public static void setEntityValue(Field field, String cellValue, Object t) {
+        try {
+            field.setAccessible(true);
+            if (field.getType() == Integer.class) {
+                //因为会有12.0这样的情况
+                double d = Double.parseDouble(cellValue);
+                field.set(t, (int) d);
+            } else if (field.getType() == Double.class) {
+                double d = Double.parseDouble(cellValue);
+                field.set(t, d);
+            } else if (field.getType() == BigDecimal.class) {
+                BigDecimal b = new BigDecimal(cellValue);
+                field.set(t, b);
+            } else if (field.getType() == Long.class) {
+                Long l = Long.parseLong(cellValue);
+                field.set(t, l);
+            } else {
+                field.set(t, cellValue);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public static <T> List<T> excelToList(InputStream inputStream, List<CellField> cellFieldList, Class<T> clazz, boolean newFlag) {
@@ -56,37 +180,7 @@ public class ExcelTools {
                     String columnCellName = firstRow.getCell(j).getStringCellValue();
                     //开始从第一列开始遍历单元格
                     Cell cell = xssfRow.getCell(j);
-                    String value = "";
-                    if (cell != null) {
-                        switch (cell.getCellType()) {
-                            case FORMULA:
-                                value = cell.getCellFormula();
-                                break;
-
-                            case NUMERIC:
-                                DecimalFormat df = new DecimalFormat("0");
-                                value = "" + df.format(cell.getNumericCellValue());
-                                break;
-                            case STRING:
-                                value = cell.getStringCellValue();
-                                break;
-
-                            case BLANK:
-                                value = null;
-                                break;
-
-                            case BOOLEAN:
-                                value = "" + cell.getBooleanCellValue();
-                                break;
-
-                            case ERROR:
-                                value = "" + cell.getErrorCellValue();
-                                break;
-
-                            default:
-                                value = "" + cell.getStringCellValue();
-                        }
-                    }
+                    String value = cellValue(cell);
                     indexMap.put(columnCellName, value);
                 }
                 //一行循环之后，将值注入到新生成的实例中，然后放到list中
@@ -100,55 +194,15 @@ public class ExcelTools {
                         String javaName = cellField.getJavaName();
                         String columnName = cellField.getCellName();
                         try {
-                            Field field = clazz.getDeclaredField(javaName);
-                            field.setAccessible(true);
-                            if (field.getType() == Integer.class) {
-                                if (indexMap.get(columnName) != null) {
-                                    String s = indexMap.get(columnName);
-                                    if (!StringTools.isBlank(s)) {
-                                        //因为会有12.0这样的情况
-                                        double d = Double.parseDouble(indexMap.get(columnName));
-                                        field.set(t, (int) d);
-                                    }
-                                }
-
-                            } else if (field.getType() == Double.class) {
-                                if (indexMap.get(columnName) != null) {
-                                    String s = indexMap.get(columnName);
-                                    if (!StringTools.isBlank(s)) {
-                                        double d = Double.parseDouble(indexMap.get(columnName));
-                                        field.set(t, d);
-                                    }
-                                }
-                            } else if (field.getType() == BigDecimal.class) {
-                                if (indexMap.get(columnName) != null) {
-                                    String s = indexMap.get(columnName);
-                                    if (!StringTools.isBlank(s)) {
-                                        BigDecimal b = new BigDecimal(s);
-                                        field.set(t, b);
-                                    }
-
-                                }
-
-                            } else if (field.getType() == Long.class) {
-                                if (indexMap.get(columnName) != null) {
-                                    String s = indexMap.get(columnName);
-                                    if (!StringTools.isBlank(s)) {
-                                        Long l = Long.parseLong(s);
-                                        field.set(t, l);
-                                    }
-
-                                }
-
-                            } else {
-                                field.set(t, indexMap.get(columnName));
+                            String cellValue = indexMap.get(columnName);
+                            if (StringTools.isBlank(cellValue)) {
+                                continue;
                             }
+                            Field field = clazz.getDeclaredField(javaName);
+                            setEntityValue(field,cellValue,t);
                         } catch (NoSuchFieldException e) {
                             // 如果发生了这个异常,说明没有对应的java字段,可能是下拉框
                             // 对异常不做处理,也就是对这个不做处理
-
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
                         }
                     }
 
@@ -169,12 +223,22 @@ public class ExcelTools {
 
 
     /**
+     * 这个是只生成表头文档
+     *
+     * @param cellFields
+     * @param <T>
+     * @return
+     */
+    public static <T> Workbook beanToExcel(List<CellField> cellFields) {
+        return beanToExcel(null, cellFields, null, true);
+    }
+
+    /**
      * 将List对象转换为excel文档.
      *
      * @param list       POJO对象列表
      * @param cellFields 表头的描述项
      */
-
     public static <T> Workbook beanToExcel(List<T> list, List<CellField> cellFields, Class<T> clazz) {
         return beanToExcel(list, cellFields, clazz, true);
     }
@@ -187,6 +251,14 @@ public class ExcelTools {
 
         Sheet sheet = workbook.createSheet();
 
+        // 渲染第一行的表头
+        Row firstRow = createExcelHeader(sheet, cellFields);
+
+        if (list == null || clazz == null) {
+            //只渲染一张空表,可以直接返回
+            return workbook;
+        }
+
         // 处理要反射的字段
         Field[] fields = clazz.getDeclaredFields();
         Map<String, Field> fieldMap = new HashMap<>(fields.length);
@@ -195,9 +267,6 @@ public class ExcelTools {
             String fieldName = field.getName();
             fieldMap.put(fieldName, field);
         }
-
-        // 渲染第一行的表头
-        Row firstRow = createExcelHeader(sheet, cellFields);
 
         int beginNum = 1;
         for (T d : list) {
@@ -216,7 +285,7 @@ public class ExcelTools {
                         if (javaName != null && cellHeaderName.equals(firstRow.getCell(i).getStringCellValue())) {
                             Field field = fieldMap.get(javaName);
                             Cell cell = accessCell(row, i);
-                            if(field ==null){
+                            if (field == null) {
                                 //对于CellFieldList里面有的字段,实体类中没有的,跳过这一列
                                 cell.setBlank();
                                 continue;
@@ -270,8 +339,8 @@ public class ExcelTools {
                 Cell cell = accessCell(firstRow, colPointer++);
                 // System.out.println(fieldName + "!!!!" + paramMap.get(fieldName));
                 cell.setCellValue(paramMap.get(fieldName).getCellName());
-                if(CellField.CELL_DROP==field.getCellType()){
-                    createDropList((List<String>) field.getDefaultValue(),cell,sheet);
+                if (CellField.CELL_DROP == field.getCellType()) {
+                    createDropList((List<String>) field.getDefaultValue(), cell, sheet);
                 }
             }
         }
@@ -373,6 +442,6 @@ public class ExcelTools {
 //        exportExcelFile(wb,"test");
 
         String s = "123.0";
-        System.out.println(s.replaceAll("\\.0",""));
+        System.out.println(s.replaceAll("\\.0", ""));
     }
 }

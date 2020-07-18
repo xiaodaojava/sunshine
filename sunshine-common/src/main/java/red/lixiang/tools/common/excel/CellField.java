@@ -1,11 +1,16 @@
 package red.lixiang.tools.common.excel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @Author lixiang
  * @CreateTime 2019/11/30
  **/
 public class CellField {
+
+    private List<CellField> list;
 
     /** cell 值,字符串 */
     public static final int FIELD_STRING = 1;
@@ -36,6 +41,18 @@ public class CellField {
     /** 默认值 */
     private Object defaultValue;
 
+
+    public CellField next(String javaName, String cellName){
+        CellField cellField = new CellField(javaName,cellName);
+        if(list ==null){
+            list = new ArrayList<>();
+            list.add(this);
+        }
+        list.add(cellField);
+        return this;
+    }
+
+
     public CellField() {
     }
 
@@ -48,6 +65,16 @@ public class CellField {
         this.javaName = javaName;
         this.cellName = cellName;
         this.cellType = cellType;
+    }
+
+    public List<CellField> getList() {
+        return list;
+    }
+
+    public CellField setList(List<CellField> list) {
+        this.list = list;
+        list.add(this);
+        return this;
     }
 
     public String getJavaName() {
