@@ -110,8 +110,8 @@ public class ExcelTools {
                     value = format.format(date);
                     break;
                 }
-                DecimalFormat df = new DecimalFormat("0");
-                value = "" + df.format(cell.getNumericCellValue());
+                DataFormatter formatter = new DataFormatter();
+                value = formatter.formatCellValue(cell);
                 break;
             case STRING:
                 value = cell.getStringCellValue();
