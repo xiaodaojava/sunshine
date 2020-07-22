@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -102,6 +103,13 @@ public class ExcelTools {
                 value = cell.getCellFormula();
                 break;
             case NUMERIC:
+                if(DateUtil.isCellDateFormatted(cell)){
+                    // 是时间类型的
+                    Date date = DateUtil.getJavaDate(cell.getNumericCellValue());
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    value = format.format(date);
+                    break;
+                }
                 DecimalFormat df = new DecimalFormat("0");
                 value = "" + df.format(cell.getNumericCellValue());
                 break;
@@ -143,7 +151,16 @@ public class ExcelTools {
             } else if (field.getType() == Long.class) {
                 Long l = Long.parseLong(cellValue);
                 field.set(t, l);
-            } else {
+            } else if(field.getType() == Date.class){
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    Date parse = format.parse(cellValue);
+                    field.set(t,parse);
+                } catch (ParseException e) {
+
+                }
+
+            } else  {
                 field.set(t, cellValue);
             }
         } catch (IllegalAccessException e) {
