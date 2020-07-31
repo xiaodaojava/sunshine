@@ -30,6 +30,7 @@ import static red.lixiang.tools.common.mybatis.MybatisToolCache.MAPPER_TABLE_CAC
 public class MapperTools {
 
     public static boolean securityFlag = false;
+
     private static final Logger logger = LoggerFactory.getLogger(MapperTools.class);
 
     private static ConcurrentHashMap<Class<?>, Field[]> reflectFieldCache = new ConcurrentHashMap<>(50);

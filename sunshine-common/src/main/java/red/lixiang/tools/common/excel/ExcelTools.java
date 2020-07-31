@@ -110,8 +110,12 @@ public class ExcelTools {
                     value = format.format(date);
                     break;
                 }
-                DataFormatter formatter = new DataFormatter();
-                value = formatter.formatCellValue(cell);
+//                DataFormatter formatter = new DataFormatter();
+//                value = formatter.formatCellValue(cell);
+                value = new BigDecimal(Double.toString(cell.getNumericCellValue()))
+                        .toPlainString()
+                        .replaceAll("0+?$", "")
+                        .replaceAll("[.]$", "");
                 break;
             case STRING:
                 value = cell.getStringCellValue();

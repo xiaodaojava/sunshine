@@ -7,14 +7,18 @@ import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.session.Configuration;
+import red.lixiang.tools.base.KV;
 import red.lixiang.tools.common.mybatis.MapperTools;
+import red.lixiang.tools.common.mybatis.model.QC;
+import red.lixiang.tools.jdk.ListTools;
 import red.lixiang.tools.jdk.StringTools;
+import red.lixiang.tools.jdk.reflect.ReflectTools;
+import red.lixiang.tools.jdk.security.AESTools;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
+import java.lang.reflect.Parameter;
+import java.util.*;
 
 /**
  * @author lixiang
@@ -44,16 +48,24 @@ public class MybatisTools {
             String msId = cls.getName()+"."+methodName;
             PlusSql plusSql = method.getAnnotation(PlusSql.class);
             if(plusSql.sqlType().equals("select")){
-                String[] params = plusSql.whereParam();
+//                String[] params = plusSql.whereParam();
+                // 可以直接获取方法的参数列表
+                Parameter[] parameters = method.getParameters();
                 SQL sql = new SQL() {
                     {
                         SELECT("*");
                         FROM(MapperTools.tableNameFromCls(cls));
-                        for (String param : params) {
-                            WHERE(StringTools.camel2UnderScope(param) +" = #{"+param+"}");
-                        }
                     }
                 };
+                for (Parameter parameter : parameters) {
+                    Class<?> type = parameter.getType();
+                    if(ReflectTools.simpleClass(type)){
+                        // 是简单类型的参数
+                        sql.WHERE(parameter.getName()+" = "+"#{"+parameter.getName()+"}");
+                    }else {
+                        // 是复杂类型的参数, todo: 复杂类型的先不处理
+                    }
+                }
                 SqlSource sqlSource = new RawSqlSource(configuration, sql.toString(),Map.class);
                 addSelectMappedStatement(msId,sqlSource, Map.class);
             }
