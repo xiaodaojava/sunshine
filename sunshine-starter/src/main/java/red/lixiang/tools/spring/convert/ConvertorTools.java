@@ -66,12 +66,12 @@ public class ConvertorTools {
                     SQL sql = new SQL(){{
                         SELECT(enhance.targetField());
                         FROM(tableName);
-                        WHERE(enhance.targetField()+"="+sourceObj);
+                        WHERE(enhance.targetIdentity()+"="+sourceObj);
                     }};
 
                     BaseMapper baseMapper = (BaseMapper) ContextHolder.getApplicationContext().getBean(tableName + "Mapper");
                     Object o = baseMapper.selectOne(sql.toString());
-                    Field targetObjField = o.getClass().getField(enhance.targetField());
+                    Field targetObjField = o.getClass().getField(StringTools.underScope2Camel(enhance.targetField()));
                     targetObjField.setAccessible(true);
                     field.set(t, targetObjField.get(o));
                 }
@@ -162,14 +162,14 @@ public class ConvertorTools {
                 WHERE(targetIdentity +" in ("+MapperTools.convertList2Str(objectList)+")");
             }};
 
-            BaseMapper baseMapper = (BaseMapper) ContextHolder.getApplicationContext().getBean(tableName + "Mapper");
+            BaseMapper baseMapper = (BaseMapper) ContextHolder.getApplicationContext().getBean(StringTools.underScope2Camel(tableName) + "Mapper");
             List selectList = baseMapper.selectList(sql.toString());
             // 把这个list变成map的形式, key是targetIdentity , value是targetField
             Map<Object, Object> pairMap = new HashMap<>();
             for (Object o : selectList) {
                 Class<?> aClass = o.getClass();
                 try {
-                    Field field = aClass.getDeclaredField(targetField);
+                    Field field = aClass.getDeclaredField(StringTools.underScope2Camel(targetField));
                     Field identityField = aClass.getDeclaredField(targetIdentity);
                     field.setAccessible(true);
                     identityField.setAccessible(true);

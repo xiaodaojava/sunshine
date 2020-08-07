@@ -1,6 +1,7 @@
 package red.lixiang.tools.jdk;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -194,6 +195,35 @@ public class StringTools {
     }
 
     /**
+     *
+     * @param value
+     * @return
+     */
+    public static String strToAscii(String value)
+    {
+        StringBuffer sbu = new StringBuffer();
+        char[] chars = value.toCharArray();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (char c : chars) {
+            stringBuilder.append("\\u"+Integer.toHexString(c));
+        }
+        return stringBuilder.toString();
+
+    }
+
+    public static boolean areNotBlank(String... values) {
+        boolean result = true;
+        if (values == null || values.length == 0) {
+            result = false;
+        } else {
+            for (String value : values) {
+                result &= !isBlank(value);
+            }
+        }
+        return result;
+    }
+
+    /**
      * 按字典升序的比较器
      */
     public static Comparator<String> StringComparator = (o1, o2) -> {
@@ -218,8 +248,7 @@ public class StringTools {
         return 0;
     };
     public static void main(String[] args) {
-        String sql = "select * from order order by id desc limit 10,1";
-        String bl = insertIntoStringBL(sql, "order", " where 1=1 ");
-        System.out.println(bl);
+        String s = strToAscii("公共私人");
+        System.out.println(s);
     }
 }

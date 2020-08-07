@@ -3,6 +3,9 @@ package red.lixiang.tools.jdk.security;
 
 import red.lixiang.tools.jdk.RandomTools;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -64,7 +67,29 @@ public class MD5Tools {
 		String destStr = md5(sourceStr+salt);
 		return destStr;
 	}
-	
+
+	public static byte[] encryptSha256(String data) throws IOException {
+		byte[] bytes = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			bytes = md.digest(data.getBytes(StandardCharsets.UTF_8));
+		} catch (GeneralSecurityException gse) {
+			throw new IOException(gse.getMessage());
+		}
+		return bytes;
+	}
+
+	public static String byte2hex(byte[] bytes) {
+		StringBuilder sign = new StringBuilder();
+		for (int i = 0; i < bytes.length; i++) {
+			String hex = Integer.toHexString(bytes[i] & 0xFF);
+			if (hex.length() == 1) {
+				sign.append("0");
+			}
+			sign.append(hex.toUpperCase());
+		}
+		return sign.toString();
+	}
 
 	private static byte[] md5(byte[] str) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
@@ -79,7 +104,8 @@ public class MD5Tools {
 
 	public static void main(String[] args) {
 		String s = "123456";
-		System.out.println(encryption(s, "abcdef"));
+		String nzjZgzZr = AESTools.AESEncode("NzjZgzZr", "2665");
+		System.out.println(nzjZgzZr);
 		
 	}
 }

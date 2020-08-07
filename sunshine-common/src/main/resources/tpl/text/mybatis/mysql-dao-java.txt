@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import red.lixiang.tools.common.mybatis.BaseMapper;
 
-import static red.lixiang.tools.common.mybatis.MybatisToolCache.DOMAIN_DO_CACHE;
-import static red.lixiang.tools.common.mybatis.MybatisToolCache.DOMAIN_QC_CACHE;
+import red.lixiang.tools.common.mybatis.MybatisToolCache;
+
 
 /**
  * 本类只做简单的增删改查,复杂的用mapper自己手写,也可以写在Provider里面
@@ -15,12 +15,11 @@ import static red.lixiang.tools.common.mybatis.MybatisToolCache.DOMAIN_QC_CACHE;
  */
 @Mapper
 @Repository
-public interface [(${table.javaTableName})]Mapper extends BaseMapper<RoleDO> {
+public interface [(${table.javaTableName})]Mapper extends BaseMapper<[(${table.javaTableName})]DO> {
 
      @Override
      default Class<?> getMapperClass(){
-        DOMAIN_QC_CACHE.put("[(${table.javaCamelName})]", [(${table.javaTableName})]QC.class);
-        DOMAIN_DO_CACHE.put("[(${table.javaCamelName})]", [(${table.javaTableName})]DO.class);
+        MybatisToolCache.cacheDomain("[(${table.javaCamelName})]",[(${table.javaTableName})]DO.class, [(${table.javaTableName})]QC.class);
         return [(${table.javaTableName})]Mapper.class;
      }
 }

@@ -15,9 +15,7 @@ import red.lixiang.tools.jdk.StringTools;
 import red.lixiang.tools.jdk.reflect.ReflectTools;
 import red.lixiang.tools.jdk.security.AESTools;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -38,49 +36,52 @@ public class MybatisTools {
         this.configuration = configuration;
     }
 
-    public void injectMapper(Class<?> cls){
+    public void injectMapper(Class<?> cls) {
         Method[] methods = cls.getDeclaredMethods();
         for (Method method : methods) {
             if (!method.isAnnotationPresent(PlusSql.class)) {
                 continue;
             }
             String methodName = method.getName();
-            String msId = cls.getName()+"."+methodName;
+            String msId = cls.getName() + "." + methodName;
+            Type genericReturnType = method.getGenericReturnType();
+            Type returnType = genericReturnType;
+            if(genericReturnType instanceof ParameterizedType){
+                ParameterizedType parameterizedType = (ParameterizedType)genericReturnType;
+                Type actualTypeArgument = parameterizedType.getActualTypeArguments()[0];
+                returnType = actualTypeArgument;
+            }
             PlusSql plusSql = method.getAnnotation(PlusSql.class);
-            if(plusSql.sqlType().equals("select")){
-//                String[] params = plusSql.whereParam();
+            if (plusSql.sqlType().equals("select")) {
+                String[] params = plusSql.whereParam();
                 // 可以直接获取方法的参数列表
-                Parameter[] parameters = method.getParameters();
+//                Parameter[] parameters = method.getParameters();
                 SQL sql = new SQL() {
                     {
                         SELECT("*");
                         FROM(MapperTools.tableNameFromCls(cls));
                     }
                 };
-                for (Parameter parameter : parameters) {
-                    Class<?> type = parameter.getType();
-                    if(ReflectTools.simpleClass(type)){
-                        // 是简单类型的参数
-                        sql.WHERE(parameter.getName()+" = "+"#{"+parameter.getName()+"}");
-                    }else {
-                        // 是复杂类型的参数, todo: 复杂类型的先不处理
-                    }
+                for (String param : params) {
+
+                    sql.WHERE(StringTools.camel2UnderScope(param) + " = " + "#{" + param + "}");
+
                 }
-                SqlSource sqlSource = new RawSqlSource(configuration, sql.toString(),Map.class);
-                addSelectMappedStatement(msId,sqlSource, Map.class);
+                SqlSource sqlSource = new RawSqlSource(configuration, sql.toString(), (Class<?>) returnType);
+                addSelectMappedStatement(msId, sqlSource,(Class<?>)returnType);
             }
-            if(plusSql.sqlType().equals("delete")){
+            if (plusSql.sqlType().equals("delete")) {
                 String[] params = plusSql.whereParam();
                 SQL sql = new SQL() {
                     {
                         DELETE_FROM(MapperTools.tableNameFromCls(cls));
                         for (String param : params) {
-                            WHERE(StringTools.camel2UnderScope(param) +" = #{"+param+"}");
+                            WHERE(StringTools.camel2UnderScope(param) + " = #{" + param + "}");
                         }
                     }
                 };
-                SqlSource sqlSource = new RawSqlSource(configuration, sql.toString(),Object.class);
-                addUpdateMappedStatement(msId,sqlSource,SqlCommandType.DELETE);
+                SqlSource sqlSource = new RawSqlSource(configuration, sql.toString(), Object.class);
+                addUpdateMappedStatement(msId, sqlSource, SqlCommandType.DELETE);
             }
 
         }
@@ -89,7 +90,7 @@ public class MybatisTools {
     /**
      * 创建一个查询的MS
      *
-     * @param msId  类名.方法名: com.red.lixiang.dao.PassportDAO.findByMobile(String mobile)
+     * @param msId       类名.方法名: com.red.lixiang.dao.PassportDAO.findByMobile(String mobile)
      * @param sqlSource  执行的sqlSource
      * @param resultType 返回的结果类型
      */
@@ -142,10 +143,12 @@ public class MybatisTools {
 //        addSelectMappedStatementForOther(PassportMapper.class,"findByMobile",sqlSource,Object.class);
 //    }
 //
+
     /**
      * 查询的mappedStatement
-     * @param mapperClass  Mapper的类
-     * @param id 方法名
+     *
+     * @param mapperClass Mapper的类
+     * @param id          方法名
      * @param sqlSource
      * @param resultType  返回值类型
      * @return
