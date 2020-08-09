@@ -4,10 +4,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Import;
 import red.lixiang.tools.common.mybatis.BaseMapper;
 import red.lixiang.tools.jdk.ThreadPoolTools;
 import red.lixiang.tools.spring.AOPTools;
 import red.lixiang.tools.spring.ContextHolder;
+import red.lixiang.tools.spring.controller.BaseSimpleController;
 import red.lixiang.tools.spring.mybatis.MybatisTools;
 import red.lixiang.tools.spring.redis.RedisSpringTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.Map;
  * @author lixiang
  */
 @Configuration
+@Import({BaseSimpleController.class})
 @EnableConfigurationProperties(ToolsProperty.class)
 public class ToolAutoConfiguration {
 

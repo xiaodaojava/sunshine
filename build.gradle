@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
 	group = 'red.lixiang.tools'
-	version = '1.0.0-snapshot'
+	version = '1.0.1-snapshot'
 	sourceCompatibility = '11'
 	targetCompatibility = '11'
 	repositories {
