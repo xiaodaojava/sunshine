@@ -1,10 +1,10 @@
-package red.lixiang.tools.spring.oss;
+package red.lixiang.tools.common.alioss;
 
 /**
  * @Author lixiang
  * @CreateTime 2019/9/11
  **/
-public class OSSProperty {
+public class OSSConfig {
     private String accessKey;
     private String accessSecret;
     private String endpoint;
@@ -14,7 +14,7 @@ public class OSSProperty {
         return accessKey;
     }
 
-    public OSSProperty setAccessKey(String accessKey) {
+    public OSSConfig setAccessKey(String accessKey) {
         this.accessKey = accessKey;
         return this;
     }
@@ -23,7 +23,7 @@ public class OSSProperty {
         return accessSecret;
     }
 
-    public OSSProperty setAccessSecret(String accessSecret) {
+    public OSSConfig setAccessSecret(String accessSecret) {
         this.accessSecret = accessSecret;
         return this;
     }
@@ -32,7 +32,7 @@ public class OSSProperty {
         return endpoint;
     }
 
-    public OSSProperty setEndpoint(String endpoint) {
+    public OSSConfig setEndpoint(String endpoint) {
         this.endpoint = endpoint;
         return this;
     }
@@ -41,7 +41,7 @@ public class OSSProperty {
         return bucket;
     }
 
-    public OSSProperty setBucket(String bucket) {
+    public OSSConfig setBucket(String bucket) {
         this.bucket = bucket;
         return this;
     }

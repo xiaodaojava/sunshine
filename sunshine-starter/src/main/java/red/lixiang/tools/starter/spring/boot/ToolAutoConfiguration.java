@@ -9,7 +9,6 @@ import red.lixiang.tools.jdk.ThreadPoolTools;
 import red.lixiang.tools.spring.AOPTools;
 import red.lixiang.tools.spring.ContextHolder;
 import red.lixiang.tools.spring.mybatis.MybatisTools;
-import red.lixiang.tools.spring.oss.AliOssTools;
 import red.lixiang.tools.spring.redis.RedisSpringTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -19,7 +18,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * @author lixiang

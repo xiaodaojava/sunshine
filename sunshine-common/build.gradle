@@ -23,6 +23,8 @@ dependencies {
 	compileOnly group: 'com.vladsch.flexmark',name: 'flexmark', version: '0.61.24'
 	compileOnly group: 'com.vladsch.flexmark', name: 'flexmark-ext-gfm-strikethrough', version: '0.61.24'
 	compileOnly group: 'com.vladsch.flexmark', name: 'flexmark-ext-tables', version: '0.61.24'
+	compileOnly group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '3.8.1'
+
 //	implementation group: 'io.netty', name: 'netty-all', version: '4.1.50.Final'
 
 
