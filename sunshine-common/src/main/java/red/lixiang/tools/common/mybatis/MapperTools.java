@@ -35,14 +35,14 @@ public class MapperTools {
 
     private static ConcurrentHashMap<Class<?>, Field[]> reflectFieldCache = new ConcurrentHashMap<>(50);
 
-    private static ConcurrentHashMap<Class<?>,String> tableFieldCache = new ConcurrentHashMap<>(50);
+    private static ConcurrentHashMap<Class<?>, String> tableFieldCache = new ConcurrentHashMap<>(50);
 
-    private static List<String> getSimpleModelFields(Class<?> clazz){
+    private static List<String> getSimpleModelFields(Class<?> clazz) {
         Field[] allFields = ReflectTools.getAllFields(clazz);
         List<String> stringList = new ArrayList<>();
         for (Field field : allFields) {
             SqlField sqlField = field.getAnnotation(SqlField.class);
-            if(sqlField==null){
+            if (sqlField == null) {
                 continue;
             }
             stringList.add(field.getName());
@@ -50,7 +50,7 @@ public class MapperTools {
         return stringList;
     }
 
-    public static String getTableFieldName(Class<?> clazz){
+    public static String getTableFieldName(Class<?> clazz) {
 
         String tableField = tableFieldCache.computeIfAbsent(clazz, x -> {
             List<String> fields = getSimpleModelFields(clazz);
@@ -62,12 +62,11 @@ public class MapperTools {
     }
 
 
-
     public static <T> SQL richWhereSql(SQL sql, T t) {
         try {
             Class<?> tClass = t.getClass();
 
-            Field[] declaredFields = reflectFieldCache.computeIfAbsent(tClass,x->{
+            Field[] declaredFields = reflectFieldCache.computeIfAbsent(tClass, x -> {
                 List<Field> fieldList = new ArrayList<>(50);
                 //获取一个类所有的字段
                 //当父类为null的时候说明到达了最上层的父类(Object类)
@@ -85,21 +84,20 @@ public class MapperTools {
                 String fieldName = field.getName();
                 Object value = field.get(t);
 
-                if(value == null){
+                if (value == null) {
                     continue;
                 }
 
                 // 判断分页的
                 if (value instanceof Page) {
                     Page p = (Page) value;
-                    if(p.getPageIndex() !=null && p.getPageSize()!=null){
+                    if (p.getPageIndex() != null && p.getPageSize() != null) {
                         sql.LIMIT(p.getPageSize());
                         sql.OFFSET(p.getStartIndex());
-                    }else if(p.getPageSize() !=null && p.getStartIndex()!=null){
+                    } else if (p.getPageSize() != null && p.getStartIndex() != null) {
                         sql.LIMIT(p.getPageSize());
                         sql.OFFSET(p.getStartIndex());
-                    }
-                    else {
+                    } else {
                         //如果没有设置page,则默认取100条
                         sql.LIMIT(100);
                         sql.OFFSET(0);
@@ -108,36 +106,36 @@ public class MapperTools {
                 }
 
                 // 加上排序的
-                if(value instanceof Sort){
+                if (value instanceof Sort) {
                     Sort s = (Sort) value;
                     sql.ORDER_BY(s.getSortAll());
                     continue;
                 }
 
                 // 如果是额外加上的sql
-                if("appendWhereSql".equals(fieldName) ){
-                    String appendWhereSql  = (String) value;
+                if ("appendWhereSql".equals(fieldName)) {
+                    String appendWhereSql = (String) value;
                     sql.WHERE(appendWhereSql);
                     continue;
                 }
 
                 if (field.isAnnotationPresent(QC.class)) {
                     QC qc = field.getAnnotation(QC.class);
-                    if(qc.skipRich()){
+                    if (qc.skipRich()) {
                         continue;
                     }
                     String valueStr = value.toString();
-                    if(qc.security() && securityFlag){
+                    if (qc.security() && securityFlag) {
                         String salt = qc.salt();
                         String aes = qc.aes();
                         Field aesField = tClass.getDeclaredField(aes);
                         aesField.setAccessible(true);
-                        if(aesField.get(t)==null){
+                        if (aesField.get(t) == null) {
                             KV kv = AESTools.spiltContent(valueStr, salt);
-                            field.set(t,kv.getName());
+                            field.set(t, kv.getName());
 
-                            if(kv.getValue()!=null){
-                                aesField.set(t,kv.getValue());
+                            if (kv.getValue() != null) {
+                                aesField.set(t, kv.getValue());
                             }
                         }
 
@@ -154,18 +152,18 @@ public class MapperTools {
                         if (!ListTools.isBlank(list)) {
                             sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " in (" + convertList2Str(list, qc.classType()) + ")");
                         }
-                    }else if(qc.notInQuery()){
+                    } else if (qc.notInQuery()) {
                         List list = (List) value;
                         if (!ListTools.isBlank(list)) {
                             sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + "  not in  (" + convertList2Str(list, qc.classType()) + ")");
                         }
-                    }else if(qc.biggerRich()){
+                    } else if (qc.biggerRich()) {
                         // 如果是大于查询
                         sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " > #{" + fieldName + "}");
-                    }else if(qc.smallerRich()){
+                    } else if (qc.smallerRich()) {
                         // 如果是小于查询
                         sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " < #{" + fieldName + "}");
-                    }else {
+                    } else {
                         //只标识了QC, 没有说具体哪种查询,就按=来处理
                         sql.WHERE(StringTools.camel2UnderScope(fieldName) + "= #{" + fieldName + "}");
                     }
@@ -192,35 +190,35 @@ public class MapperTools {
             for (Field field : declaredFields) {
                 field.setAccessible(true);
                 String fieldName = field.getName();
-                if(!field.isAnnotationPresent(SqlField.class)){
+                if (!field.isAnnotationPresent(SqlField.class)) {
                     continue;
                 }
                 SqlField sqlField = field.getAnnotation(SqlField.class);
-                if(sqlField.snowId()){
+                if (sqlField.snowId()) {
                     // 如果是需要雪花算法生成id
                     field.set(t, IDTools.ID());
                 }
-                if(sqlField.createTime() || sqlField.updateTime()){
+                if (sqlField.createTime() || sqlField.updateTime()) {
                     field.set(t, new Date());
                 }
                 Object value = field.get(t);
 
-                if(Objects.isNull(value)){
+                if (Objects.isNull(value)) {
                     continue;
                 }
 
-                if(sqlField.security() && securityFlag){
+                if (sqlField.security() && securityFlag) {
                     //需要加密特殊处理的
                     String aesFieldName = sqlField.aes();
                     String saltFieldName = sqlField.salt();
                     String s = value.toString();
                     //把整个s划分成三段,只对中间一段加密
                     KV kv = AESTools.spiltContent(s, saltFieldName);
-                    field.set(t,kv.getName());
+                    field.set(t, kv.getName());
                     Field aesField = tClass.getDeclaredField(aesFieldName);
                     aesField.setAccessible(true);
-                    if(kv.getValue()!=null){
-                        aesField.set(t,kv.getValue());
+                    if (kv.getValue() != null) {
+                        aesField.set(t, kv.getValue());
                     }
                 }
 
@@ -249,34 +247,34 @@ public class MapperTools {
             for (Field field : declaredFields) {
                 field.setAccessible(true);
                 String fieldName = field.getName();
-                if(!field.isAnnotationPresent(SqlField.class)){
+                if (!field.isAnnotationPresent(SqlField.class)) {
                     continue;
                 }
                 SqlField sqlField = field.getAnnotation(SqlField.class);
-                if(sqlField.updateTime()){
-                    field.set(t,new Date());
+                if (sqlField.updateTime()) {
+                    field.set(t, new Date());
                 }
                 Object value = field.get(t);
 
-                if(Objects.isNull(value)){
+                if (Objects.isNull(value)) {
                     continue;
                 }
 
-                if(sqlField.security() && securityFlag){
+                if (sqlField.security() && securityFlag) {
                     //需要加密特殊处理的
                     String aesFieldName = sqlField.aes();
                     Field aesField = tClass.getDeclaredField(aesFieldName);
                     aesField.setAccessible(true);
 //                    if(aesField.get(t)==null){
-                        String saltFieldName = sqlField.salt();
-                        String s = value.toString();
-                        //把整个s划分成三段,只对中间一段加密
-                        KV kv = AESTools.spiltContent(s, saltFieldName);
-                        field.set(t,kv.getName());
+                    String saltFieldName = sqlField.salt();
+                    String s = value.toString();
+                    //把整个s划分成三段,只对中间一段加密
+                    KV kv = AESTools.spiltContent(s, saltFieldName);
+                    field.set(t, kv.getName());
 
-                        if(kv.getValue()!=null){
-                            aesField.set(t,kv.getValue());
-                        }
+                    if (kv.getValue() != null) {
+                        aesField.set(t, kv.getValue());
+                    }
 //                    }
 
                 }
@@ -331,21 +329,30 @@ public class MapperTools {
         throw new RuntimeException("too many result");
     }
 
-    public static  String tableNameFromObj(Object qc){
+    public static String tableNameFromObj(Object qc) {
         return tableNameFromCls(qc.getClass());
     }
 
-    public static  String tableNameFromCls(Class<?> clazz){
-        return "`"+pureTableNameFromCls(clazz)+"`";
+    public static String tableNameFromCls(Class<?> clazz) {
+        return "`" + pureTableNameFromCls(clazz) + "`";
     }
-    public static  String pureTableNameFromCls(Class<?> clazz){
-        return MAPPER_TABLE_CACHE.computeIfAbsent(clazz,cls->{
+
+    public static String pureTableNameFromCls(Class<?> clazz) {
+        return MAPPER_TABLE_CACHE.computeIfAbsent(clazz, cls -> {
             String simpleName = cls.getSimpleName();
             String s = simpleName.replaceAll("Mapper", "");
             s = s.replaceAll("DAO", "");
             s = s.replaceAll("QC", "");
             s = s.replaceAll("DO", "");
-            return StringTools.camel2UnderScope(s);});
+            return StringTools.camel2UnderScope(s);
+        });
+    }
+
+    public static String camelTableNameFromCls(Class<?> clazz) {
+        // 先获取下划线名称
+        String underScope = pureTableNameFromCls(clazz);
+        // 再把下划线转成驼峰
+        return StringTools.underScope2Camel(underScope);
     }
 
 

@@ -17,4 +17,15 @@ public class MybatisToolCache {
         DOMAIN_DO_CACHE.put(domain,doClass);
         DOMAIN_QC_CACHE.put(domain,qcClass);
     }
+    public static void cacheDomain(Class<?> doClass,Class<?> qcClass){
+        String domainName = MapperTools.camelTableNameFromCls(doClass);
+        DOMAIN_DO_CACHE.put(domainName,doClass);
+        DOMAIN_QC_CACHE.put(domainName,qcClass);
+    }
+
+    public static void cacheDomain(Class<?> doClass){
+        String domainName = MapperTools.camelTableNameFromCls(doClass);
+        DOMAIN_DO_CACHE.put(domainName,doClass);
+        DOMAIN_QC_CACHE.put(domainName,doClass);
+    }
 }
