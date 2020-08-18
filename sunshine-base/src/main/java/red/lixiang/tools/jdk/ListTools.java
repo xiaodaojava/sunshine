@@ -144,6 +144,15 @@ public class ListTools {
         return null;
     }
 
+    public static List<String> checkExits(List<String> source, List<String> target){
+        // 先对source / target 进行排序
+        source.sort(StringTools.StringComparator);
+        target.sort(StringTools.StringComparator);
+        // 还是先用循环来写
+        List<String> list = source.stream().filter(x -> !target.contains(x)).collect(Collectors.toList());
+        return list;
+    }
+
 
     /**
      * 将一个list均分成n个list
