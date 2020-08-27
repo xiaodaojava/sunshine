@@ -215,7 +215,7 @@ public class BaseSimpleController extends CommonController {
                 continue;
             }
             TableField tableField = field.getAnnotation(TableField.class);
-            if (!tableField.addField()) {
+            if (!tableField.addField() || (StringTools.isBlank(tableField.label()) && StringTools.isBlank(tableField.title()))) {
                 // 设置为不新增的
                 continue;
             }
@@ -333,6 +333,8 @@ public class BaseSimpleController extends CommonController {
                     field.set(obj, Long.parseLong(value));
                 } else if (type == Integer.class) {
                     field.set(obj, Integer.valueOf(value));
+                }else if(type==Double.class){
+                    field.set(obj,Double.valueOf(value));
                 } else if (type == Date.class) {
                     //时间类型的先跳过
                     continue;

@@ -22,10 +22,13 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.util.Map;
 
 /**
+ *
+ * BaseSimpleController交给子项目去导入
+ *
  * @author lixiang
  */
 @Configuration
-@Import({BaseSimpleController.class})
+//@Import({BaseSimpleController.class})
 @EnableConfigurationProperties(ToolsProperty.class)
 public class ToolAutoConfiguration {
 
