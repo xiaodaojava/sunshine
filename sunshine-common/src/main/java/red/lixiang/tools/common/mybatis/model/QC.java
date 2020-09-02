@@ -30,8 +30,14 @@ public @interface QC {
     /** 是否是大于 */
     boolean biggerRich() default false;
 
+    /** 是否是大于等于 */
+    boolean biggerOrEqualsRich() default false;
+
     /** 是否是小于 */
     boolean smallerRich() default false;
+
+    /** 是否是小于等于 */
+    boolean smallerOrEqualsRich() default false;
 
     /** 是否做了加密处理 */
     boolean security() default false;
