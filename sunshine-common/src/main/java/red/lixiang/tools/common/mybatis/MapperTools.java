@@ -163,7 +163,13 @@ public class MapperTools {
                     } else if (qc.smallerRich()) {
                         // 如果是小于查询
                         sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " < #{" + fieldName + "}");
-                    } else {
+                    } else if (qc.biggerOrEqualsRich()) {
+                        // 如果是大于等于查询
+                        sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " >= #{" + fieldName + "}");
+                    } else if (qc.smallerOrEqualsRich()) {
+                        // 如果是小于等于查询
+                        sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " <= #{" + fieldName + "}");
+                    }else {
                         //只标识了QC, 没有说具体哪种查询,就按=来处理
                         sql.WHERE(StringTools.camel2UnderScope(fieldName) + "= #{" + fieldName + "}");
                     }
