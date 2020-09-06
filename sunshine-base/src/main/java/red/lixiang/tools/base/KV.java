@@ -1,6 +1,7 @@
 package red.lixiang.tools.base;
 
 /**
+ * 这个适用于一些简单的id-name的东西
  * @author lixiang
  * @date 2019/12/28
  **/
