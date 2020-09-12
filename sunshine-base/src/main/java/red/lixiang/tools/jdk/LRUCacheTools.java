@@ -11,18 +11,18 @@ import java.util.stream.Collectors;
  **/
 public class LRUCacheTools<K, V> {
 
-    /** 默认的缓存数量为10 */
-    private Integer size = 10;
+
 
     private Map<K,V> map ;
 
     public LRUCacheTools() {
-        this(3);
+        this(10);
     }
 
     public LRUCacheTools(Integer size) {
-        this.size = size;
-        map = new LinkedHashMap<K,V>(size,0.75f,true){
+
+        map = new LinkedHashMap<>(size,0.75f,true){
+            private static final long serialVersionUID = 1L;
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
                 return size()>size;
