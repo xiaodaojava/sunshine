@@ -112,6 +112,7 @@ public class SqlTools {
     }
     public static List<SqlField> columnInfo(String schemeName, String tableName, Connection conn) {
         List<SqlField> fieldList = new ArrayList<>();
+        ResultSet resultSet = null;
         try {
             DatabaseMetaData metaData = conn.getMetaData();
             //获取索引数据,凡是有索引的,都要放到QC对象里面
@@ -122,7 +123,7 @@ public class SqlTools {
                 indexList.add(columnName);
             }
             // 获取列信息
-            ResultSet resultSet = metaData.getColumns(schemeName, schemeName, tableName, "%");
+            resultSet = metaData.getColumns(schemeName, schemeName, tableName, "%");
             String columnName;
             String columnType;
 
@@ -144,10 +145,25 @@ public class SqlTools {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }finally {
+            try {
+                if(resultSet!=null){
+                    resultSet.close();
+                }
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
         }
         return fieldList;
     }
 
+    /**
+     * 去数据库查询表格数据
+     *
+     * @param sql
+     * @param config
+     * @return
+     */
     public static List<Map<String, Object>> tableDetail(String sql , SqlConfig config){
         return tableDetail(sql,config.getTargetDb(),config.conn());
     }
@@ -155,10 +171,11 @@ public class SqlTools {
     public static List<Map<String, Object>> tableDetail(String sql , String targetDb, Connection conn){
         List<Map<String, Object>> result = new ArrayList<>();
         Statement statement = null;
+        ResultSet resultSet = null;
         try {
             statement = conn.createStatement();
             statement.execute("use "+targetDb);
-            ResultSet resultSet = statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
             List<String> colNameList = new ArrayList<>();
@@ -176,6 +193,13 @@ public class SqlTools {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }finally {
+            if(resultSet!=null){
+                try {
+                    resultSet.close();
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            }
             if(statement!=null){
                 try {
                     statement.close();
