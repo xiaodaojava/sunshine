@@ -5,6 +5,7 @@ pluginManagement {
 	}
 }
 rootProject.name = 'sunshine'
+include 'sunshine-admin'
 include 'sunshine-base'
 include 'sunshine-common'
 include 'sunshine-starter'
