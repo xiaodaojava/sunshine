@@ -1,9 +1,7 @@
 package red.lixiang.tools.jdk;
 
-import com.alibaba.fastjson.JSON;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author lixiang

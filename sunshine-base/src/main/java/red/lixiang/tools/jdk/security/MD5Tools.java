@@ -104,7 +104,7 @@ public class MD5Tools {
 
 	public static void main(String[] args) {
 		String s = "123456";
-		String nzjZgzZr = AESTools.AESEncode("NzjZgzZr", "2665");
+		String nzjZgzZr = AESTools.AESEncode("NzjZgzZr", "1591");
 		System.out.println(nzjZgzZr);
 		
 	}
