@@ -18,7 +18,7 @@ maven:
 
 gradle:
 ```groovy
-compile 'red.lixiang.tools:sunshine-starter:1.0.1'
+compile 'red.lixiang.tools:sunshine-starter:1.0.2'
 ```
 如只需要jdk本身的工具,可只引用 `sunshine-base`
 如只需一些第三方的某个工具只需引用 `sunshine-common`
