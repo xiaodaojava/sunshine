@@ -68,7 +68,7 @@ public class DoubleTools {
     }
 
     public static double div(double v1, double v2) {
-        return div(v1, v2, 10);
+        return div(v1, v2, 2);
     }
 
     public static double div(double v1, double v2, int scale) {
@@ -78,7 +78,24 @@ public class DoubleTools {
         }
         BigDecimal b1 = new BigDecimal(Double.toString(v1));
         BigDecimal b2 = new BigDecimal(Double.toString(v2));
-        return b1.divide(b2, scale, RoundingMode.HALF_UP).doubleValue();
+        return b1.divide(b2, scale, RoundingMode.UP).doubleValue();
     }
 
+    /***
+     * 比较大小
+     * @param v1
+     * @param v2
+     * @return  -1: v1小于v2. 0: v1等于v2. 1: v1大于v2
+     */
+    public static int compare(BigDecimal v1, BigDecimal v2) {
+
+        return v1.compareTo(v2);
+    }
+
+    public static void main(String[] args) {
+        Double d = 2.01d;
+        Integer i = 3;
+        int b = compare(new BigDecimal(d), new BigDecimal(i));
+        System.out.println(b);
+    }
 }

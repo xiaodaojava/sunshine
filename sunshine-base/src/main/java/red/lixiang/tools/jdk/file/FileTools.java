@@ -9,8 +9,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.*;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,6 +46,31 @@ public class FileTools {
             path = path.substring(i + 1);
             return path;
         }
+    }
+
+    /**
+     * 遍历文件夹的,通常来说,都是递归来做的
+     * 这里通过一个栈来简单模拟一下
+     */
+    public static List<Path> listFile(String path){
+        List<Path> pathList = new ArrayList<>();
+
+        try {
+            Deque<Path> stack = new ArrayDeque<>();
+            stack.push(Paths.get(path));
+            while (!stack.isEmpty()){
+                Path curPath = stack.pop();
+                Files.list(curPath).forEach(p->{
+                    if(Files.isDirectory(p)){
+                        stack.push(p);
+                    }
+                    pathList.add(p);
+                });
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pathList;
     }
 
     public static String getFileNameFromPathNoSuffix(String path) {
@@ -133,6 +157,10 @@ public class FileTools {
         }
     }
 
+    /**
+     * 删除某个文件夹里面的文件
+     * @param path
+     */
     public static void deleteDirFiles(String path) {
         deleteDirFiles(path, null, false);
     }
