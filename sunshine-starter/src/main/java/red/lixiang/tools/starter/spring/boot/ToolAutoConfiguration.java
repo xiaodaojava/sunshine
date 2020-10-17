@@ -68,12 +68,14 @@ public class ToolAutoConfiguration {
         ApplicationContext applicationContext = ContextHolder.getApplicationContext();
         Map<String, Object> mapperList = applicationContext.getBeansWithAnnotation(Mapper.class);
         mapperList.forEach((key,value)->{
-            BaseMapper baseMapper = (BaseMapper) value;
-            // 初始化一些缓存信息
-            baseMapper.getMapperClass();
-            // 从BaseMapper中获取真正的类,这时候的target是
-            Class<?> target = AOPTools.getTarget(baseMapper);
-            tools.injectMapper(target);
+            if(value instanceof BaseMapper){
+                BaseMapper baseMapper = (BaseMapper) value;
+                // 初始化一些缓存信息
+                baseMapper.getMapperClass();
+                // 从BaseMapper中获取真正的类,这时候的target是
+                Class<?> target = AOPTools.getTarget(baseMapper);
+                tools.injectMapper(target);
+            }
         });
         return tools;
     }

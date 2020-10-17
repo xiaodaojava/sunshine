@@ -16,13 +16,10 @@ import java.util.Map;
  **/
 public class Main {
     public static void main(String[] args) {
-        double a = 5.5d;
-        double b = 4.28d;
-        double sum = DoubleTools.sum(a, b);
-        System.out.println(sum);
+
+        Integer a = 5;
+
+        
     }
-
-
-
 
 }
