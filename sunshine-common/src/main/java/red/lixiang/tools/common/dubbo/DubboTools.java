@@ -7,6 +7,8 @@ import org.apache.dubbo.rpc.service.GenericService;
 
 import java.util.Map;
 
+import static red.lixiang.tools.common.dubbo.DubboToolCache.DUBBO_SERVICE_CACHE;
+
 /**
  * @author lixiang
  * @date 2020/10/18
@@ -14,35 +16,38 @@ import java.util.Map;
 public class DubboTools {
 
 
-    public static void invokeNoArg(String url,String interfaceName, String methodName){
+    public static Object invokeNoArg(String url, String interfaceName, String methodName) {
         DubboInvokeConfig config = new DubboInvokeConfig();
         config.setRegistryAddress(url);
         config.setInterfaceName(interfaceName);
         config.setMethodName(methodName);
-        doInvoke(config);
+        return doInvoke(config);
     }
 
-    public static void invokeWithArgs(String url,String interfaceName, String methodName,String[] types,Object[] objs){
+    public static Object invokeWithArgs(String url, String interfaceName, String methodName, String[] types, Object[] objs) {
         DubboInvokeConfig config = new DubboInvokeConfig();
         config.setRegistryAddress(url);
         config.setInterfaceName(interfaceName);
         config.setMethodName(methodName);
         config.setArgTypes(types);
         config.setArgObjects(objs);
-        doInvoke(config);
+        return doInvoke(config);
     }
 
 
+    public static Object doInvoke(DubboInvokeConfig config) {
+        // 通过hashMap把对象缓存起来
+        String key = config.getInterfaceName() + "#" + config.getMethodName();
+        GenericService genericService = DUBBO_SERVICE_CACHE.computeIfAbsent(key, (k) -> {
+            ReferenceConfig<GenericService> referenceConfig = ReferenceFactory.buildReferenceConfig(config);
+            return referenceConfig.get();
+        });
 
-    public static void doInvoke(DubboInvokeConfig config) {
-        // 这个对象后面要缓存起来
-        ReferenceConfig<GenericService> referenceConfig = ReferenceFactory.buildReferenceConfig(config);
-        GenericService genericService = referenceConfig.get();
         Map<String, String> attachments = config.getAttachments();
         if (attachments != null) {
             RpcContext.getContext().setAttachments(attachments);
         }
         Object result = genericService.$invoke(config.getMethodName(), config.getArgTypes(), config.getArgObjects());
-        System.out.println(result);
+        return result;
     }
 }
