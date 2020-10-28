@@ -18,12 +18,14 @@ import java.util.concurrent.Executor;
  **/
 public class CommonConfig {
 
-    public static Properties configContent;
+    public static Properties configContent = new Properties();
 
     public static void init(NacosServerConfig config){
         ConfigService configService = null;
         try {
             configService = NacosFactory.createConfigService(config.getServerAddr());
+            String content = configService.getConfig(config.getDataId(), config.getGroup(), 10000);
+            configContent.load(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
             configService.addListener(config.getDataId(), config.getGroup(), new Listener() {
                 @Override
                 public Executor getExecutor() {
@@ -39,7 +41,7 @@ public class CommonConfig {
                     }
                 }
             });
-        } catch (NacosException e) {
+        } catch (NacosException | IOException e) {
             e.printStackTrace();
         }
     }

@@ -8,7 +8,7 @@ public class NacosServerConfig {
 
     private String serverAddr;
     private String dataId;
-    private String group;
+    private String group = "DEFAULT_GROUP";
 
     public String getServerAddr() {
         return serverAddr;
