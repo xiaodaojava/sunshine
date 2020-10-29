@@ -37,7 +37,7 @@ public class ConvertorTools {
                 Field sourceField = null;
                 sourceField = t.getClass().getDeclaredField(sourceFieldName);
 
-                if (!sourceField.canAccess(t)) {
+                if (!sourceField.isAccessible()) {
                     sourceField.setAccessible(true);
                 }
                 Object sourceObj = sourceField.get(t);
@@ -186,7 +186,7 @@ public class ConvertorTools {
               try {
                   EnhanceTool enhanceTool = key.getAnnotation(EnhanceTool.class);
                   Field sourceField = cls.getDeclaredField(enhanceTool.source());
-                  if (!sourceField.canAccess(t)) {
+                  if (!sourceField.isAccessible()) {
                       sourceField.setAccessible(true);
                   }
                   Object o = map.get(sourceField.get(t));
@@ -227,7 +227,7 @@ public class ConvertorTools {
                 try {
                     EnhanceTool enhanceTool = key.getAnnotation(EnhanceTool.class);
                     Field sourceField = cls.getDeclaredField(enhanceTool.source());
-                    if (!sourceField.canAccess(t)) {
+                    if (!sourceField.isAccessible()) {
                         sourceField.setAccessible(true);
                     }
                     Object sourceValue = sourceField.get(t);

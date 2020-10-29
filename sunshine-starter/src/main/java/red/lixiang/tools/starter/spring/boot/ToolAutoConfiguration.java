@@ -2,6 +2,7 @@ package red.lixiang.tools.starter.spring.boot;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import javax.sql.DataSource;
 import java.util.Map;
 
 /**
@@ -60,7 +62,7 @@ public class ToolAutoConfiguration {
 //    }
 
     @Bean
-    @ConditionalOnClass(SqlSessionFactory.class)
+    @ConditionalOnBean(DataSource.class)
     public MybatisTools getSecurityInterceptor(){
         SqlSessionFactory sessionFactory = ContextHolder.getBean(SqlSessionFactory.class).get();
         org.apache.ibatis.session.Configuration configuration = sessionFactory.getConfiguration();

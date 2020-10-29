@@ -1,8 +1,10 @@
 package red.lixiang.tools.jdk.os;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -22,7 +24,7 @@ public class HostTools {
         String path = getHostPath();
         String result;
         try {
-            result = Files.readString(Paths.get(path));
+            result = String.join("\n", Files.readAllLines(Paths.get(path)));
         } catch (IOException e) {
             e.printStackTrace();
             return "read host fail"+e.getMessage();
@@ -35,7 +37,7 @@ public class HostTools {
             return "fail, file can not write!";
         }
         try {
-            Files.writeString(Paths.get(path),content);
+            Files.write(Paths.get(path),content.getBytes(StandardCharsets.UTF_8));
             return "success";
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,7 +52,7 @@ public class HostTools {
             if(Files.notExists(Paths.get(toolsPath))){
                 Files.createDirectories(Paths.get(toolsPath));
             }
-            Files.writeString(Paths.get(tempHostPath),content);
+            Files.write(Paths.get(tempHostPath),content.getBytes(StandardCharsets.UTF_8));
             TerminalTools.execByRoot("rm -rf /etc/hosts", root);
             String s = TerminalTools.execByRoot(" mv "+tempHostPath+" /etc/hosts", root);
             //改变权限和组

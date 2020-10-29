@@ -3,6 +3,7 @@ package red.lixiang.tools.jdk.file;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class FileMain {
             String s = p.getFileName().toString();
             if(s.endsWith(".mp4")){
                 try {
-                    Files.move(p, Path.of(p.getParent().getParent() + "/" + s));
+                    Files.move(p, Paths.get(p.getParent().getParent() + "/" + s));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

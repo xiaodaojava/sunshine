@@ -19,7 +19,7 @@ public class LRUCacheTools<K, V> {
 
     public LRUCacheTools(Integer size) {
 
-        map = new LinkedHashMap<>(size,0.75f,true){
+        map = new LinkedHashMap<K,V>(size,0.75f,true){
             private static final long serialVersionUID = 1L;
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
