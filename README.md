@@ -4,7 +4,7 @@
 > Do you like sunshine?  Yes , I do.
 
 ## jdk版本说明
-master的分支为jdk11的版本, jdk8的版本,暂时没有维护
+支持Jdk1.8及以上.
 
 ## maven引用
 maven:  
@@ -12,13 +12,13 @@ maven:
 <dependency>
   <groupId>red.lixiang.tools</groupId>
   <artifactId>sunshine-starter</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 </dependency>
 ```
 
 gradle:
 ```groovy
-compile 'red.lixiang.tools:sunshine-starter:1.0.2'
+compile 'red.lixiang.tools:sunshine-starter:1.0.3'
 ```
 如只需要jdk本身的工具,可只引用 `sunshine-base`
 如只需一些第三方的某个工具只需引用 `sunshine-common`
@@ -43,7 +43,7 @@ compile 'red.lixiang.tools:sunshine-starter:1.0.2'
 
 ## sunshine-common
 基于第三方的工具再次封装的工具包  
-为了项目不臃肿,所以的包都是以`runtime`的方式引进来的,也就是说,你还需要自己在项目中添加依赖才可以使用里面的工具  
+为了项目不臃肿,所有的包都是以`compileOnly`的方式引进来的,也就是说,你还需要自己在项目中添加依赖才可以使用里面的工具  
 - aliOssTools
 - ExcelTools
 - KuberTools
@@ -52,7 +52,7 @@ compile 'red.lixiang.tools:sunshine-starter:1.0.2'
 
 ## sunshine-starter
 可用于spring-boot引用 
-- RedisTools
+- RedisSpringTools
 - ContextHolder  
 
 引入starter之后,可以完成一个最简化的增删改查+Controller
