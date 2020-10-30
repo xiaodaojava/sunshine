@@ -33,17 +33,17 @@ public interface BaseMapper<T> {
         return this.findAll(getMapperClass());
     }
 
-//    /**
-//     * 查找全部
-//     *
-//     * @see BaseProvider#findAllNoDataRule(Class)
-//     */
-//    @SelectProvider(type = BaseProvider.class)
-//    List<T> findAllNoDataRule(Class<?> tClass);
-//
-//    default List<T> findAllNoDataRule() {
-//        return this.findAllNoDataRule(getMapperClass());
-//    }
+    /**
+     * 查找全部
+     *
+     * @see BaseProvider#findAllNoDataRule(Class)
+     */
+    @SelectProvider(type = BaseProvider.class)
+    List<T> findAllNoDataRule(Class<?> tClass);
+
+    default List<T> findAllNoDataRule() {
+        return this.findAllNoDataRule(getMapperClass());
+    }
 
 
     /**
@@ -59,18 +59,18 @@ public interface BaseMapper<T> {
         return this.findById(id, getMapperClass());
     }
 
-//    /**
-//     * 通过ID查找
-//     * @see BaseProvider#findByIdNoDataRule(Long, Class)
-//     * @param id
-//     * @return
-//     */
-//    @SelectProvider(type = BaseProvider.class)
-//    T findByIdNoDataRule(@Param("id") Long id, Class<?> tClass);
-//
-//    default T findByIdNoDataRule(Long id) {
-//        return this.findByIdNoDataRule(id, getMapperClass());
-//    }
+    /**
+     * 通过ID查找
+     * @see BaseProvider#findByIdNoDataRule(Long, Class)
+     * @param id
+     * @return
+     */
+    @SelectProvider(type = BaseProvider.class)
+    T findByIdNoDataRule(@Param("id") Long id, Class<?> tClass);
+
+    default T findByIdNoDataRule(Long id) {
+        return this.findByIdNoDataRule(id, getMapperClass());
+    }
 
 
     /**
@@ -82,14 +82,14 @@ public interface BaseMapper<T> {
     @SelectProvider(type = BaseProvider.class)
     List<T> findByQuery(BaseQC qc);
 
-//    /**
-//     * 通过条件查询
-//     * @see BaseProvider#findByQueryNoDataRule(BaseQC)
-//     * @param qc
-//     * @return
-//     */
-//    @SelectProvider(type = BaseProvider.class)
-//    List<T> findByQueryNoDataRule(BaseQC qc);
+    /**
+     * 通过条件查询
+     * @see BaseProvider#findByQueryNoDataRule(BaseQC)
+     * @param qc
+     * @return
+     */
+    @SelectProvider(type = BaseProvider.class)
+    List<T> findByQueryNoDataRule(BaseQC qc);
 
     /**
      * 通过条件查询数量
@@ -100,14 +100,14 @@ public interface BaseMapper<T> {
     @SelectProvider(type = BaseProvider.class)
     Long countByQuery(BaseQC qc);
 
-//    /**
-//     * 通过条件查询数量
-//     * @see BaseProvider#countByQueryNoDataRule(BaseQC)
-//     * @param qc
-//     * @return
-//     */
-//    @SelectProvider(type = BaseProvider.class)
-//    Long countByQueryNoDataRule(BaseQC qc);
+    /**
+     * 通过条件查询数量
+     * @see BaseProvider#countByQueryNoDataRule(BaseQC)
+     * @param qc
+     * @return
+     */
+    @SelectProvider(type = BaseProvider.class)
+    Long countByQueryNoDataRule(BaseQC qc);
 
 
     /**
