@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public class TimeCache {
 
-    public static Map<String,ObjectWrapper> cache = new ConcurrentHashMap<>(100);
+    private static Map<String,ObjectWrapper> cache = new ConcurrentHashMap<>(100);
 
     public static Object setCache(String key,Object obj,long expireTime){
         ObjectWrapper wrapper = new ObjectWrapper();
@@ -34,5 +34,14 @@ public class TimeCache {
     static class ObjectWrapper{
         Object obj;
         long expireStamp;
+    }
+
+
+    public static void main(String[] args) {
+        TimeCache.setCache("aaaa","bbbb",20000);
+        Object aaaa = TimeCache.getFromCache("aaaa");
+        System.out.println(aaaa);
+        Object aaaa1 = TimeCache.getFromCache("aaaa");
+        System.out.println(aaaa1);
     }
 }

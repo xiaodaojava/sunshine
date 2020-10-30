@@ -30,13 +30,13 @@ public class BaseProvider implements ProviderMethodResolver {
         return sql.toString();
     }
 
-    public String findAllNoDataRule(Class<?> clazz){
-        SQL sql = new SQL() {{
-            SELECT("*");
-        }};
-        sql.FROM(tableNameFromCls(clazz));
-        return sql.toString();
-    }
+//    public String findAllNoDataRule(Class<?> clazz){
+//        SQL sql = new SQL() {{
+//            SELECT("*");
+//        }};
+//        sql.FROM(tableNameFromCls(clazz));
+//        return sql.toString();
+//    }
 
     /**
      * @see BaseMapper#findById(Long, Class)
@@ -53,20 +53,20 @@ public class BaseProvider implements ProviderMethodResolver {
         return sql.toString();
     }
 
-    /**
-     * @see BaseMapper#findByIdNoDataRule(Long, Class)
-     * @param id
-     * @param clazz
-     * @return
-     */
-    public String findByIdNoDataRule(@Param("id") Long id, Class<?> clazz){
-        SQL sql = new SQL() {{
-            SELECT("*");
-            WHERE("id = #{id}");
-        }};
-        sql.FROM(tableNameFromCls(clazz));
-        return sql.toString();
-    }
+//    /**
+//     * @see BaseMapper#findByIdNoDataRule(Long, Class)
+//     * @param id
+//     * @param clazz
+//     * @return
+//     */
+//    public String findByIdNoDataRule(@Param("id") Long id, Class<?> clazz){
+//        SQL sql = new SQL() {{
+//            SELECT("*");
+//            WHERE("id = #{id}");
+//        }};
+//        sql.FROM(tableNameFromCls(clazz));
+//        return sql.toString();
+//    }
 
     /**
      * @see BaseMapper#findByQuery(BaseQC)
@@ -83,19 +83,19 @@ public class BaseProvider implements ProviderMethodResolver {
     }
 
 
-    /**
-     * @see BaseMapper#findByQueryNoDataRule(BaseQC)
-     * @param qc
-     * @return
-     */
-    public String findByQueryNoDataRule(BaseQC qc){
-        SQL sql = new SQL() {{
-            SELECT("*");
-        }};
-        MapperTools.richWhereSql(sql,qc);
-        sql.FROM(tableNameFromObj(qc));
-        return sql.toString();
-    }
+//    /**
+//     * @see BaseMapper#findByQueryNoDataRule(BaseQC)
+//     * @param qc
+//     * @return
+//     */
+//    public String findByQueryNoDataRule(BaseQC qc){
+//        SQL sql = new SQL() {{
+//            SELECT("*");
+//        }};
+//        MapperTools.richWhereSql(sql,qc);
+//        sql.FROM(tableNameFromObj(qc));
+//        return sql.toString();
+//    }
 
 
     /**
@@ -113,19 +113,19 @@ public class BaseProvider implements ProviderMethodResolver {
     }
 
 
-    /**
-     * @see BaseMapper#countByQueryNoDataRule(BaseQC) (BaseQC)
-     * @param qc
-     * @return
-     */
-    public String countByQueryNoDataRule(BaseQC qc){
-        SQL sql = new SQL() {{
-            SELECT("count(1)");
-        }};
-        MapperTools.richWhereSql(sql,qc);
-        sql.FROM(tableNameFromObj(qc));
-        return sql.toString();
-    }
+//    /**
+//     * @see BaseMapper#countByQueryNoDataRule(BaseQC) (BaseQC)
+//     * @param qc
+//     * @return
+//     */
+//    public String countByQueryNoDataRule(BaseQC qc){
+//        SQL sql = new SQL() {{
+//            SELECT("count(1)");
+//        }};
+//        MapperTools.richWhereSql(sql,qc);
+//        sql.FROM(tableNameFromObj(qc));
+//        return sql.toString();
+//    }
 
 
     /**

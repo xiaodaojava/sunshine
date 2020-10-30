@@ -16,13 +16,7 @@ import java.util.Map;
  **/
 public class Main {
     public static void main(String[] args) {
-        boolean a = true;
 
-        boolean[] bArray = new boolean[2];
-        bArray[0]=true;
-        bArray[1]=true;
-        System.out.println(a);
-        System.out.println(bArray);
     }
 
 }

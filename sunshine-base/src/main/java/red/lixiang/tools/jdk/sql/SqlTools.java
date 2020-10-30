@@ -211,4 +211,24 @@ public class SqlTools {
         return result;
     }
 
+    public static int update(String sql , String targetDb, Connection conn){
+        Statement statement = null;
+        try {
+            statement = conn.createStatement();
+            statement.execute("use "+targetDb);
+            return statement.executeUpdate(sql);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
+            if(statement!=null){
+                try {
+                    statement.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return 0;
+    }
 }
