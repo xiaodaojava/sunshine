@@ -22,6 +22,9 @@ public class TimeCache {
 
     public static Object getFromCache(String key){
         ObjectWrapper wrapper = cache.get(key);
+        if(wrapper ==null){
+            return null;
+        }
         long l = System.currentTimeMillis();
         if(l>wrapper.expireStamp){
             cache.remove(key);
