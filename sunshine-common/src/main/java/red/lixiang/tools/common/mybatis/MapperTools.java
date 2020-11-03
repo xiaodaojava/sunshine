@@ -286,7 +286,7 @@ public class MapperTools {
                 }
 
                 // 如果值不为空的话，往里面拼接updateSQL
-                sql.SET(StringTools.camel2UnderScope(fieldName) + "=" + String.format("#{%s}", fieldName));
+                sql.SET('`'+StringTools.camel2UnderScope(fieldName)+'`' + "=" + String.format("#{%s}", fieldName));
 
             }
         } catch (Exception e) {

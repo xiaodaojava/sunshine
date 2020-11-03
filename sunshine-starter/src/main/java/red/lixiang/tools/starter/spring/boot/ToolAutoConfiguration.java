@@ -5,7 +5,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.ApplicationContext;
 import red.lixiang.tools.common.mybatis.BaseMapper;
-import red.lixiang.tools.jdk.ThreadPoolTools;
+import red.lixiang.tools.jdk.thread.ThreadPoolTools;
 import red.lixiang.tools.spring.AOPTools;
 import red.lixiang.tools.spring.ContextHolder;
 import red.lixiang.tools.spring.mybatis.MybatisTools;

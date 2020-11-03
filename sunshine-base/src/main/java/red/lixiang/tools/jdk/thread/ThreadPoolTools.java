@@ -1,4 +1,4 @@
-package red.lixiang.tools.jdk;
+package red.lixiang.tools.jdk.thread;
 
 
 import java.util.concurrent.*;
@@ -10,13 +10,13 @@ import java.util.concurrent.*;
 public class ThreadPoolTools {
 
     /** 线程池维护线程的最少数量 */
-    private int minPoolSize = 10;
+    private final int minPoolSize = 10;
 
     /** 线程池维护线程的最大数量 */
-    private int maxPoolSize = 100;
+    private final int maxPoolSize = 100;
 
     /** 线程池维护线程所允许的空闲时间 */
-    private int idleSeconds = 1800;
+    private final int idleSeconds = 1800;
 
     /** 线程池所使用的缓冲队列 */
     private int queueBlockSize = 100;
