@@ -5,6 +5,7 @@ import red.lixiang.tools.jdk.reflect.ReflectTools;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,11 @@ public class SimpleSqlTools {
 
 
     public  static <T> List<T> selectList(String sql, Class<T> clazz,SqlConfig config){
-        List<Map<String, Object>> resultList = SqlTools.tableDetail(sql, config);
+        return selectList(sql,clazz,config.getTargetDb(),config.conn());
+    }
+
+    public  static <T> List<T> selectList(String sql, Class<T> clazz, String targetDb,Connection connection){
+        List<Map<String, Object>> resultList = SqlTools.tableDetail(sql, targetDb,connection);
         List<T> list = new ArrayList<>();
         Field[] allFields = ReflectTools.getAllFields(clazz);
         for (Map<String, Object> map : resultList) {
