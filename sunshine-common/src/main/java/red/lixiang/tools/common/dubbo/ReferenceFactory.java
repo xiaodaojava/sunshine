@@ -50,7 +50,7 @@ public class ReferenceFactory {
 
         reference.setInterface(param.getInterfaceName());
         reference.setVersion(param.getVersion());
-        reference.setGeneric(true);
+        reference.setGeneric("true");
         if (!StringUtils.isEmpty(param.getGroup())) {
             reference.setGroup(param.getGroup());
         }

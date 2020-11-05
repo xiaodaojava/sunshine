@@ -21,6 +21,8 @@ public class DubboTools {
         config.setRegistryAddress(url);
         config.setInterfaceName(interfaceName);
         config.setMethodName(methodName);
+        config.setArgTypes(new String[]{});
+        config.setArgObjects(new Object[]{});
         return doInvoke(config);
     }
 
@@ -38,16 +40,16 @@ public class DubboTools {
     public static Object doInvoke(DubboInvokeConfig config) {
         // 通过hashMap把对象缓存起来
         String key = config.getInterfaceName() + "#" + config.getMethodName();
-        GenericService genericService = DUBBO_SERVICE_CACHE.computeIfAbsent(key, (k) -> {
+        ReferenceConfig<GenericService> genericService = DUBBO_SERVICE_CACHE.computeIfAbsent(key, (k) -> {
             ReferenceConfig<GenericService> referenceConfig = ReferenceFactory.buildReferenceConfig(config);
-            return referenceConfig.get();
+            return referenceConfig;
         });
 
         Map<String, String> attachments = config.getAttachments();
         if (attachments != null) {
             RpcContext.getContext().setAttachments(attachments);
         }
-        Object result = genericService.$invoke(config.getMethodName(), config.getArgTypes(), config.getArgObjects());
+        Object result = genericService.get().$invoke(config.getMethodName(), config.getArgTypes(), config.getArgObjects());
         return result;
     }
 }

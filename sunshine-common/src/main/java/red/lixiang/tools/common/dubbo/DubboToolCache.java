@@ -1,5 +1,6 @@
 package red.lixiang.tools.common.dubbo;
 
+import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.rpc.service.GenericService;
 import red.lixiang.tools.common.mybatis.MapperTools;
 
@@ -12,12 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public class DubboToolCache {
 
-    public static Map<String, GenericService> DUBBO_SERVICE_CACHE  = new ConcurrentHashMap<>(50);
+    public static Map<String, ReferenceConfig<GenericService>> DUBBO_SERVICE_CACHE  = new ConcurrentHashMap<>(50);
 
 
-    public static GenericService getFromCache(String interfaceName,String methodName){
+    public static ReferenceConfig<GenericService> getFromCache(String interfaceName,String methodName){
         String key  = interfaceName+"#"+methodName;
-        GenericService genericService = DUBBO_SERVICE_CACHE.get(key);
+        ReferenceConfig<GenericService> genericService = DUBBO_SERVICE_CACHE.get(key);
         return genericService;
     }
 
