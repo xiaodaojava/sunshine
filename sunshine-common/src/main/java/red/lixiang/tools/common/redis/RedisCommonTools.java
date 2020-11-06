@@ -2,6 +2,7 @@ package red.lixiang.tools.common.redis;
 
 import io.lettuce.core.*;
 import io.lettuce.core.api.StatefulRedisConnection;
+import red.lixiang.tools.jdk.ListTools;
 import red.lixiang.tools.jdk.StringTools;
 
 import java.util.List;
@@ -32,8 +33,11 @@ public class RedisCommonTools {
         if(init){
             return ScanCursor.INITIAL;
         }
-        if(scanCursor==null || scanCursor == ScanCursor.FINISHED){
+        if(scanCursor==null ){
             scanCursor = ScanCursor.INITIAL;
+        }
+        if(scanCursor.isFinished()){
+            return null;
         }
         return scanCursor;
     }
@@ -90,22 +94,33 @@ public class RedisCommonTools {
      * @return
      */
     public List<String> scan(Boolean init,String match,Long count){
-//        RedisClient client = config.fetchRedisClient();
         count = count ==null?100L:count;
         ScanArgs scanArgs = ScanArgs.Builder.limit(count);
         if(StringTools.isNotBlank(match)){
             scanArgs.match(match+"*");
         }
         // 去连接获取数据
-//        StatefulRedisConnection<String, String> connect = client.connect();
         StatefulRedisConnection<String, String> connect = config.conn();
-
-        KeyScanCursor<String> scan = connect.sync().scan(getScanCursor(init), scanArgs);
-        scanCursor = scan;
-//        connect.close();
-//        client.shutdown();
+        ScanCursor scanCursor = getScanCursor(init);
+        if(scanCursor==null){
+            return null;
+        }
+        KeyScanCursor<String> scan = connect.sync().scan(scanCursor, scanArgs);
+        this.scanCursor = scan;
 
         return scan.getKeys();
+    }
+
+    public List<String> findAllKeys(){
+        List<String> scan = scan(true, null, null);
+        while (true){
+            List<String> scan1 = scan(false, null, null);
+            if(ListTools.isBlank(scan1)){
+                break;
+            }
+            scan.addAll(scan1);
+        }
+        return scan;
     }
 
     public void close(){
