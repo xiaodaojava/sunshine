@@ -1,5 +1,4 @@
-# 工具类说明(基于JDK11)
-
+# 工具类说明(基于JDK8)
 
 > Do you like sunshine?  Yes , I do.
 
@@ -12,13 +11,13 @@ maven:
 <dependency>
   <groupId>red.lixiang.tools</groupId>
   <artifactId>sunshine-starter</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 </dependency>
 ```
 
 gradle:
 ```groovy
-compile 'red.lixiang.tools:sunshine-starter:1.0.4'
+compile 'red.lixiang.tools:sunshine-starter:1.0.5'
 ```
 如只需要jdk本身的工具,可只引用 `sunshine-base`
 如只需一些第三方的某个工具只需引用 `sunshine-common`
