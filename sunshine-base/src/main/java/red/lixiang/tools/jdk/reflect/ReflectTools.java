@@ -18,6 +18,14 @@ public class ReflectTools {
         Method[] declaredMethods = clazz.getDeclaredMethods();
     }
 
+    public static Type[] getGenericParameterType(Class<?> clazz){
+        Type type = clazz.getGenericInterfaces()[0];
+        if(type instanceof ParameterizedType){
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            return parameterizedType.getActualTypeArguments();
+        }
+        return null;
+    }
 
     /**
      * 从类中获取指定的方法(这种处理不了重载的情况)

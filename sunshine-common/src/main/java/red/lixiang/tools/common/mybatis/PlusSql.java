@@ -1,4 +1,4 @@
-package red.lixiang.tools.spring.mybatis;
+package red.lixiang.tools.common.mybatis;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -11,7 +11,7 @@ public class MybatisToolCache {
     public static Map<Class<?>,String> MAPPER_TABLE_CACHE  = new ConcurrentHashMap<>(50);
     public static Map<String,Class<?>> DOMAIN_QC_CACHE = new ConcurrentHashMap<>(50);
     public static Map<String,Class<?>> DOMAIN_DO_CACHE = new ConcurrentHashMap<>(50);
-
+    public static Map<Object,Class<?>> PROXY_MAPPER_CACHE = new ConcurrentHashMap<>(50);
 
     public static void cacheDomain(String domain, Class<?> doClass,Class<?> qcClass){
         DOMAIN_DO_CACHE.put(domain,doClass);

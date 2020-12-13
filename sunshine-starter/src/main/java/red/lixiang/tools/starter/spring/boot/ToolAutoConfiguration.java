@@ -12,12 +12,15 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import red.lixiang.tools.common.alioss.AliOssTools;
 import red.lixiang.tools.common.mybatis.BaseMapper;
+import red.lixiang.tools.common.mybatis.MybatisToolCache;
+import red.lixiang.tools.jdk.reflect.ReflectTools;
 import red.lixiang.tools.jdk.thread.ThreadPoolTools;
 import red.lixiang.tools.spring.AOPTools;
 import red.lixiang.tools.spring.ContextHolder;
-import red.lixiang.tools.spring.mybatis.MybatisTools;
+import red.lixiang.tools.common.mybatis.MybatisTools;
 import red.lixiang.tools.spring.redis.RedisSpringTools;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -69,9 +72,13 @@ public class ToolAutoConfiguration {
             if(value instanceof BaseMapper){
                 BaseMapper baseMapper = (BaseMapper) value;
                 // 初始化一些缓存信息
-                baseMapper.getMapperClass();
+
                 // 从BaseMapper中获取真正的类,这时候的target是
                 Class<?> target = AOPTools.getTarget(baseMapper);
+                Type[] parameterType = ReflectTools.getGenericParameterType(target);
+                if(parameterType!=null){
+                    MybatisToolCache.cacheDomain((Class<?>) parameterType[0],(Class<?>) parameterType[1]);
+                }
                 tools.injectMapper(target);
             }
         });

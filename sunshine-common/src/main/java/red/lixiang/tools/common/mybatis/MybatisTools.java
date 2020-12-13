@@ -1,5 +1,6 @@
-package red.lixiang.tools.spring.mybatis;
+package red.lixiang.tools.common.mybatis;
 
+import org.apache.ibatis.binding.MapperProxy;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
@@ -7,16 +8,14 @@ import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.session.Configuration;
-import red.lixiang.tools.base.KV;
-import red.lixiang.tools.common.mybatis.MapperTools;
-import red.lixiang.tools.common.mybatis.model.QC;
-import red.lixiang.tools.jdk.ListTools;
 import red.lixiang.tools.jdk.StringTools;
-import red.lixiang.tools.jdk.reflect.ReflectTools;
-import red.lixiang.tools.jdk.security.AESTools;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author lixiang
@@ -32,8 +31,25 @@ public class MybatisTools {
     private SqlSource sqlSource;
 
 
+    public MybatisTools() {
+    }
+
     public MybatisTools(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    public static Class<?> getMapperFromProxy(Object proxy){
+        try {
+            Field field = proxy.getClass().getSuperclass().getDeclaredField("h");
+            field.setAccessible(true);
+            MapperProxy mapperProxy = (MapperProxy) field.get(proxy);
+            Field mapperInterface = mapperProxy.getClass().getDeclaredField("mapperInterface");
+            mapperInterface.setAccessible(true);
+            return (Class<?>) mapperInterface.get(mapperProxy);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void injectMapper(Class<?> cls) {

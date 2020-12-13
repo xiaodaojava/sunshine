@@ -5,21 +5,21 @@ import red.lixiang.tools.common.mybatis.model.BaseQC;
 
 import java.util.List;
 
-import java.util.Map;
-
 
 /**
  * @author lixiang
  * @date 2020/6/23
  **/
-public interface BaseMapper<T> {
+public interface BaseMapper<T,R> {
 
     /**
      * 需要子类重写的返回,返回当前的Mapper.class
      *
      * @return
      */
-     Class<?> getMapperClass();
+     default Class<?> getMapperClass(){
+         return MybatisTools.getMapperFromProxy(this);
+     }
 
     /**
      * 查找全部
