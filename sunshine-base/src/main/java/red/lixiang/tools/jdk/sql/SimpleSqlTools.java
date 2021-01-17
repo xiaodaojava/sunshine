@@ -16,6 +16,9 @@ import java.util.Map;
  **/
 public class SimpleSqlTools {
 
+    public  static  List<Map> selectList(String sql,SqlConfig config){
+        return selectList(sql,Map.class,config.getTargetDb(),config.conn());
+    }
 
     public  static <T> List<T> selectList(String sql, Class<T> clazz,SqlConfig config){
         return selectList(sql,clazz,config.getTargetDb(),config.conn());
@@ -23,6 +26,9 @@ public class SimpleSqlTools {
 
     public  static <T> List<T> selectList(String sql, Class<T> clazz, String targetDb,Connection connection){
         List<Map<String, Object>> resultList = SqlTools.tableDetail(sql, targetDb,connection);
+        if(clazz==Map.class){
+            return (List<T>) resultList;
+        }
         List<T> list = new ArrayList<>();
         Field[] allFields = ReflectTools.getAllFields(clazz);
         for (Map<String, Object> map : resultList) {
