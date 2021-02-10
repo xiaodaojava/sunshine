@@ -41,14 +41,6 @@ javadoc {
 publishing {
 	repositories {
 
-		maven {
-			name 'ALI_MAVEN'
-			credentials {
-				username project.findProperty("aliyun.username")
-				password project.findProperty("aliyun.password")
-			}
-			url 'https://repo.rdc.aliyun.com/repository/78952-snapshot-kdIdFK/'
-		}
 
 		maven {
 			name 'sonatypeRepository'
