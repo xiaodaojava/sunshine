@@ -69,7 +69,7 @@ public class ContextHolder  {
         return convert;
     }
 
-    private static List<KV> convert(String content) {
+    public static List<KV> convert(String content) {
         List<KV> result = new ArrayList<>();
         if (!StringTools.isBlank(content)) {
             String[] valueArray = content.split(";");

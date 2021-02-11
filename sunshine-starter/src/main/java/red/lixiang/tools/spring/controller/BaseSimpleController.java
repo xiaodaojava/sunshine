@@ -239,8 +239,10 @@ public class BaseSimpleController extends CommonController {
     /**
      * 获取配置信息
      * key就是想展示出来的,比如hospitalName
-     *
-     * @param type   1.从配置中获取, 2.通过sql获取
+     * 1.从配置中取的传参： type:1,key:xxxx
+     * 2.从sql中取的传参： type:2,domain:hospital,key:hospitalName, idField: id , s:人民医院
+     * 3.从sys_dic中取： type:3,domain:需要就传,key:refer_type
+     * @param type   1.从配置中获取, 2.通过sql去表中获取 ，或者通过sysDic表去取
      * @param key    属性的key值, 配置中的key , sql的话则为表中的字段名
      * @param domain 如果是使用sql的话,则是表名
      * @param s      用户现在输入的值
@@ -291,6 +293,30 @@ public class BaseSimpleController extends CommonController {
                 e.printStackTrace();
             }
 
+        }else if("3".equals(type)){
+            SQL sql = new SQL() {
+                {
+                    SELECT("name", "value");
+                    FROM("`sys_dic`");
+                    WHERE("name = '"+key+"'");
+                    if(StringTools.isNotBlank(domain)){
+                        WHERE("domain = '"+domain+"'");
+                    }
+                }
+            };
+            //组装sql
+            BaseMapper baseMapper = ContextHolder.getBean("sysDicMapper", BaseMapper.class);
+            Object obj = baseMapper.selectOne(sql.toString());
+            if(null != obj){
+                try {
+                    Field value = obj.getClass().getDeclaredField("value");
+                    value.setAccessible(true);
+                    String valueStr = value.get(obj).toString();
+                    return ContextHolder.convert(valueStr);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+
+                }
+            }
         }
         return null;
     }
