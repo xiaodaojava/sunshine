@@ -130,6 +130,7 @@ public class ConvertorTools {
                 // 从list中获取这些字段的值
                 convertorMap.put(field, set);
             }
+            // 如果targetField不为空的话，则使用sql转换器
             if (StringTools.isNotBlank(enhance.targetField())) {
                 targetMap.put(field, set);
             }

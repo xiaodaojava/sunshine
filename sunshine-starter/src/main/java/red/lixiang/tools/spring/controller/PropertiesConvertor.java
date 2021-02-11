@@ -23,6 +23,7 @@ public class PropertiesConvertor  implements Convertor {
     @Override
     public Map<Object, Object> convertList(List<Object> list, String identity) {
         Map<String, String> propertyMap = ContextHolder.getPropertyMap(identity, "");
+        // todo:应该从propertyMap中过虑出 list中有的数据
         Map<Object,Object> map  = new HashMap<>(propertyMap);
         return map;
     }

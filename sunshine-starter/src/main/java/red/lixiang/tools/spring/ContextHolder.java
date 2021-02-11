@@ -59,8 +59,8 @@ public class ContextHolder  {
 
     public static Map<String,String> getPropertyMap(String key, String defaultValue){
         String properties = getProperty(key,defaultValue);
-        List<KV> convert = convert(properties);
-        return convert.stream().collect(Collectors.toMap(KV::getValue,KV::getName));
+
+        return convertMap(properties);
     }
 
     public static List<KV> getPropertyList(String key, String defaultValue){
@@ -89,6 +89,11 @@ public class ContextHolder  {
             }
         }
         return result;
+    }
+
+    public static Map<String,String> convertMap(String content) {
+        List<KV> result = convert(content);
+        return result.stream().collect(Collectors.toMap(KV::getValue,KV::getName));
     }
 
     public static void setDubboContext(String key , String value){
