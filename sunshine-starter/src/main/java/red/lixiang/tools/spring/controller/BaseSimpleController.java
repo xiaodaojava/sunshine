@@ -2,6 +2,7 @@ package red.lixiang.tools.spring.controller;
 
 import com.alibaba.fastjson.JSON;
 import org.apache.ibatis.jdbc.SQL;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 import red.lixiang.tools.base.BaseResponse;

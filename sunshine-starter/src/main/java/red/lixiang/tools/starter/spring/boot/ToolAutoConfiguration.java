@@ -18,6 +18,7 @@ import red.lixiang.tools.jdk.thread.ThreadPoolTools;
 import red.lixiang.tools.spring.AOPTools;
 import red.lixiang.tools.spring.ContextHolder;
 import red.lixiang.tools.common.mybatis.MybatisTools;
+import red.lixiang.tools.spring.controller.SysDicConvertor;
 import red.lixiang.tools.spring.redis.RedisSpringTools;
 
 import java.lang.reflect.Type;
@@ -44,6 +45,11 @@ public class ToolAutoConfiguration {
         StringRedisTemplate stringRedisTemplate = ContextHolder.getBean(StringRedisTemplate.class).get();
         stringRedisTemplate.setDefaultSerializer(new StringRedisSerializer());
         return new RedisSpringTools().setRedisTemplate(stringRedisTemplate);
+    }
+
+    @Bean
+    public SysDicConvertor sysDicConvertor(){
+        return new SysDicConvertor();
     }
 
 

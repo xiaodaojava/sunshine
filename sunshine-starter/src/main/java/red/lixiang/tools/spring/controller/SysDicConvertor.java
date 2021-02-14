@@ -17,7 +17,6 @@ import java.util.Map;
  * @author lixiang
  * @date 2020/6/26
  **/
-@Component
 public class SysDicConvertor implements Convertor {
 
     @Override
