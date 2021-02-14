@@ -19,6 +19,7 @@ import red.lixiang.tools.spring.convert.ConvertorTools;
 import red.lixiang.tools.spring.processor.ProcessorCache;
 import red.lixiang.tools.spring.processor.SimpleProcessor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -36,6 +37,9 @@ import static red.lixiang.tools.common.mybatis.MybatisToolCache.DOMAIN_QC_CACHE;
  **/
 @RestController
 public class BaseSimpleController extends CommonController {
+
+    @Resource
+    private SysDicConvertor sysDicConvertor;
 
     /**
      * 查询列表的方法
@@ -228,8 +232,15 @@ public class BaseSimpleController extends CommonController {
                     .setFieldName(field.getName());
             if (tableField.fieldType() == TableField.TYPE_SELECT) {
                 //如果是下拉框的话,则获取下拉框的值
-                List<KV> propertyList = ContextHolder.getPropertyList(tableField.property(), "");
-                insertField.setSelectList(propertyList);
+                if(Object.class == tableField.convertor()){
+                    List<KV> propertyList = ContextHolder.getPropertyList(tableField.property(), "");
+                    insertField.setSelectList(propertyList);
+                }
+                if(SysDicConvertor.class == tableField.convertor()){
+                    List<KV> list = sysDicConvertor.getList(tableField.property());
+                    insertField.setSelectList(list);
+                }
+
             }
             fieldList.add(insertField);
         }

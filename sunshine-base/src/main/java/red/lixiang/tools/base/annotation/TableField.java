@@ -35,4 +35,7 @@ public @interface TableField {
 
     int fieldType() default 1;
 
+    /** 如果是下拉框的话，用哪个转换器 */
+    Class<?> convertor() default Object.class;
+
 }

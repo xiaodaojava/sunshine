@@ -1,6 +1,8 @@
 package red.lixiang.tools.spring.controller;
 
 import org.apache.ibatis.jdbc.SQL;
+import org.springframework.stereotype.Component;
+import red.lixiang.tools.base.KV;
 import red.lixiang.tools.common.convertor.Convertor;
 import red.lixiang.tools.common.mybatis.BaseMapper;
 import red.lixiang.tools.jdk.StringTools;
@@ -15,6 +17,7 @@ import java.util.Map;
  * @author lixiang
  * @date 2020/6/26
  **/
+@Component
 public class SysDicConvertor implements Convertor {
 
     @Override
@@ -42,6 +45,31 @@ public class SysDicConvertor implements Convertor {
             }
         }
 
+        return null;
+    }
+
+    public List<KV> getList(String identity){
+        SQL sql = new SQL() {
+            {
+                SELECT("name", "value");
+                FROM("`sys_dic`");
+                WHERE("name = '"+identity+"'");
+            }
+        };
+        //组装sql
+        BaseMapper baseMapper = ContextHolder.getBean("sysDicMapper", BaseMapper.class);
+        Object dbValue = baseMapper.selectOne(sql.toString());
+        if(null != dbValue){
+            try {
+                Field value = dbValue.getClass().getDeclaredField("value");
+                value.setAccessible(true);
+                String valueStr = value.get(dbValue).toString();
+                List<KV> kvList = ContextHolder.convert(valueStr);
+                return kvList;
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+
+            }
+        }
         return null;
     }
 
