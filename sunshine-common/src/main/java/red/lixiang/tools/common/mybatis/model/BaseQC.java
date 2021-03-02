@@ -16,6 +16,10 @@ public class BaseQC implements Serializable {
     /** 排序条件 */
     private Sort sort;
 
+    /** 初始排序条件 */
+    @QC(skipRich = true)
+    private String initSort;
+
     /** 分页条件 */
     private Page page;
 
@@ -27,6 +31,19 @@ public class BaseQC implements Serializable {
 
     /** 除了框架自动设置的url之外,可以手工添加一些条件,如is null , != 之类的 */
     private String appendWhereSql;
+
+    public String getInitSort() {
+        return initSort;
+    }
+
+    public BaseQC setInitSort(String initSort) {
+        if(sort==null){
+            sort = new Sort();
+        }
+        sort.setInitSort(initSort);
+        this.initSort = initSort;
+        return this;
+    }
 
     public String getAppendWhereSql() {
         return appendWhereSql;
