@@ -2,6 +2,8 @@
 
 > Do you like sunshine?  Yes , I do.
 
+这个项目，提供了一个简化的增删改查框架,可以
+
 ## jdk版本说明
 支持Jdk1.8及以上.
 
@@ -11,13 +13,13 @@ maven:
 <dependency>
   <groupId>red.lixiang.tools</groupId>
   <artifactId>sunshine-starter</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
 </dependency>
 ```
 
 gradle:
 ```groovy
-compile 'red.lixiang.tools:sunshine-starter:1.0.5'
+compile 'red.lixiang.tools:sunshine-starter:1.0.6'
 ```
 如只需要jdk本身的工具,可只引用 `sunshine-base`
 如只需一些第三方的某个工具只需引用 `sunshine-common`

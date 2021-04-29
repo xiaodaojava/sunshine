@@ -64,7 +64,7 @@ public class ToolsLogger {
     }
 
     public static void error(String msg, Throwable t){
-        LOGGER.severe(msg+" "+t.getMessage());
+        LOGGER.severe(msg+":"+ExceptionTools.exceptionMsg(t));
     }
 
     public static void error(String msg){
