@@ -317,4 +317,14 @@ public class FileTools {
         }
         return workDir;
     }
+
+    public static String readFromFile(String fileName){
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get(fileName));
+            return new String(bytes);
+        } catch (IOException e) {
+
+        }
+        return null;
+    }
 }

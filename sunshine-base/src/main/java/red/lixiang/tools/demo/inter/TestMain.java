@@ -11,9 +11,7 @@ import java.util.List;
  * @date 2020/6/17
  **/
 public class TestMain {
-
     public static void main(String[] args) {
-        Greet greet = new TrueGreet();
-        greet.cheer();
+
     }
 }

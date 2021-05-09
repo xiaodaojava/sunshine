@@ -1,5 +1,8 @@
 package red.lixiang.tools.base;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 /**
  * 这个适用于关联关系的那种
  * @author lixiang
@@ -14,6 +17,18 @@ public class Pair {
     private String targetName;
 
     public Pair() {
+        System.out.println();
+        System.err.println();
+        System.out.println("Pair.Pair");
+        System.out.println();
+        System.out.println("id = " + id);
+//        System.out.printf("")
+//        System.err.print();
+        try {
+            System.in.read("aaa".getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Pair(Long sourceId, Long targetId) {
