@@ -127,6 +127,23 @@ public class DateTools {
     }
 
     /**
+     * 获取这周开始的时间
+     * @return
+     */
+    public static Date thisWeekBegin(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK,1);
+        clearTimeForCalendar(calendar);
+        return calendar.getTime();
+    }
+    public static String thisWeekBeginStr(){
+        Date date = thisWeekBegin();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(date);
+    }
+
+
+    /**
      * 把date里面的时分秒给清空
      * @param date
      * @return

@@ -1,5 +1,8 @@
 package red.lixiang.tools.jdk;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author lixiang
  * @date 2020/3/16
@@ -25,6 +28,23 @@ public class URLTools {
         String host = getHost(url);
         url = url.substring(url.indexOf(host)+host.length()+1);
         return url;
+    }
+
+    /**
+     * 从URL中获取参数
+     * @param url
+     * @param param
+     * @return
+     */
+    public static String paramFromUrl(String url,String param){
+        String paramUrl = url.substring(url.indexOf("?") + 1);
+        String[] params = paramUrl.split("&");
+        Map<String,String> paramMap = new HashMap<>();
+        for (String s : params) {
+            String[] strings = s.split("=");
+            paramMap.put(strings[0],strings[1]);
+        }
+        return paramMap.get(param);
     }
 
     public static void main(String[] args) {

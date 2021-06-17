@@ -24,7 +24,7 @@ public class JianYingTools {
     }
 
     public static void main(String[] args) {
-        String subtitle = getSubtitle("C:\\Users\\lixiang\\AppData\\Local\\JianyingPro\\User Data\\Projects\\com.lveditor.draft\\3E22BFC5-6DAB-4ad2-9E94-26A0DB79ECD1\\draft_content.json");
+        String subtitle = getSubtitle("C:\\Users\\lixiang\\AppData\\Local\\JianyingPro\\User Data\\Projects\\com.lveditor.draft\\3835B2A7-EEB3-4cca-A385-D007FC925815\\draft_content.json");
         System.out.println(subtitle);
     }
 }

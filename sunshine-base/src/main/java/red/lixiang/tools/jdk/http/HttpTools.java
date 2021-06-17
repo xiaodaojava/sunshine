@@ -13,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.net.HttpURLConnection.*;
+
 /**
  * @author lixiang
  * @date 2019/12/13
@@ -55,7 +57,9 @@ public class HttpTools {
 
     public static <T> HttpResponse<T> doPost(String url, String bodyContent, Map<String, String> headerMap, Class<T> responseType) {
         HttpRequest request = new HttpRequest(url);
-        request.setBodyContent(bodyContent);
+        if(StringTools.isNotBlank(bodyContent)){
+            request.setBodyContent(bodyContent);
+        }
         request.setHeaderMap(headerMap);
         request.setHttpMethod(HttpRequest.METHOD_POST);
         return doInvoke(request, responseType);
@@ -85,52 +89,60 @@ public class HttpTools {
 
             InputStreamReader isr = null;
             InputStreamReader esr = null;
-            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection(proxy);
-            // 请置请求方式
-            conn.setRequestMethod(request.getHttpMethod());
-            // 添加header
-            if(request.getHeaderMap()!=null){
-                for (Map.Entry<String, String> entry : request.getHeaderMap().entrySet()) {
-                    conn.setRequestProperty(entry.getKey(), entry.getValue());
+            HttpURLConnection conn = null;
+            int statusCode = 0;
+            for (int i = 0; i < 3; i++) {
+                conn = (HttpURLConnection) new URL(url).openConnection(proxy);
+                // 请置请求方式
+                conn.setRequestMethod(request.getHttpMethod());
+                // 添加header
+                if(request.getHeaderMap()!=null){
+                    for (Map.Entry<String, String> entry : request.getHeaderMap().entrySet()) {
+                        conn.setRequestProperty(entry.getKey(), entry.getValue());
+                    }
                 }
-            }
-            conn.setUseCaches(false);
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            // 添加请求的body
-            if (StringTools.isNotBlank(request.getBodyContent())) {
-                try (OutputStream outputStream = conn.getOutputStream()) {
-                    outputStream.write(request.getBodyContent().getBytes(StandardCharsets.UTF_8));
+                conn.setUseCaches(false);
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+                // 添加请求的body
+                if (StringTools.isNotBlank(request.getBodyContent())) {
+                    try (OutputStream outputStream = conn.getOutputStream()) {
+                        outputStream.write(request.getBodyContent().getBytes(StandardCharsets.UTF_8));
+                    }
                 }
+                conn.connect();
+                statusCode = conn.getResponseCode();
+                boolean redirect = statusCode == HTTP_MOVED_PERM || statusCode == HTTP_MOVED_TEMP || statusCode == HTTP_SEE_OTHER;
+                if(!redirect){
+                    break;
+                }
+                url = conn.getHeaderField("Location");
+                conn.disconnect();
             }
 
-            conn.connect();
-
-
-            int statusCode = conn.getResponseCode();
 
             String response = null;
             try {
                 if(responseType == byte[].class){
                     byte[] bytes = IOTools.readByte(conn.getInputStream());
-                    return new HttpResponse<>(statusCode,(T)bytes);
+                    return new HttpResponse<>(url,statusCode,(T)bytes);
                 }
                 if(responseType == InputStream.class){
-                    return new HttpResponse<>(statusCode,(T) conn.getInputStream());
+                    return new HttpResponse<>(url,statusCode,(T) conn.getInputStream());
                 }
                 isr = new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8);
                 response = IOTools.readString(isr);
                 if (responseType == String.class) {
-                    return new HttpResponse<>(statusCode, (T) response);
+                    return new HttpResponse<>(url,statusCode, (T) response);
                 }
-                return new HttpResponse<T>(statusCode, JSON.parseObject(response, responseType));
+                return new HttpResponse<T>(url,statusCode, JSON.parseObject(response, responseType));
             } catch (Exception e) {
                 InputStream errorStream = conn.getErrorStream();
                 if (errorStream != null) {
                     esr = new InputStreamReader(errorStream, StandardCharsets.UTF_8);
                     try {
                         response =IOTools.readString(esr);
-                        return new HttpResponse(statusCode, response);
+                        return new HttpResponse(url,statusCode, response);
                     } catch (IOException ioe) {
                         //ignore
                     }

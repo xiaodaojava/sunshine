@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import red.lixiang.tools.jdk.StringTools;
+import red.lixiang.tools.jdk.reflect.ReflectTools;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -252,6 +253,13 @@ public class ExcelTools {
      */
     public static <T> Workbook beanToExcel(List<CellField> cellFields) {
         return beanToExcel(null, cellFields, null, true);
+    }
+
+    public static <T> Workbook beanToExcel(List<T> list ,Class<T> clazz){
+        Field[] allFields = ReflectTools.getAllFields(clazz);
+        List<CellField> cellFieldList = Arrays.stream(allFields).map(x -> new CellField(x.getName(), x.getName())).collect(Collectors.toList());
+        return beanToExcel(list,cellFieldList,clazz,true);
+
     }
 
     /**
