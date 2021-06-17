@@ -19,6 +19,10 @@ public class HttpResponse<T> {
     this.body = body;
   }
 
+  public String getUrl() {
+    return url;
+  }
+
   public int getStatusCode() {
     return statusCode;
   }
