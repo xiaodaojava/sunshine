@@ -350,6 +350,8 @@ public class MapperTools {
             s = s.replaceAll("DAO", "");
             s = s.replaceAll("QC", "");
             s = s.replaceAll("DO", "");
+            s = s.replaceAll("Read", "");
+            s = s.replaceAll("Write", "");
             return StringTools.camel2UnderScope(s);
         });
     }
