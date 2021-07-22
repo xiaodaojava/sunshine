@@ -229,7 +229,7 @@ public class MapperTools {
                 }
 
                 // 如果值不为空的话，往里面拼接insertSQL
-                sql.VALUES('`'+StringTools.camel2UnderScope(fieldName)+'`', String.format("#{%s}", fieldName));
+                sql.VALUES(StringTools.camel2UnderScope(fieldName), String.format("#{%s}", fieldName));
             }
         } catch (Exception e) {
             logger.error("执行查询sql有错", e);
@@ -340,7 +340,7 @@ public class MapperTools {
     }
 
     public static String tableNameFromCls(Class<?> clazz) {
-        return "`" + pureTableNameFromCls(clazz) + "`";
+        return pureTableNameFromCls(clazz) ;
     }
 
     public static String pureTableNameFromCls(Class<?> clazz) {
