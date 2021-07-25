@@ -38,13 +38,13 @@ public class StringTools {
     }
 
     /**
-     * 从字符串中返回指定第一次出现开头和第一次出现结尾之间的子字符串（不包含开头和结尾）
+     * 从字符串中返回指定两个指定标记之间的子字符串（不包含开头和结尾）
      * @param originalStr
      * @param from
      * @param to
      * @return
      */
-    public static String[] getSubstringBetweenFF(String originalStr , String from , String to){
+    public static String[] getSubstringBetween(String originalStr , String from , String to){
         List<String> list = new ArrayList<>();
         String tempStr = originalStr.substring(originalStr.indexOf(from));
         while (true){
@@ -59,6 +59,33 @@ public class StringTools {
 
         return list.toArray(new String[0]);
     }
+
+    /**
+     * 返回从第 num 个 from 开始标记之后到 to 标记的字符串
+     * @param originalStr
+     * @param num
+     * @param from
+     * @param to
+     * @return
+     */
+    public static String getBetweenAndNum(String originalStr ,Integer num,String from , String to){
+        String result = null;
+        String tempStr = originalStr.substring(originalStr.indexOf(from));
+        for (int i = 0; i < num; i++) {
+
+            if( !tempStr.contains(to)){
+                break;
+            }
+            tempStr = tempStr.substring(tempStr.indexOf(from)+from.length());
+            result = tempStr.substring(0,tempStr.indexOf(to));
+            tempStr = tempStr.substring(tempStr.indexOf(to)+to.length());
+
+            }
+
+        return result;
+    }
+
+
 
     /**
      * 从字符串中返回指定第一次出现开头和最后一次出现结尾之间的子字符串（不包含开头和结尾）
@@ -77,7 +104,7 @@ public class StringTools {
      * @param to
      * @return
      */
-    public static String[] getSubstringBetweenCFF(String originalStr , String from , String to){
+    public static String[] getSubstringBetweenC(String originalStr , String from , String to){
         List<String> list = new ArrayList<>();
         String tempStr = originalStr.substring(originalStr.indexOf(from));
         while (true){
@@ -248,7 +275,8 @@ public class StringTools {
         return 0;
     };
     public static void main(String[] args) {
-        String s = strToAscii("公共私人");
-        System.out.println(s);
+
+        String ss = getBetweenAndNum("abcdefaecdea",1,"a","c");
+        System.out.println(ss);
     }
 }

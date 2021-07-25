@@ -73,7 +73,7 @@ public class YamlTools {
             String innerKey  = separatorKeys[i];
             Integer index  = null;
             if(innerKey.contains("[")){
-                index  = Integer.valueOf(StringTools.getSubstringBetweenFF(innerKey,"[","]")[0]);
+                index  = Integer.valueOf(StringTools.getSubstringBetween(innerKey,"[","]")[0]);
                 innerKey = innerKey.substring(0,innerKey.indexOf("["));
             }
             Map<String,Object> mapTempObj = (Map)tempObject;
