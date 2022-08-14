@@ -7,9 +7,12 @@ plugins {
 
 
 dependencies {
-	compile project(":sunshine-starter")
+	compile project(":sunshine-base")
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'com.h2database:h2'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
