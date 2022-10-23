@@ -10,7 +10,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -22,6 +25,10 @@ public class DbConfig {
     @Autowired
     private ApplicationContext applicationContext;
 
+    /**
+     * 数据源配置
+     * @return
+     */
     @Bean(name = "h2DataSource")
     public DataSource dataSource(){
         //org.h2.jdbcx.JdbcDataSource
@@ -31,6 +38,16 @@ public class DbConfig {
         config.setJdbcUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
         config.setUsername("sa");
         return new HikariDataSource(config);
+    }
+
+    @Bean
+    public DataSourceTransactionManager h2DataSourceTransactionManager(DataSource dataSource){
+        return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean
+    public TransactionTemplate h2TransactionTemplate(PlatformTransactionManager platformTransactionManager){
+        return new TransactionTemplate(platformTransactionManager);
     }
 
     @Bean(initMethod = "start" , destroyMethod = "stop")
