@@ -17,7 +17,7 @@ public class WechatTools {
 
     /**
      * 获取公众号,小程序的token
-     *31_l-Sqc_If2vrY79PahZ2klQBgdqeb0eJaQJ7ydIrmW__IHRhQsdhJckXBBf9JYckrabfd6b0HUODtnGgtKSWH6OINtblmHOPH3OSFQfPLp2uMH19RTM_idI2K-D59XVtwOtFvZ08Ob2TEk1vdGTUgAHAQDE
+     *
      * @param config
      * @return
      */
@@ -52,8 +52,5 @@ public class WechatTools {
         return result;
     }
 
-    public static void main(String[] args) {
-        String tempQRImageByToken = getTempQRImageByToken("31_h4a-LKsHZ3QqPRMTyR-DUpxbxxibLaun6vepi4qEw_CT5patZ1sdUyDY-Eabl0mbAWDy7kiIYVmujo6fJ1-wMfT0QWUkxyqKrzfk4HSnC2XtUugY_cOTBYLErTho5sQpDZppHdHnevQjRiPIUIKbAHAJXZ", "106834105884224", 3000L);
-        System.out.println(tempQRImageByToken);
-    }
+
 }

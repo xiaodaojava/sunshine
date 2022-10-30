@@ -19,6 +19,15 @@ public class StringTools {
         return word.substring(0,1).toUpperCase().concat(word.substring(1));
     }
 
+    public static String getMessage(String src, Object... obj){
+        try {
+            return String.format(src,obj);
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+
     /**
      * 把首字符转成小写的
      * @param word

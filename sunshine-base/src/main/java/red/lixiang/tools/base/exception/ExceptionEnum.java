@@ -20,7 +20,7 @@ package red.lixiang.tools.base.exception;
  * @Author lixiang
  * @CreateTime 2019-03-05
  **/
-public enum ExceptionEnum {
+public enum ExceptionEnum implements BaseErrorMsg {
 
     /**
      * 登录密码错误
@@ -28,9 +28,7 @@ public enum ExceptionEnum {
     LOGIN_WRONG_PASSWORD("登录密码错误","101"),
 
 
-    PARA_CHECK_FAIL("参数校验错误","701");
-
-
+    PARA_CHECK_FAIL("参数校验错误[%s]","701");
 
 
 
@@ -43,14 +41,13 @@ public enum ExceptionEnum {
         this.errorCode = errorCode;
     }
 
-    public String getErrorMsg() {
-        return errorMsg;
-    }
-
-
-    public String getErrorCode() {
+    @Override
+    public String getCode() {
         return errorCode;
     }
 
-
+    @Override
+    public String getMsg() {
+        return errorMsg;
+    }
 }

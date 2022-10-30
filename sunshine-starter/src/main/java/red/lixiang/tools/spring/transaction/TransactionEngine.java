@@ -1,6 +1,8 @@
 package red.lixiang.tools.spring.transaction;
 
 
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StopWatch;
@@ -8,6 +10,7 @@ import red.lixiang.tools.spring.event.LocalEventService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TransactionEngine {
 
@@ -80,6 +83,25 @@ public class TransactionEngine {
         StopWatch stopWatch = new StopWatch();
 
         try {
+            if(Objects.equals(ABORT_THREAD_LOCAL.get(),Boolean.TRUE)){
+                return;
+            }
+
+            List<Runnable> runnables = TRANSACTION_REGISTER_THREAD_LOCAL.get();
+            if(runnables == null){
+                return;
+            }
+
+            // 事务真正执行的位置
+            transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+                @Override
+                protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    runnables.forEach(Runnable::run);
+                }
+            });
+
+            // 后置处理
+            localEventService.runLocalEventAction();
 
         }catch (Throwable e){
 

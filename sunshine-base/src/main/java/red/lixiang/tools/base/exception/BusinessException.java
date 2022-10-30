@@ -1,6 +1,9 @@
 package red.lixiang.tools.base.exception;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author lixiang
@@ -20,60 +23,43 @@ public class BusinessException extends RuntimeException {
      */
     private Object env;
 
+    private List<Object> args;
+
+
+    /**
+     * 一种是纯MSG的
+     * @param msg
+     */
     public BusinessException(String msg) {
         super(msg);
         this.errorMessage = msg;
     }
 
-    public BusinessException(String msg, String code) {
-        super(msg);
-        this.errorMessage = msg;
-        this.errorCode = code;
-    }
 
+    /**
+     * 消息+异常。 这种和上面，对应着，没有定义枚举的场景
+     * @param msg
+     * @param exception
+     */
     public BusinessException(String msg, Throwable exception) {
         super(msg,exception);
         this.throwable = exception;
         this.errorMessage = msg;
     }
 
-    public BusinessException(String msg, String code , Throwable throwable, Object env){
-        super(msg,throwable);
-        this.errorCode = code;
-        this.errorMessage = msg;
-        this.throwable = throwable;
-        this.env = env;
-    }
 
-    public BusinessException(String msg, String code , Object env){
-        super(msg);
-        this.errorCode = code;
-        this.errorMessage = msg;
-        this.env = env;
-    }
 
-    public BusinessException(ExceptionEnum e , Object env){
-        super(e.getErrorCode()+":"+e.getErrorMsg());
-        this.errorCode = e.getErrorCode();
-        this.errorMessage = e.getErrorMsg();
-        this.env = env;
-    }
 
-    public BusinessException(ExceptionEnum e ){
-        super(e.getErrorCode()+":"+e.getErrorMsg());
-        this.errorCode = e.getErrorCode();
-        this.errorMessage = e.getErrorMsg();
-
+    public BusinessException(BaseErrorMsg e , Object... args){
+        this.errorCode = e.getCode();
+        this.errorMessage = e.getMsg();
+        if(args!=null && args.length > 0){
+            this.args = new ArrayList<>();
+            this.args.addAll(Arrays.asList(args));
+        }
     }
 
 
-
-    public BusinessException(String msg, String code, Throwable exception) {
-        super(msg,exception);
-        this.errorMessage = msg;
-        this.errorCode = code;
-        this.throwable = exception;
-    }
 
     public Throwable getThrowable() {
         return throwable;
