@@ -1,14 +1,15 @@
 plugins {
 	id 'java'
 	id 'maven-publish'
-	id 'signing'
+//	id 'signing'
 }
 
 
 dependencies {
-	compile project(":sunshine-common")
+	implementation project(":sunshine-common")
+	implementation project(":sunshine-base")
 	implementation platform('org.springframework.boot:spring-boot-dependencies:2.3.3.RELEASE')
-	compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:2.3.3.RELEASE"
 	compileOnly group: 'org.apache.commons', name: 'commons-pool2', version: '2.8.1'
 	compileOnly 'org.springframework.boot:spring-boot-starter-data-redis:2.3.3.RELEASE'
@@ -16,7 +17,7 @@ dependencies {
 	compileOnly group: 'org.apache.dubbo', name: 'dubbo', version: '2.7.8'
 	compileOnly group: 'org.mybatis', name: 'mybatis', version: '3.5.5'
 	compileOnly group: 'org.springframework', name: 'spring-jdbc', version: '5.2.8.RELEASE'
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.3.3.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.3.3.RELEASE'
 	compileOnly group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '3.11.0'
 }
 
@@ -97,6 +98,6 @@ publishing {
 	}
 }
 
-signing {
-	sign publishing.publications.mavenJava
-}
+//signing {
+//	sign publishing.publications.mavenJava
+//}

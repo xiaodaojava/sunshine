@@ -187,7 +187,7 @@ public class ConvertorTools {
               try {
                   EnhanceTool enhanceTool = key.getAnnotation(EnhanceTool.class);
                   Field sourceField = cls.getDeclaredField(enhanceTool.source());
-                  if (!sourceField.isAccessible()) {
+                  if (!sourceField.canAccess(t)) {
                       sourceField.setAccessible(true);
                   }
                   Object o = map.get(sourceField.get(t));
