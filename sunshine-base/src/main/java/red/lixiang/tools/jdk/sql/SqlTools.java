@@ -33,6 +33,7 @@ public class SqlTools {
         property2BeanMap.put("BIGINT","Long");
         property2BeanMap.put("TEXT","String");
         property2BeanMap.put("TINYINT","Integer");
+        property2BeanMap.put("SMALLINT","Integer");
         property2BeanMap.put("INT","Integer");
         property2BeanMap.put("BIT","Integer");
         property2BeanMap.put("CHAR","String");
