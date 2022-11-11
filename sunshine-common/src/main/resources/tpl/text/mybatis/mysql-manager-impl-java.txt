@@ -33,7 +33,7 @@ public class [(${table.javaTableName})]ManagerImpl implements [(${table.javaTabl
     @Override
     public List<[(${table.javaTableName})]DO> query[(${table.javaTableName})]([(${table.javaTableName})]QC qc){
 
-        List<[(${table.javaTableName})]DO> [(${table.javaCamelName})]s = [(${table.javaCamelName})]Mapper.list[(${table.javaTableName})]s(qc);
+        List<[(${table.javaTableName})]DO> [(${table.javaCamelName})]s = [(${table.javaCamelName})]Mapper.findByQuery(qc);
         return [(${table.javaCamelName})]s;
     }
     
@@ -41,7 +41,7 @@ public class [(${table.javaTableName})]ManagerImpl implements [(${table.javaTabl
     @Override
     public Long count[(${table.javaTableName})]([(${table.javaTableName})]QC qc){
 
-        Long count = [(${table.javaCamelName})]Mapper.count[(${table.javaTableName})]s(qc);
+        Long count = [(${table.javaCamelName})]Mapper.countByQuery(qc);
         return count;
     }
 
@@ -49,10 +49,10 @@ public class [(${table.javaTableName})]ManagerImpl implements [(${table.javaTabl
     public [(${table.javaTableName})]DO save[(${table.javaTableName})]([(${table.javaTableName})]DO [(${table.javaCamelName})]){
 
         if([(${table.javaCamelName})].getId()!=null){
-             [(${table.javaCamelName})]Mapper.update[(${table.javaTableName})]([(${table.javaCamelName})]);
+             [(${table.javaCamelName})]Mapper.update([(${table.javaCamelName})]);
         }else {
             [(${table.javaCamelName})].setCreateTime(new Date());
-             [(${table.javaCamelName})]Mapper.insert[(${table.javaTableName})]([(${table.javaCamelName})]);
+             [(${table.javaCamelName})]Mapper.insert([(${table.javaCamelName})]);
         }
         return [(${table.javaCamelName})];
 
@@ -61,7 +61,7 @@ public class [(${table.javaTableName})]ManagerImpl implements [(${table.javaTabl
     @Override
     public int remove[(${table.javaTableName})]ById(Long id){
 
-        return [(${table.javaCamelName})]Mapper.remove[(${table.javaTableName})]ById(id);
+        return [(${table.javaCamelName})]Mapper.removeById(id);
 
     }
 

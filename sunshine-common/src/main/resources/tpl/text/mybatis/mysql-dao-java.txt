@@ -15,11 +15,7 @@ import red.lixiang.tools.common.mybatis.MybatisToolCache;
  */
 @Mapper
 @Repository
-public interface [(${table.javaTableName})]Mapper extends BaseMapper<[(${table.javaTableName})]DO> {
+public interface [(${table.javaTableName})]Mapper extends BaseMapper<[(${table.javaTableName})]DO,[(${table.javaTableName})]QC> {
 
-     @Override
-     default Class<?> getMapperClass(){
-        MybatisToolCache.cacheDomain("[(${table.javaCamelName})]",[(${table.javaTableName})]DO.class, [(${table.javaTableName})]QC.class);
-        return [(${table.javaTableName})]Mapper.class;
-     }
+
 }
