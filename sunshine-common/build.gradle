@@ -1,12 +1,13 @@
 plugins {
 	id 'java'
 	id 'maven-publish'
+	id 'java-library'
 //	id 'signing'
 }
 
 
 dependencies {
-	implementation project(":sunshine-base")
+	api project(":sunshine-base")
 	compileOnly group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
 	compileOnly group: 'ognl', name: 'ognl', version: '3.2.10'
 	compileOnly group: 'org.apache.poi', name: 'poi', version: '4.1.2'

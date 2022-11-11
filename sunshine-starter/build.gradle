@@ -1,13 +1,13 @@
 plugins {
 	id 'java'
 	id 'maven-publish'
+	id 'java-library'
 //	id 'signing'
 }
 
 
 dependencies {
-	implementation project(":sunshine-common")
-	implementation project(":sunshine-base")
+	api project(":sunshine-common")
 	implementation platform('org.springframework.boot:spring-boot-dependencies:2.3.3.RELEASE')
 	implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:2.3.3.RELEASE"
