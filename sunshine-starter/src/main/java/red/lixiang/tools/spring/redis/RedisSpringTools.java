@@ -14,9 +14,10 @@ public class RedisSpringTools {
     private Logger logger = LoggerFactory.getLogger(RedisSpringTools.class);
 
     //各种时间
-    public static final Long TWELVE_HOUR = 60L * 60 * 12;
     public static final Long ONE_HOUR = 60L*60;
+    public static final Long TWELVE_HOUR = 60L * 60 * 12;
     public static final Long TEN_DAY = 60L*60*24*10;
+    public static final Long THIRTY_DAY = 60L*60*24*30;
 
 
 
