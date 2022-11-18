@@ -25,10 +25,14 @@ public enum ExceptionEnum implements BaseErrorMsg {
     /**
      * 登录密码错误
      */
-    LOGIN_WRONG_PASSWORD("登录密码错误","101"),
+    LOGIN_WRONG_PASSWORD("101","登录密码错误"),
 
 
-    PARA_CHECK_FAIL("参数校验错误[%s]","701");
+    SQL_TRANSACTION_FAIL("401","数据库事务未开启"),
+
+
+    PARA_CHECK_FAIL("701","参数校验错误[%s]");
+
 
 
 
@@ -36,9 +40,9 @@ public enum ExceptionEnum implements BaseErrorMsg {
 
     private String errorCode;
 
-    ExceptionEnum(String errorMsg, String errorCode) {
-        this.errorMsg = errorMsg;
+    ExceptionEnum(String errorCode, String errorMsg) {
         this.errorCode = errorCode;
+        this.errorMsg = errorMsg;
     }
 
     @Override
