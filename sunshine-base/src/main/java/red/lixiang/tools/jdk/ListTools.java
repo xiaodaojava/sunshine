@@ -187,6 +187,12 @@ public class ListTools {
         return !isBlank(list);
     }
 
+    public  static <T>  List<T> newList(T ...elements){
+        List<T> list = new ArrayList<>(elements.length);
+        list.addAll(Arrays.asList(elements));
+        return list;
+    }
+
     public static void main(String[] args) {
         List<String> list = new ArrayList<>();
         list.add("aaaa");
