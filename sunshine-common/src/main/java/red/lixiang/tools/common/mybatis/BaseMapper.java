@@ -117,6 +117,7 @@ public interface BaseMapper<T,R> {
      * @return
      */
     @InsertProvider(type = BaseProvider.class)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(T t);
 
     /**

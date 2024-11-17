@@ -144,7 +144,7 @@ public class MapperTools {
                     if (qc.likeQuery()) {
                         //如果是like查询
                         if (!StringTools.isBlank(valueStr)) {
-                            sql.WHERE(StringTools.camel2UnderScope(fieldName) + " like concat('%',#{" + fieldName + "},'%')");
+                            sql.WHERE(StringTools.camel2UnderScope(qc.fieldName()) + " like concat('%',#{" + fieldName + "},'%')");
                         }
                     } else if (qc.listQuery()) {
                         // 如果是list查询

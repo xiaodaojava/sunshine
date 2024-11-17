@@ -7,7 +7,7 @@ plugins {
 
 
 dependencies {
-	implementation project(":sunshine-base")
+	implementation project(":sunshine-starter")
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
