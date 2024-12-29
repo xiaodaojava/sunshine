@@ -31,6 +31,9 @@ public class Page implements Serializable {
      */
     private Integer startIndex = 0;
 
+    public Page() {
+    }
+
     public Page(Integer pageIndex, Integer pageSize) {
         this.pageIndex = pageIndex;
         this.pageSize = pageSize;

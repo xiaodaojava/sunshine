@@ -22,4 +22,10 @@ public class DateTimeTools {
         return LocalDateTime.parse(date, defaultLocalDateTimeFormatter);
     }
 
+
+    public static String localDateTimeToString(LocalDateTime date)
+    {
+        return date.format(defaultLocalDateTimeFormatter);
+    }
+
 }
