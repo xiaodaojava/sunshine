@@ -141,8 +141,15 @@ public class HttpTools {
                 if (errorStream != null) {
                     esr = new InputStreamReader(errorStream, StandardCharsets.UTF_8);
                     try {
+                        if(responseType == byte[].class){
+                            byte[] bytes = IOTools.readByte(conn.getInputStream());
+                            return new HttpResponse<>(url,statusCode,(T)bytes);
+                        }
                         response =IOTools.readString(esr);
-                        return new HttpResponse(url,statusCode, response);
+                        if (responseType == String.class) {
+                            return new HttpResponse<>(url,statusCode, (T) response);
+                        }
+                        return new HttpResponse(url,statusCode, JSON.parseObject(response, responseType));
                     } catch (IOException ioe) {
                         //ignore
                     }
